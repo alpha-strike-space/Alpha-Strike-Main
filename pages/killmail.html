@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Killmail Details - Alpha-Strike</title> <link rel="shortcut icon" href="../favicon.png" />
+    <link rel="stylesheet" href="../styles/main.css" />
+    <link rel="stylesheet" href="../styles/navigation.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" ... />
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2..." rel="stylesheet" />
+</head>
+<body>
+    <div id="navigation-container"></div>
+
+    <div class="container killmail-detail-container">
+        <h1 id="killmail-page-title" data-translate="page.killmailDetailHeader">Killmail Detail</h1>
+        
+        <div id="killmail-content">
+            <p data-translate="loading.killmail">Loading killmail data...</p>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>All EVE-Frontier related materials are property of CCP Games</p>
+    </footer>
+
+    <script src="../js/translation-dictionary.js"></script>
+    <script src="../js/utils.js"></script> <script src="../js/api.js"></script>   <script src="../components/navigation.js"></script>
+    <script src="../js/common.js"></script>
+
+    
+
+    <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        initializePage("killmail_detail"); // Or a suitable identifier
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const tempKey = urlParams.get('tempKey'); // Get the temporary key
+
+        const killmailContentEl = document.getElementById('killmail-content');
+        const pageTitleEl = document.getElementById('killmail-page-title'); // Your H1
+        const documentTitleEl = document.querySelector('title'); // The <title> tag
+
+        if (tempKey) {
+            try {
+                const storedItemJson = sessionStorage.getItem(tempKey);
+                // Optional: remove the item after retrieving to prevent sessionStorage from growing indefinitely
+                // sessionStorage.removeItem(tempKey); 
+
+                if (!storedItemJson) {
+                    throw new Error("Killmail data not found in session. This link may have expired or is not shareable.");
+                }
+
+                const killmailData = JSON.parse(storedItemJson);
+
+                // ---- Function to Render Killmail Details ----
+                // You would build out this function extensively
+                function renderKillmailDetailsHTML(data) {
+                    documentTitleEl.textContent = `Killmail: ${data.victim_name} vs ${data.killer_name} - Alpha-Strike`;
+                    if (pageTitleEl) { // Check if the element exists
+                         pageTitleEl.textContent = `Killmail: ${data.victim_name} vs ${data.killer_name}`; // More descriptive
+                    }
+
+                    let html = '<div>'; // Start a container for details
+                    html += `<p><strong>Victim:</strong> <span class="victim clickable-name" data-name="${data.victim_name || "UNKNOWN"}">${data.victim_name || "UNKNOWN"}</span> (Address: ${data.victim_address || 'N/A'})</p>`;
+                    html += `<p><strong>Killer:</strong> <span class="killer clickable-name" data-name="${data.killer_name || "UNKNOWN"}">${data.killer_name || "UNKNOWN"}</span> (Address: ${data.killer_address || 'N/A'})</p>`;
+                    html += `<p><strong>Loss Type:</strong> ${data.loss_type || "CLASSIFIED"}</p>`;
+                    html += `<p><strong>System:</strong> <span class="clickable-system" data-system="${data.solar_system_name || "UNKNOWN"}">${data.solar_system_name || "UNKNOWN"}</span> (ID: ${data.solar_system_id || 'N/A'})</p>`;
+                    html += `<p><strong>Time:</strong> ${formatTimestamp(data.time_stamp, showLocalTime)}</p>`; // Assumes formatTimestamp and showLocalTime are available
+                    
+                    // TODO: Add display for other involved parties, items lost/destroyed, ship fittings if available in 'data'
+                    html += '</div>';
+                    return html;
+                }
+                // ---- End Render Function ----
+
+                killmailContentEl.innerHTML = renderKillmailDetailsHTML(killmailData);
+                
+                // If your rendered HTML contains clickable names/systems, re-apply listeners
+                if (typeof addIncidentCardListeners === 'function') { // This function might need to be generalized or split
+                    addIncidentCardListeners(); // Or a more specific listener setup for this page
+                }
+
+
+                // Re-apply translations if new dynamic content has data-translate attributes
+                if (typeof setLanguage === 'function') {
+                    setLanguage(localStorage.getItem('preferredLanguage') || 'en');
+                }
+
+            } catch (error) {
+                console.error("Failed to load killmail data from session:", error);
+                killmailContentEl.innerHTML = `<p class="error" data-translate="error.killmailLoadFailed">${error.message || "Failed to load killmail data."}</p>`;
+                if (typeof setLanguage === 'function') {
+                    setLanguage(localStorage.getItem('preferredLanguage') || 'en');
+                }
+            }
+        } else {
+            killmailContentEl.innerHTML = `<p class="error" data-translate="error.noKillmailId">No killmail reference provided.</p>`; // Update translation key if needed
+            if (typeof setLanguage === 'function') {
+                setLanguage(localStorage.getItem('preferredLanguage') || 'en');
+            }
+        }
+    });
+</script>
+</body>
+</html>

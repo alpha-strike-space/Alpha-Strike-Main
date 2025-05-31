@@ -1,0 +1,373 @@
+/* Specific styling for the search totals card */
+.search-total h2 {
+    font-size: 1.8em;
+}
+
+.enhanced-player-card .player-status,
+.enhanced-system-card .system-id {
+    font-family: "Exo 2", monospace;
+    font-size: 0.8rem;
+    color: #c0c0c0 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    margin: 0;
+}
+
+.card-header {
+    padding: 20px;
+    background: linear-gradient(
+        135deg,
+        rgba(211, 47, 47, 0.9) 0%,
+        rgba(139, 0, 0, 1) 50%,
+        rgba(211, 47, 47, 0.9) 100%
+    );
+    border-bottom: 1px solid rgba(211, 47, 47, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-section,
+.system-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.profile-image-container,
+.system-image-container {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 0;
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 20px rgba(211, 47, 47, 0.4);
+    flex-shrink: 0;
+}
+
+.system-image-container {
+    border-radius: 0;
+    clip-path: polygon(
+        15% 0%,
+        85% 0%,
+        100% 15%,
+        100% 85%,
+        85% 100%,
+        15% 100%,
+        0% 85%,
+        0% 15%
+    );
+}
+
+.profile-image,
+.system-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.system-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 2rem;
+}
+
+.profile-info,
+.system-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* New styling for system region - less prominent */
+.enhanced-system-card .system-region {
+    font-family: "Exo 2", monospace;
+    font-size: 0.7rem; /* Smaller than system-id */
+    color: #888 !important; /* More muted color */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    margin: 0;
+    opacity: 0.7; /* Make it less apparent */
+    font-style: italic; /* Add italic to make it look like placeholder text */
+}
+
+/* Override the .data-card h2 styling for player and system names */
+.enhanced-player-card .player-name,
+.enhanced-system-card .system-name {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 1.6rem; /* Slightly smaller to fit better */
+    font-weight: 700;
+    color: #ffffff !important;
+    text-shadow:
+        0 0 15px rgba(255, 255, 255, 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.8) !important;
+}
+
+.enhanced-player-card .player-status,
+.enhanced-system-card .system-id {
+    font-family: var(--font-secondary);
+    font-size: 0.8rem;
+    color: #c0c0c0 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    margin: 0;
+}
+
+/* Header stats - key stats displayed in header */
+.header-stats {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.header-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 80px;
+}
+
+.header-stat-value {
+    font-family: var(--font-secondary);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    line-height: 1;
+}
+
+.header-stat-label {
+    font-family: var(--font-primary);
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+/* Color coding for header stats */
+.header-stat-value.killer {
+    color: var(--color-secondary);
+    text-shadow: 0 0 15px rgba(255, 167, 38, 0.4);
+}
+
+.header-stat-value.victim {
+    color: var(--color-primary-light);
+    text-shadow: 0 0 15px rgba(255, 82, 82, 0.4);
+}
+
+.header-stat-value.threat-high {
+    color: var(--color-primary-light);
+    text-shadow: 0 0 15px rgba(255, 82, 82, 0.4);
+}
+
+.header-stat-value.threat-medium {
+    color: var(--color-secondary);
+    text-shadow: 0 0 15px rgba(255, 167, 38, 0.4);
+}
+
+.header-stat-value.threat-low {
+    color: #4caf50;
+    text-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
+}
+
+/* Compact stats grid - for remaining stats */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(180px, 1fr)
+    ); /* Smaller minimum width */
+    gap: 12px; /* Reduced gap */
+    padding: 15px 20px; /* Reduced padding */
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Reduced gap */
+    padding: 12px; /* Reduced padding */
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0; /* Smaller radius */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: rgba(211, 47, 47, 0.4);
+    transform: translateY(-1px); /* Reduced transform */
+}
+
+.stat-item.primary {
+    border-color: rgba(211, 47, 47, 0.3);
+    background: rgba(211, 47, 47, 0.1);
+}
+
+.stat-item.secondary {
+    border-color: rgba(255, 255, 255, 0.2);
+    width: fit-content;
+    margin: auto;
+}
+
+.stat-icon {
+    width: 32px; /* Smaller icon container */
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(211, 47, 47, 0.2);
+    border-radius: 0;
+    color: #fff;
+    font-size: 1rem; /* Smaller icon */
+    flex-shrink: 0;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1px; /* Reduced gap */
+}
+
+.stat-value {
+    font-family: "Exo 2", monospace;
+    font-size: 1.2rem; /* Smaller value */
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    line-height: 1;
+}
+
+.stat-label {
+    font-family: "Orbitron", monospace;
+    font-size: 0.7rem; /* Smaller label */
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@media screen and (max-width: 600px) {
+    .header-stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .header-stat {
+        min-width: auto;
+    }
+
+    .profile-section,
+    .system-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .profile-image-container,
+    .system-image-container {
+        width: 60px;
+        height: 60px;
+    }
+
+    .player-name,
+    .system-name {
+        font-size: 1.4rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .stat-item {
+        padding: 12px;
+    }
+
+    .stat-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .card-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .profile-section,
+    .system-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .header-stats {
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .profile-image-container,
+    .system-image-container {
+        width: 60px;
+        height: 60px;
+    }
+
+    .enhanced-player-card .player-name,
+    .enhanced-system-card .system-name {
+        font-size: 1.4rem;
+    }
+
+    .enhanced-player-card .player-status,
+    .enhanced-system-card .system-region {
+        color: #c0c0c0 !important; /* Maintain consistent mobile styling */
+    }
+
+    .header-stat-value {
+        font-size: 1.5rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .stat-item {
+        padding: 10px;
+    }
+
+    .stat-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+    }
+
+    .stat-value {
+        font-size: 1.1rem;
+    }
+}
