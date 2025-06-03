@@ -244,34 +244,68 @@
         		console.log('WebSocket connection established.');
       		};
 		// Recieve messages.
-     		ws.onmessage = function(event) {
-        		try {
-				try {
-				        // Assume the incoming message is a single JSON object
-          				const newItem = JSON.parse(event.data);
-          				// Create a new card for the new item
-          				const card = document.createElement("div");
-          				card.classList.add("data-card");
-          				card.innerHTML = `
-            					<h2>
-							<span class="killer">${newItem.killer_name}</span>
-							<img src="pew.png" alt="vs" style="height:20px; vertical-align:middle;" />
-							<span class="victim">${newItem.victim_name}</span>
-						</h2>
-            					<p><strong>Loss Type:</strong> ${newItem.loss_type}</p>
-            					<p><strong>Solar System:</strong> ${newItem.solar_system_name} (ID: ${newItem.solar_system_id})</p>
-            					<p><strong>Timestamp:</strong> ${formatTimestamp(newItem.time_stamp)}</p>
-          				`;
-          				// Prepend the new card at the top of the container
-          				const container = document.getElementById("data-card");
-          				container.insertBefore(card, container.firstChild);
-    				} catch (error) {
-        				console.warn("Received non-mail JSON message:", event.data);
-    				}
-        		} catch (error) {
-          			console.error('Error processing WebSocket message:', error);
+      		ws.onmessage = function(event) {
+        		console.log("Received event.data:", event.data);
+        		console.log("Type of event.data:", typeof event.data);
+        		// Handle data if it comes as a Blob.
+        		if (event.data instanceof Blob) {
+          			event.data.text().then(text => {
+            				processData(text);
+          			}).catch(blobError => {
+            				console.error("Error converting Blob to text:", blobError);
+          			});
+        		} else {
+         		 	processData(event.data);
         		}
       		};
+      		/**
+       		* Processes a message received from the WebSocket. Only valid mail data is rendered.
+       		*/
+      		function processData(data) {
+        		try {
+          			const trimmedData = data.trim();
+          			if (trimmedData.length === 0) {
+            				console.warn("Empty message received, ignoring.");
+           	 			return;
+          			}
+          			const newItem = JSON.parse(trimmedData);
+				// Check for the expected mail data properties.
+          			// If anything essential is missing, skip this message.
+          			if (!newItem ||
+            				!newItem.id ||
+            				!newItem.killer_name ||
+            				!newItem.victim_name ||
+            				!newItem.loss_type ||
+            				!newItem.solar_system_name ||
+            				!newItem.solar_system_id ||
+            				!newItem.time_stamp)
+				{
+            				console.warn("Received non-mail or incomplete data, skipping:", newItem);
+            				return;
+          			}
+          			const card = document.createElement("div");
+          			card.classList.add("data-card");
+          			card.innerHTML = `
+            			<h3>
+              				<span class="killer">${newItem.killer_name}</span>
+              				<img src="pew.png" alt="vs" style="height:20px; vertical-align:middle;" />
+              				<span class="victim">${newItem.victim_name}</span>
+            			</h3>
+            			<p><strong>Loss Type:</strong> ${newItem.loss_type}</p>
+            			<p><strong>Solar System:</strong> ${newItem.solar_system_name} (ID: ${newItem.solar_system_id})</p>
+            			<p><strong>Timestamp:</strong> ${formatTimestamp(newItem.time_stamp)}</p>
+          			`;
+          			const container = document.getElementById("data-container");
+          				if (!container) {
+            					console.error("Container with id 'data-container' not found.");
+            					return;
+          				}
+          			container.insertBefore(card, container.firstChild);
+          			console.log("New mail card inserted successfully!");
+        		} catch (error) {
+          				console.error("Error processing the message data:", error);
+       			}
+      		}
 		// Get errors.
       		ws.onerror = function(error) {
         		console.error('WebSocket error:', error);
