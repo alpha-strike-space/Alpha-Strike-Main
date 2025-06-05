@@ -1,0 +1,343 @@
+/* styles/components/navigation.css */
+
+/* Base styles for the top navigation */
+.topnav {
+  display: flex;
+  position: fixed; /* Keep it fixed */
+  top: 0;
+  left: 0;
+  align-items: center; /* Vertically align items in the nav bar */
+  width: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(26, 26, 26, 0.95) 0%,
+    rgba(18, 18, 18, 0.98) 100%
+  );
+  padding: 0 var(--spacing-md); /* Consistent padding */
+  box-shadow:
+    0 var(--spacing-xs) 20px rgba(211, 47, 47, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 2px 10px rgba(0, 0, 0, 0.5);
+  border-bottom: 2px solid rgba(211, 47, 47, 0.4);
+  backdrop-filter: blur(10px);
+  z-index: 1000; /* Ensure it's on top */
+  min-height: 60px; /* Ensure a minimum height, adjust as needed */
+  box-sizing: border-box;
+}
+
+/* Logo styling (new) */
+.nav-logo.alpha-strike-logo {
+  font-family: "Orbitron", sans-serif; /* Orbitron for logo */
+  font-size: 1.5rem; /* Adjust size as needed */
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  padding: var(--spacing-sm) 0; /* Match link padding vertically if needed */
+  margin-right: auto; /* Pushes other items (like hamburger on mobile, or links on desktop) to the right */
+}
+
+/* Hamburger Menu Button (new) */
+.hamburger-menu {
+  display: none; /* Hidden by default, shown on mobile */
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  font-size: 1.8rem; /* Adjust size */
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  line-height: 1; /* Ensure icon is centered */
+  z-index: 1001; /* Above topnav-links when they are absolute */
+}
+
+/* Container for navigation links */
+.topnav-links {
+  display: flex; /* Default for desktop: links in a row */
+  align-items: center;
+}
+
+/* Navigation links general styling (mostly retained) */
+.topnav-links a,
+.topnav-links .lang-btn-nav {
+  /* Target lang button specifically if it's styled as a link */
+  color: var(--color-text-secondary);
+  text-align: center;
+  padding: var(--spacing-md) var(--spacing-lg); /* Consistent padding */
+  text-decoration: none;
+  font-family: "Exo 2", "Orbitron", monospace;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  transition: all 0.3s ease;
+  margin: 0 var(--spacing-xs); /* Small margin between links */
+  white-space: nowrap; /* Prevent links from wrapping */
+}
+
+/* Language button specific styling (retained hover from #animatedLangBtn) */
+.lang-btn-nav {
+  font-size: 1rem; /* Matches link font size */
+  background: transparent;
+  border: var(--border-primary);
+  cursor: pointer;
+  opacity: 1;
+  /* position: relative; -> Already applied to general links */
+  /* transition: all 0.3s ease; -> Already applied to general links */
+  backdrop-filter: blur(5px); /* Retained */
+}
+
+.lang-btn-nav::before {
+  /* From #animatedLangBtn styling */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(211, 47, 47, 0.1) 0%,
+    rgba(139, 0, 0, 0.2) 50%,
+    rgba(211, 47, 47, 0.1) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.lang-btn-nav:hover {
+  /* From #animatedLangBtn styling */
+  background: linear-gradient(
+    135deg,
+    rgba(211, 47, 47, 0.8) 0%,
+    rgba(139, 0, 0, 0.9) 50%,
+    rgba(211, 47, 47, 0.8) 100%
+  );
+  color: #ffff;
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 20px rgba(211, 47, 47, 0.4),
+    var(--shadow-inset);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  border-color: rgba(211, 47, 47, 0.6);
+}
+
+.lang-btn-nav:hover::before {
+  /* From #animatedLangBtn styling */
+  opacity: 1;
+}
+
+/* Sci-fi hover effect for links (retained) */
+.topnav-links a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(211, 47, 47, 0.1) 0%,
+    rgba(139, 0, 0, 0.2) 50%,
+    rgba(211, 47, 47, 0.1) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+/* Active link styling (retained) */
+.topnav-links a.active {
+  background: linear-gradient(
+    135deg,
+    rgba(211, 47, 47, 0.9) 0%,
+    rgba(139, 0, 0, 1) 50%,
+    rgba(211, 47, 47, 0.9) 100%
+  );
+  color: #ffff;
+  box-shadow:
+    inset 0 0 15px rgba(0, 0, 0, 0.5),
+    var(--shadow-glow-primary),
+    var(--shadow-inset);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  border: var(--border-primary-strong);
+}
+
+/* Hover effect for links (retained) */
+.topnav-links a:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(211, 47, 47, 0.8) 0%,
+    rgba(139, 0, 0, 0.9) 50%,
+    rgba(211, 47, 47, 0.8) 100%
+  );
+  color: #ffff;
+  transform: translateY(
+    2px
+  ); /* Note: consider translateY(-2px) for upward lift on hover */
+  box-shadow:
+    0 6px 20px rgba(211, 47, 47, 0.4),
+    var(--shadow-inset);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  border: var(--border-primary-strong);
+}
+
+.topnav-links a:hover::before {
+  opacity: 1;
+}
+
+/* Sci-fi accent line (retained) */
+.topnav::after {
+  content: "";
+  position: absolute;
+  bottom: -2px; /* Ensure it's correctly positioned if nav height changes */
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(211, 47, 47, 0.8),
+    rgba(139, 0, 0, 1),
+    rgba(211, 47, 47, 0.8),
+    transparent
+  );
+  box-shadow: 0 0 10px rgba(211, 47, 47, 0.5);
+}
+
+/* Sci-fi pulse animation for active elements (retained) */
+@keyframes scifiPulse {
+  0%,
+  100% {
+    box-shadow: var(--shadow-glow-primary), var(--shadow-inset);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(211, 47, 47, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+}
+
+.topnav-links a.active {
+  animation: scifiPulse 3s ease-in-out infinite;
+}
+
+@media screen and (max-width: 1399px) and (min-width: 901px) {
+  .topnav {
+    padding: 0 var(--spacing-xs); /* Further reduced padding */
+  }
+
+  .nav-logo.alpha-strike-logo {
+    font-size: 1.1rem; /* Smaller logo */
+    padding: var(--spacing-xs) 0;
+  }
+
+  .topnav-links a,
+  .topnav-links .lang-btn-nav {
+    padding: var(--spacing-sm) var(--spacing-xs); /* Reduced padding */
+    font-size: 0.75rem; /* Smaller font */
+    letter-spacing: 0.3px; /* Reduced letter spacing */
+  }
+
+  .topnav-links a i {
+    margin-right: var(--spacing-xs);
+    font-size: 0.8em; /* Smaller icons */
+  }
+
+  .lang-btn-nav {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.75rem;
+    min-width: 35px; /* Smaller minimum width */
+  }
+}
+
+/* Mobile Menu Styles - Breakpoint 900px */
+@media screen and (max-width: 900px) {
+  .topnav {
+    justify-content: space-between;
+    padding: 0 var(--spacing-xs);
+    height: 50px; /* Fixed height for mobile */
+  }
+
+  .nav-logo.alpha-strike-logo {
+    font-size: 1rem;
+    padding: var(--spacing-xs) 0;
+  }
+
+  .hamburger-menu {
+    display: block;
+    font-size: 1.4rem; /* Smaller hamburger icon */
+    padding: var(--spacing-xs);
+  }
+
+  .topnav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    background: var(--gradient-dark);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(211, 47, 47, 0.2);
+    max-height: 0;
+    overflow: hidden;
+    transition:
+      max-height 0.3s ease-out,
+      padding 0.3s ease-out;
+    padding: 0;
+  }
+
+  .topnav-links.open {
+    display: flex;
+    max-height: calc(100vh - 50px);
+    padding: var(--spacing-xs) 0;
+  }
+
+  .topnav-links a,
+  .topnav-links .lang-btn-nav {
+    width: calc(100% - var(--spacing-lg) * 2); /* Account for padding */
+    margin: 0 auto; /* Center the items */
+    text-align: left;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid rgba(211, 47, 47, 0.2);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  .topnav-links a i {
+    width: 20px;
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .topnav-links a:last-of-type,
+  .topnav-links .lang-btn-nav {
+    border-bottom: none;
+  }
+
+  .topnav-links .lang-btn-nav {
+    margin: 0 auto; /* Center the language button */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-top: 1px solid rgba(211, 47, 47, 0.2);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.9rem;
+    width: calc(100% - var(--spacing-lg) * 2); /* Match other items */
+  }
+
+  .topnav-links a:hover,
+  .topnav-links .lang-btn-nav:hover {
+    transform: none;
+    background-color: rgba(211, 47, 47, 0.1);
+  }
+
+  .topnav-links a.active {
+    background-color: rgba(211, 47, 47, 0.15);
+    border-left: 3px solid var(--color-primary);
+    padding-left: calc(var(--spacing-md) - 3px);
+  }
+}

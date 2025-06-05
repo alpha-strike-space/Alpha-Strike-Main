@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="description"
+            content="The Alpha-Strike Leaderboard or Killboard for Eve Frontier"
+        />
+        <meta
+            name="keywords"
+            content="Eve Frontier, PVP, Leaderboard, Killboard"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Alpha-Strike, Find your Content on the Frontier!</title>
+        <link rel="shortcut icon" href="../favicon.png" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+            integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+            rel="stylesheet"
+        />
+      <script type="module" crossorigin src="/assets/systems-B_TQ_sHu.js"></script>
+      <link rel="modulepreload" crossorigin href="/assets/common-IQxCJoLi.js">
+      <link rel="modulepreload" crossorigin href="/assets/monthly-tables-HbPDPibe.js">
+      <link rel="stylesheet" crossorigin href="/assets/common-BiBftliO.css">
+    </head>
+    <body>
+        <main>
+            <!-- Top Navigation Bar with Language Switcher -->
+            <div id="navigation-container"></div>
+
+            <h1>
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span data-translate="header.leadingSystemsByIncidents"
+                    >Systems by Incidents</span
+                >
+            </h1>
+            <div class="container monthly-tables">
+                <h1 id="rollingAverageHeader"></h1>
+                <div class="time-range-selector" style="text-align: center; margin-bottom: 20px;">
+                    <button class="time-range-btn" data-range="day" data-translate="button.rangeDay">Day</button>
+                    <button class="time-range-btn" data-range="week" data-translate="button.rangeWeek">Week</button>
+                    <button class="time-range-btn active" data-range="month" data-translate="button.rangeMonth">Month</button> 
+                </div>
+                <div id="data-container">Loading data...</div>
+                <table id="systemTable" style="display: none">
+                    <thead>
+                        <tr>
+                            <th data-translate="table.name">Name</th>
+                            <th data-translate="table.numIncidents">
+                                Number of Incidents
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </main>
+        <!-- Scripts -->
+        
+    </body>
+</html>

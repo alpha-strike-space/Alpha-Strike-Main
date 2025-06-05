@@ -1,0 +1,480 @@
+/* Data container */
+#data-container {
+  text-align: center;
+  margin-top: 20px;
+  color: var(--color-text-light);
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: auto;
+}
+
+/* Incident list items fill their wrapper */
+.incident-list-item {
+  display: flex;
+  align-items: center;
+  min-width: fit-content;
+  width: auto;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-xl);
+  margin-bottom: var(--spacing-sm);
+  background: var(--gradient-medium);
+  border: var(--border-primary);
+  border-radius: 0;
+  color: var(--color-text-primary);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.incident-list-item:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(54, 54, 54, 0.95) 0%,
+    rgba(42, 42, 42, 0.98) 100%
+  );
+  border-color: rgba(211, 47, 47, 0.5);
+  box-shadow: 0 0 15px rgba(211, 47, 47, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Photo section */
+.incident-photos {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+.photo-container {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: var(--color-bg-medium);
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.killer-photo {
+  border-color: rgba(255, 167, 38, 0.6);
+  box-shadow:
+    0 0 var(--spacing-sm) rgba(255, 167, 38, 0.3),
+    inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.victim-photo {
+  border-color: rgba(255, 82, 82, 0.6);
+  box-shadow:
+    0 0 var(--spacing-sm) rgba(255, 82, 82, 0.3),
+    inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.combatant-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vs-indicator {
+  color: rgba(211, 47, 47, 0.8);
+  font-size: 0.8rem;
+  margin: 0 var(--spacing-xs);
+}
+
+/* Combatants section */
+.incident-combatants {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-xs);
+  min-width: 200px;
+  flex: 1;
+}
+
+.combatant-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: var(--spacing-sm);
+}
+
+/* Adjust font awesome icon in combatant-info div */
+.incident-list-item i {
+  color: var(--color-text-light);
+  font-size: 0.5rem;
+  margin: 0;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+  vertical-align: super;
+  margin-left: 1px;
+}
+
+.combatant-label {
+  font-family: "Orbitron", monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-align: right;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #aaa;
+  min-width: 60px;
+  white-space: nowrap;
+}
+
+.combatant-name {
+  font-family: "Exo 2", monospace;
+  white-space: nowrap;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  text-decoration: underline;
+  min-width: 300px; /* Ensure enough space for name */
+  margin-left: 1.5rem;
+  cursor: pointer;
+}
+
+.clickable-system {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.combatant-name.killer {
+  color: var(--color-secondary);
+  text-shadow: 0 0 5px rgba(255, 167, 38, 0.3);
+}
+
+.combatant-name.victim {
+  color: var(--color-primary-light);
+  text-shadow: 0 0 5px rgba(255, 82, 82, 0.3);
+}
+
+/* Details section */
+.incident-details-compact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  min-width: 180px;
+  flex: 1;
+}
+
+.detail-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.detail-label {
+  font-family: "Orbitron", monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-light);
+  min-width: 70px;
+}
+
+.detail-value {
+  font-family: "Exo 2", monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+/* Timestamp section */
+.incident-timestamp {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 160px;
+  flex-shrink: 0;
+}
+
+.timestamp-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.timestamp-label {
+  font-size: 0.6rem;
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+.timestamp-value {
+  font-family: "Space Mono", monospace;
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  text-shadow: 0 0 5px rgba(211, 47, 47, 0.4);
+}
+
+.time-elapsed {
+  font-family: "Exo 2", monospace;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Container for the detail link, helps with positioning within the card */
+.incident-detail-link-container {
+  display: flex;
+  justify-content: flex-end; /* Example: align to the right */
+  align-items: center;
+  padding-top: var(--spacing-sm); /* Add some space above the link */
+  /* If your card items are in a grid/flex layout, this might need different positioning */
+}
+
+a.view-killmail-details-link.icon-only-link {
+  display: inline-flex; /* Or flex, to help center the icon */
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-sm); /* Adjust padding to get desired button size */
+  color: var(--color-text-secondary); /* Icon color */
+  border: 1px solid var(--color-primary-dark); /* Subtle border */
+  border-radius: var(--radius-sm); /* Rounded corners */
+  background-color: rgba(
+    var(--color-bg-medium-rgb, 26, 26, 26),
+    0.5
+  ); /* Slightly transparent background, define --color-bg-medium-rgb or use a direct rgba value */
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+a.view-killmail-details-link.icon-only-link:hover,
+a.view-killmail-details-link.icon-only-link:focus {
+  color: #fff; /* Brighter icon color on hover/focus */
+  background-color: var(--color-primary); /* Use primary color for background */
+  border-color: var(--color-primary);
+  box-shadow: 0 0 8px var(--color-primary-dark);
+}
+
+a.view-killmail-details-link.icon-only-link i {
+  font-size: 1rem; /* Adjust icon size as needed */
+  line-height: 1; /* Ensure icon is vertically centered if padding causes issues */
+}
+
+.no-detail-link {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  padding: var(--spacing-sm);
+}
+
+/* ID section */
+.incident-id-compact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.id-label {
+  font-family: "Orbitron", monospace;
+  font-size: 0.6rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.id-value {
+  font-family: "Exo 2", monospace;
+  font-size: 0.8rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Container adjustments for list view */
+.container {
+  max-width: 95%;
+  width: fit-content;
+}
+
+/* Compact mode for medium-large screens */
+@media screen and (min-width: 801px) and (max-width: 1200px) {
+  .incident-list-item {
+    padding: var(--spacing-sm) var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+
+  .photo-container {
+    width: 40px;
+    height: 40px;
+  }
+
+  .incident-combatants {
+    min-width: 160px;
+  }
+
+  .combatant-name {
+    font-size: 0.8rem;
+    min-width: 200px;
+  }
+
+  .combatant-label {
+    font-size: 0.6rem;
+    min-width: 50px;
+  }
+
+  .incident-details-compact {
+    min-width: 140px;
+  }
+
+  .detail-label {
+    font-size: 0.6rem;
+    min-width: 60px;
+  }
+
+  .detail-value {
+    font-size: 0.75rem;
+  }
+
+  .incident-timestamp {
+    min-width: 140px;
+  }
+
+  .timestamp-value {
+    font-size: 0.75rem;
+  }
+
+  .time-elapsed {
+    font-size: 0.65rem;
+  }
+
+  .incident-id-compact {
+    min-width: 60px;
+  }
+
+  .id-value {
+    font-size: 0.75rem;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .incident-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .incident-card {
+    max-width: 100%;
+  }
+
+  .incident-list-item {
+    flex-direction: column;
+    gap: var(--spacing-md); /* Adjusted gap for medium screens */
+    padding: var(--spacing-md); /* Adjusted padding for medium screens */
+    align-items: stretch; /* Stretch items to fill container width */
+    width: 100%; /* Allow list item to take full width in column layout */
+    min-width: auto; /* Reset min-width for column layout */
+  }
+
+  .incident-photos {
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .photo-container {
+    width: 50px;
+    height: 50px;
+  }
+
+  .incident-combatants {
+    display: inline;
+    width: 100%;
+    min-width: auto;
+    align-items: start;
+    text-align: center;
+    margin: auto;
+  }
+
+  .incident-details-compact {
+    min-width: auto;
+    align-items: center;
+    text-align: center;
+  }
+
+  .incident-timestamp {
+    align-items: center;
+    min-width: auto;
+  }
+
+  .timestamp-group {
+    align-items: center;
+    text-align: center;
+  }
+
+  .incident-id-compact {
+    min-width: auto;
+  }
+  /* Reduce glow effects on mobile for performance */
+  h1 {
+    text-shadow:
+      0 0 15px rgba(211, 47, 47, 0.5),
+      0 2px var(--spacing-xs) rgba(0, 0, 0, 0.8);
+  }
+
+  .topnav {
+    box-shadow:
+      0 2px 15px rgba(211, 47, 47, 0.2),
+      0 1px 5px rgba(0, 0, 0, 0.4);
+  }
+
+  .vs-divider {
+    transform: rotate(90deg);
+    margin: 10px 0;
+  }
+
+  .vs-line {
+    width: 30px;
+    height: 2px;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .detail-label {
+    min-width: auto;
+  }
+
+  .combatant-info {
+    text-align: center;
+    margin: auto;
+  }
+
+  .combatant-label {
+    width: 100%;
+    text-align: right;
+    margin: auto;
+  }
+  .combatant-name {
+    width: 100%;
+    min-width: auto;
+    text-align: left;
+    margin: auto;
+    margin-left: 0;
+  }
+}
+
+/* Further responsive adjustments for smaller screens if needed for photos */
+@media screen and (max-width: 400px) {
+  .combatant-photo-container {
+    width: 50px; /* Even smaller on very small screens */
+    height: 50px;
+  }
+  .combatant-name {
+    font-size: 1rem; /* Slightly smaller name on very small screens */
+  }
+  .container {
+    max-width: 95%;
+    padding: 15px;
+  }
+}

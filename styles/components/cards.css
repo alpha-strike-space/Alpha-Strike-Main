@@ -1,0 +1,106 @@
+.data-card {
+  background: var(--gradient-medium);
+  border: var(--border-primary);
+  border-radius: 0;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 0 20px rgba(211, 47, 47, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 6px 20px
+    rgba(0, 0, 0, 0.4);
+  color: var(--color-text-primary);
+  text-align: center;
+  position: relative;
+  backdrop-filter: blur(5px);
+  overflow: hidden;
+}
+
+/* Sci-fi corner accents */
+.data-card::before,
+.data-card::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(211, 47, 47, 0.6);
+}
+
+.data-card::before {
+  top: 10px;
+  left: 10px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.data-card::after {
+  bottom: 10px;
+  right: 10px;
+  border-left: none;
+  border-top: none;
+}
+
+.data-card h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: var(--color-primary);
+  text-shadow: 0 0 10px rgba(211, 47, 47, 0.4);
+  font-family: "Orbitron", monospace;
+  letter-spacing: 1px;
+}
+
+.data-card p {
+  margin-bottom: 10px;
+  line-height: 1.6;
+  overflow: hidden;
+}
+
+.data-card p strong {
+  color: #ffff;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+#totals-card {
+  text-align: center;
+  background: linear-gradient(135deg, rgba(32, 32, 32, 0.95) 0%, rgba(24, 24, 24, 0.98) 100%);
+  padding: 20px;
+  border-radius: 0;
+  margin-top: 20px;
+  border: var(--border-primary);
+  box-shadow: 0 0 15px rgba(211, 47, 47, 0.1);
+  margin-bottom: 3rem;
+}
+
+.timestamp {
+  font-style: italic;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-top: 12px;
+  text-shadow: none;
+}
+
+/* Player colors */
+.victim {
+  color: var(--color-primary-light);
+  font-weight: 600;
+  text-shadow: 0 0 var(--spacing-sm) rgba(255, 82, 82, 0.4);
+}
+
+.killer {
+  color: var(--color-secondary);
+  font-weight: 600;
+  text-shadow: 0 0 var(--spacing-sm) rgba(255, 167, 38, 0.4);
+}
+
+@media screen and (max-width: 800px) {
+  .data-card {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .data-card h2 {
+    font-size: 1.4em;
+  }
+  .data-card::before,
+  .data-card::after {
+    width: 15px;
+    height: 15px;
+  }
+}
