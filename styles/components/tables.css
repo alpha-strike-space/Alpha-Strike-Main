@@ -1,0 +1,156 @@
+/* Container variant for monthly tables */
+/* Container variant for monthly tables */
+.container.monthly-tables {
+  margin: var(--spacing-lg) auto;
+  background: linear-gradient(135deg, rgba(20, 20, 20, 0.97) 0%, rgba(28, 28, 28, 0.92) 100%);
+  border: 1px solid rgba(var(--color-primary), 0.6);
+  max-width: fit-content;
+  padding: 2rem; /* Reduced padding slightly */
+  border-radius: 0px; /* Sharper corners */
+  box-shadow: var(--shadow-glow-primary);
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 0px; /* Slightly sharper */
+  border: 1px solid rgba(30, 30, 30, 0.7); /* Dark border for the responsive container */
+}
+
+table {
+  margin: auto;
+  width: 100%;
+  border-collapse: separate; /* Allows border-spacing */
+  border-spacing: 0;
+  background: var(--gradient-dark);
+  font-family: var(--font-primary);
+  border-radius: 0px; /* Sharper table corners */
+  overflow: hidden;
+  box-shadow: var(--shadow-inset);
+}
+
+th,
+td {
+  padding: var(--spacing-md) 0 var(--spacing-md) 0;
+  margin-right: 0;
+  border: none; /* Remove individual borders first */
+  text-align: left;
+  position: relative;
+  color: var(--color-text-light);
+  text-shadow: var(--shadow-text-muted);
+  border-bottom: var(--border-primary); /* Apply only bottom border to cells for row separation */
+  font-weight: bold;
+}
+
+/* Font awesome formatting in table rows */
+table td i {
+  color: var(--color-text-light);
+  font-size: 0.5rem;
+  margin: 0;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+  vertical-align: super;
+  margin-left: 1px;
+}
+
+table th:first-child,
+table td:first-child {
+  padding-left: var(--spacing-lg);
+}
+
+table th:last-child,
+table td:last-child {
+  padding-right: var(--spacing-lg);
+}
+
+th {
+  background: VAR(--gradient-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px; /* Adjusted for Orbitron */
+  text-shadow: var(--shadow-glow-primary);
+  border-bottom: var(--border-primary-strong); /* Strong red underline for headers */
+}
+
+th:last-child,
+td:last-child {
+  text-align: right;
+}
+
+/* Sci-fi table row hover effect */
+tbody tr {
+  transition: background-color 0.25s ease-out, box-shadow 0.25s ease-out, color 0.2s ease-in-out;
+}
+
+tbody tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.25); /* Darker, more pronounced striping */
+}
+
+tbody tr:nth-child(odd) {
+  background-color: rgba(10, 10, 10, 0.15); /* Subtle dark for odd rows */
+}
+
+tbody tr:hover {
+  background-color: var(--color-primary-light);
+  box-shadow: var(--shadow-inset);
+  color: #fff; /* Ensure text is bright on hover */
+  font-weight: bolder;
+}
+
+tbody tr:last-child td {
+  border-bottom: none; /* No border for the last row's cells */
+}
+
+.monthly-tables th,
+.monthly-tables td {
+  text-align: center; /* Center text for monthly tables */
+}
+
+/* Ensure last child in monthly tables is also centered if it was right-aligned by general rule */
+.monthly-tables th:last-child,
+.monthly-tables td:last-child {
+  text-align: center;
+}
+
+@media screen and (max-width: 1000px) {
+  .table-responsive {
+    border-radius: 0px;
+  }
+
+  th,
+  td {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.9rem;
+  }
+
+  .monthly-tables th,
+  .monthly-tables td {
+    font-size: 0.85rem;
+  }
+
+  th {
+    letter-spacing: 1px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  th,
+  td {
+    font-size: 0.8rem;
+    letter-spacing: 0.5px; /* Reduce letter spacing on small screens */
+  }
+  .monthly-tables th,
+  .monthly-tables td {
+    font-size: 0.75rem;
+  }
+  table th:first-child,
+  table td:first-child {
+    padding-left: var(--spacing-md);
+  }
+
+  table th:last-child,
+  table td:last-child {
+    padding-right: var(--spacing-md);
+  }
+}

@@ -1,0 +1,143 @@
+@import url("variables.css");
+@import url("utilities.css");
+@import url("base.css");
+@import url("animations.css");
+
+@import url("components/navigation.css");
+@import url("components/cards.css");
+@import url("components/buttons.css");
+@import url("components/incidents.css");
+@import url("components/tables.css");
+@import url("components/forms.css");
+@import url("components/stats.css");
+@import url("components/hero.css");
+@import url("components/killmail-detail.css");
+
+/* Navbar Search Styles */
+.nav-search-container {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-search-toggle {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.nav-search-toggle:hover {
+  color: var(--primary-color);
+}
+
+.nav-search-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--color-bg-medium);
+  border: var(--border-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--spacing-md);
+  display: none;
+  z-index: 1000;
+  min-width: 300px;
+  max-width: 90vw;
+  box-sizing: border-box;
+}
+
+.nav-search-dropdown::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: 20px;
+  width: 12px;
+  height: 12px;
+  background-color: var(--color-bg-medium);
+  border-left: var(--border-primary);
+  border-top: var(--border-primary);
+  transform: rotate(45deg);
+  z-index: -1;
+}
+
+.nav-search-dropdown.show {
+  display: block;
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-search {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nav-search select,
+.nav-search input {
+  height: 36px;
+  padding: 0 12px;
+  border: var(--border-primary);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nav-search button {
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--gradient-primary);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-default);
+  width: 100%;
+  font-weight: 500;
+}
+
+.nav-search button:hover {
+  box-shadow: var(--shadow-glow-primary);
+  transform: translateY(-1px);
+}
+
+/* Responsive styles for navbar search */
+@media screen and (max-width: 768px) {
+  .nav-search-dropdown {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 8px 8px 0 0;
+    padding: 16px;
+    min-width: auto;
+  }
+
+  .nav-search {
+    gap: 12px;
+  }
+}

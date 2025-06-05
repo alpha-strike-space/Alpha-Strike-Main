@@ -1,0 +1,328 @@
+/* styles/components/killmail-detail.css */
+
+body.killmail-page {
+  /* Apply specific body font for this page if needed, or inherit from base.css */
+  font-family: var(--font-secondary), sans-serif; /* More readable default */
+}
+
+.killmail-detail-view-container {
+  max-width: 1000px; /* Slightly wider for more content */
+  margin: var(--spacing-md) auto; /* Use theme spacing */
+  padding: var(--spacing-md); /* Use theme spacing */
+  /* Base card styling will come from .data-card class in cards.css */
+}
+
+.killmail-header-section {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: var(--gradient-dark);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.killmail-header-section h1 {
+  margin: 0;
+  font-family: var(--font-primary); /* Orbitron for main title */
+  font-size: 2.2em; /* Responsive font size */
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+.killmail-header-section h1 .killer {
+  /* Class from variables.css or cards.css */
+  color: var(--color-secondary);
+}
+.killmail-header-section h1 .victim {
+  /* Class from variables.css or cards.css */
+  color: var(--color-primary-light);
+}
+.killmail-header-section .system-location {
+  font-size: 1.1em;
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-sm);
+}
+.killmail-header-section .system-location .clickable-system {
+  /* Assuming .clickable-system has base styles */
+  color: var(--color-text-secondary);
+  text-decoration: underline; /* Or use existing link styles */
+}
+
+.combatants-grid-km {
+  display: flex;
+  justify-content: space-between; /* Keeps killer on left, victim on right */
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  /* New properties for centering the grid block itself */
+  width: fit-content; /* Grid takes up only as much width as its content needs */
+  max-width: 100%; /* Ensures it doesn't overflow on very small viewports before wrapping */
+  margin-left: auto; /* Center the grid block */
+  margin-right: auto; /* Center the grid block */
+  /* flex-wrap: wrap; -- keep this commented unless needed for specific responsive behavior */
+}
+
+.combatant-column-km {
+  flex: 1 1 400px; /* Flex basis for responsiveness */
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.combatant-card-km {
+  background: var(--gradient-medium); /* From variables.css */
+  padding: var(--spacing-md);
+  border: 1px solid transparent; /* Base border, specific below */
+  box-shadow: var(--shadow-card); /* From variables.css */
+  width: 100%;
+  flex-grow: 1;
+}
+
+/* Differentiate Killer and Victim Cards */
+.killer-card-km {
+  border-left: 4px solid var(--color-secondary);
+}
+.victim-card-km {
+  border-left: 4px solid var(--color-primary-light);
+}
+
+.combatant-header-km {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.combatant-header-km .profile-image {
+  /* Leverages .profile-image from stats.css if possible, or define here */
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border: 2px solid var(--color-bg-light);
+}
+.killer-card-km .profile-image {
+  border-color: var(--color-secondary);
+}
+.victim-card-km .profile-image {
+  border-color: var(--color-primary-light);
+}
+
+.combatant-info-km .combatant-role-label {
+  font-family: var(--font-primary);
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: var(--spacing-xs);
+  display: block;
+}
+.combatant-info-km .combatant-role-label.killer {
+  color: var(--color-secondary);
+}
+.combatant-info-km .combatant-role-label.victim {
+  color: var(--color-primary-light);
+}
+
+.combatant-info-km h2 {
+  /* Player name */
+  margin: 0 0 var(--spacing-xs) 0;
+  font-family: var(--font-secondary); /* Exo 2 for names */
+  font-size: 1.4em;
+  word-break: break-all; /* Prevent long names from breaking layout */
+  text-decoration: underline;
+}
+/* Color for names already handled by .killer and .victim classes */
+
+.combatant-info-km p {
+  /* Ship, corp info */
+  margin: var(--spacing-xs) 0;
+  font-size: 0.95em;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+.combatant-info-km .placeholder {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.engagement-details-km,
+.fitting-section-km {
+  /* .data-card class from cards.css provides base background, border, shadow */
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+.engagement-details-km h3,
+.fitting-section-km h3 {
+  /* Section titles */
+  font-family: var(--font-primary);
+  color: var(--color-primary);
+  margin-top: 0;
+  border-bottom: 1px solid var(--color-primary-dark);
+  padding-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.5em;
+}
+.engagement-details-km p {
+  margin: var(--spacing-sm) 0;
+  color: var(--color-text-light);
+  font-size: 1em;
+  line-height: 1.6;
+}
+
+.fitting-table-km summary {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--color-secondary);
+  background: rgba(var(--color-bg-medium-rgb, 26, 26, 26), 0.7);
+  transition: background-color 0.2s ease;
+  font-family: var(--font-secondary); /* Exo 2 for summary */
+  font-size: 1.1em;
+  display: flex; /* For aligning icon and text */
+  align-items: center; /* For aligning icon and text */
+  justify-content: center; /* Added to center all content (icon and text) */
+  position: relative; /* For positioning the pseudo-element if needed, and default marker hiding */
+  list-style: none; /* Hide default marker in some browsers */
+}
+
+/* Hide default disclosure marker for WebKit/Blink browsers */
+.fitting-table-km summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Hide default disclosure marker for Firefox */
+.fitting-table-km summary::marker {
+  /* Standard way, but ::-moz-list-bullet is sometimes needed */
+  display: none;
+  content: ""; /* Ensure it's fully gone */
+}
+.fitting-table-km summary::-moz-list-bullet {
+  /* Firefox specific */
+  font-size: 0; /* Another way to hide in FF if display:none isn't enough for ::marker */
+  display: none; /* Should work */
+}
+
+/* Add custom expansion indicator */
+.fitting-table-km summary::after {
+  /* Using ::after to place it after the text/icon group */
+  font-weight: 900; /* For Solid icons */
+  font-size: 0.8em;
+  margin-left: auto; /* Pushes the indicator to the far right */
+  padding-left: var(--spacing-md); /* Some space from the content */
+  color: var(--color-text-muted);
+  transition: transform 0.2s ease-in-out; /* For rotating effect if desired */
+}
+
+.fitting-table-km details[open] summary {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background: rgba(var(--color-primary-rgb, 211, 47, 47), 0.3);
+  color: var(--color-text-primary);
+}
+.fitting-table-km summary:hover {
+  background: rgba(var(--color-primary-rgb, 211, 47, 47), 0.2);
+}
+
+/* The existing icon (fa-crosshairs etc.) remains as is */
+.fitting-table-km summary i {
+  margin-right: var(--spacing-sm); /* Keep space between main icon and text */
+  color: var(--color-text-muted); /* Original color */
+  width: 1.2em;
+  text-align: center;
+}
+
+.fitting-table-km details[open] summary i {
+  color: var(--color-secondary); /* Or var(--color-text-primary) */
+}
+
+.fitting-table-km ul {
+  list-style: none;
+  padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-lg);
+  margin: 0;
+  background: rgba(var(--color-bg-dark-rgb, 18, 18, 18), 0.5);
+  border-top: 1px solid rgba(var(--color-text-primary-rgb, 240, 240, 240), 0.05);
+  font-size: 0.95em;
+}
+.fitting-table-km ul li {
+  padding: var(--spacing-xs) 0;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+.fitting-table-km ul li .placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Note specific to fitting section */
+.fitting-section-km .note {
+  text-align: left;
+  margin-bottom: var(--spacing-md);
+  background-color: rgba(var(--color-bg-medium-rgb, 26, 26, 26), 0.7);
+  border-left: 3px solid var(--color-secondary);
+  padding: var(--spacing-sm);
+  font-size: 0.9em; /* Uses existing .note styles from base.css as a base */
+  color: var(--color-text-light); /* Overriding default note color for better contrast on dark bg */
+  box-shadow: none; /* Override default note shadow if not desired here */
+}
+.fitting-section-km .note i {
+  margin-right: var(--spacing-xs);
+  color: var(--color-secondary);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .killmail-header-section h1 {
+    font-size: 1.8em;
+  }
+  .combatant-info-km h2 {
+    /* Player name */
+    font-size: 1.2em;
+  }
+  .engagement-details-km h3,
+  .fitting-section-km h3 {
+    /* Section titles */
+    font-size: 1.3em;
+  }
+  .fitting-table-km summary {
+    font-size: 1em;
+  }
+  .combatants-grid-km {
+    flex-wrap: wrap;
+    justify-content: center; /* Center columns when wrapping */
+    width: fit-content;
+    margin: auto;
+  }
+
+  .combatant-card-km {
+    width: calc(100% - var(--spacing-lg)); /* Full width minus spacing */
+    margin: 10px;
+
+    margin-bottom: var(--spacing-lg); /* Add space between cards */
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .combatants-grid-km {
+    flex-direction: column;
+    align-items: stretch; /* Stretch columns when stacked */
+  }
+  .combatant-column-km {
+    min-width: 100%; /* Make columns full width when stacked */
+    margin-bottom: var(--spacing-md); /* Add space between stacked cards */
+  }
+  .combatant-column-km:last-child {
+    margin-bottom: 0;
+  }
+
+  .killmail-header-section h1 {
+    font-size: 1.6em;
+  }
+  .killmail-header-section .system-location {
+    font-size: 1em;
+  }
+
+  .combatant-header-km {
+    flex-direction: column; /* Stack image and info vertically */
+    align-items: flex-start; /* Align to the start */
+  }
+  .combatant-header-km .profile-image {
+    width: 50px;
+    height: 50px;
+    margin-bottom: var(--spacing-xs);
+  }
+}

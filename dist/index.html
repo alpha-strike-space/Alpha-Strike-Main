@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="description"
+      content="Alpha-Strike: The ultimate leaderboard and killboard for Eve Frontier. Track PVP statistics, view top killers, and stay updated with real-time combat data."
+    />
+    <meta
+      name="keywords"
+      content="Eve Frontier, PVP, Leaderboard, Killboard, Gaming Statistics, Combat Data, Space Game, MMO"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Alpha-Strike" />
+    <meta
+      property="og:title"
+      content="Alpha-Strike - Eve Frontier Leaderboard"
+    />
+    <meta
+      property="og:description"
+      content="Track PVP statistics and view top killers in Eve Frontier"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://alpha-strike.space" />
+
+    <title>Alpha-Strike | Eve Frontier Leaderboard & Killboard</title>
+    <link rel="shortcut icon" href="/favicon.png" />
+    <base href="." />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="module" crossorigin src="/assets/main-FCUNrFsZ.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/common-IQxCJoLi.js">
+    <link rel="stylesheet" crossorigin href="/assets/common-BiBftliO.css">
+  </head>
+  <body>
+    <main>
+      <!-- Navigation will be inserted here -->
+      <div id="navigation-container"></div>
+
+      <div class="landing-content">
+        <section class="hero-section">
+          <h1>
+            <i class="fa-solid fa-skull-crossbones"></i>
+            <span data-translate="hero.title"></span>
+          </h1>
+          <p class="tagline" data-translate="hero.tagline"></p>
+        </section>
+
+        <section class="intro-section">
+          <h2 data-translate="intro.heading"></h2>
+          <p data-translate="intro.paragraph1"></p>
+          <p data-translate="intro.paragraph2"></p>
+        </section>
+
+        <section class="call-to-action">
+          <a
+            href="pages/killers.html"
+            class="btn-primary"
+            data-translate="cta.viewKillers"
+            >View Top Killers</a
+          >
+        </section>
+      </div>
+
+      <h1>
+        <i class="fa-sharp fa-solid fa-trophy"></i>
+        <span data-translate="page.stamped-header">Recently Stamped Mails</span>
+      </h1>
+      <div id="data-container" class="container" aria-live="polite"></div>
+
+      <!-- Floating timezone toggle button -->
+      <button id="timezone-toggle" class="timezone-toggle-floating">
+        <i class="far fa-clock"></i>
+        <span data-translate="timezone.showUtc">Show UTC</span>
+      </button>
+    </main>
+
+    <!-- Added Footer -->
+    <footer class="site-footer">
+      <p>All EVE-Frontier related materials are property of CCP Games</p>
+    </footer>
+
+    <!-- Scripts -->
+  </body>
+</html>

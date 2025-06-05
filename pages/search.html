@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="description"
+      content="The Alpha-Strike Leaderboard or Killboard for Eve Frontier"
+    />
+    <meta name="keywords" content="Eve Frontier, PVP, Leaderboard, Killboard" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alpha-Strike, Find your Content on the Frontier!</title>
+    <!-- Corrected favicon path for pages subdirectory -->
+    <link rel="shortcut icon" href="../favicon.png" />
+    <!-- External stylesheets -->
+    <link rel="stylesheet" href="../styles/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <main>
+      <!-- Dynamic Navigation Bar will be inserted here -->
+      <div id="navigation-container"></div>
+      <h1>
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <span data-translate="page.search-header">Search Results</span>
+      </h1>
+
+      <!-- Main Container for Search Results -->
+      <div class="container">
+        <div id="totals-card"></div>
+        <div id="results-container"></div>
+      </div>
+
+      <!-- Floating timezone toggle button -->
+      <button
+        id="timezone-toggle"
+        class="timezone-toggle-floating"
+        onclick="toggleTimezone()"
+      >
+        <i class="far fa-clock"></i>
+        <span data-translate="timezone.showUtc">Show UTC</span>
+      </button>
+    </main>
+
+    <script type="module">
+      import { initializePage } from "/js/common.js";
+      import { searchIncidents, searchTotals } from "/js/api.js";
+      import {
+        createIncidentCard,
+        addIncidentCardListeners,
+      } from "/js/incidentCard.js";
+      import { displayAggregateCard } from "/js/components/cards.js";
+      import { initializeSearchPage } from "/js/search.js";
+    </script>
+  </body>
+</html>

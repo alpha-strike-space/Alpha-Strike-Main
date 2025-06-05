@@ -1,0 +1,65 @@
+:root {
+  /* Colors */
+  --color-primary: #d32f2f;
+  --color-primary-dark: #8b0000;
+  --color-primary-light: #ff5252;
+  --color-secondary: #ffa726;
+
+  --color-bg-dark: #121212;
+  --color-bg-medium: #1a1a1a;
+  --color-bg-light: #2c2c2c;
+
+  --color-text-primary: #f0f0f0;
+  --color-text-secondary: #e0e0e0;
+  --color-text-muted: #888;
+  --color-text-light: #bbb;
+
+  --color-primary-rgb: 211, 47, 47;
+  --color-secondary-rgb: 255, 167, 38;
+  --color-bg-dark-rgb: 18, 18, 18;
+  --color-bg-medium-rgb: 26, 26, 26;
+  --color-bg-light-rgb: 44, 44, 44;
+  --color-text-primary-rgb: 240, 240, 240;
+
+  /* Gradients */
+  --gradient-dark: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(28, 28, 28, 0.9) 100%);
+  --gradient-medium: linear-gradient(135deg, rgba(44, 44, 44, 0.9) 0%, rgba(32, 32, 32, 0.95) 100%);
+  --gradient-primary: linear-gradient(
+    135deg,
+    rgba(211, 47, 47, 0.9) 0%,
+    rgba(139, 0, 0, 1) 50%,
+    rgba(211, 47, 47, 0.9) 100%
+  );
+
+  /* Shadows */
+  --shadow-glow-primary: 0 0 20px rgba(211, 47, 47, 0.4);
+  --shadow-glow-secondary: 0 0 20px rgba(255, 167, 38, 0.4);
+  --shadow-card: 0 0 30px rgba(211, 47, 47, 0.2), 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  /* Borders */
+  --border-primary: 1px solid rgba(211, 47, 47, 0.3);
+  --border-primary-strong: 1px solid rgba(211, 47, 47, 0.6);
+
+  /* Typography */
+  --font-primary: "Exo 2", monospace;
+  --font-secondary: "Exo 2", "Segoe UI", monospace, sans-serif;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+
+  /* Transitions */
+  --transition-default: all 0.3s ease;
+
+  /* ... existing variables ... */
+}

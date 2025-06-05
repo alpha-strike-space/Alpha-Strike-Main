@@ -1,0 +1,170 @@
+.btn-primary,
+.btn-secondary {
+  padding: 0.9rem 2.2rem;
+  font-family: "Orbitron", monospace;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(211, 47, 47, 0.5);
+  border: 2px solid #d32f2f;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #8b0000;
+  box-shadow: 0 0 20px #8b0000;
+  border-color: #8b0000;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #d32f2f;
+}
+
+.btn-secondary:hover {
+  background-color: #d32f2f;
+  color: #fff;
+  box-shadow: 0 0 20px #d32f2f;
+}
+
+.search-container button {
+  padding: 12px 20px;
+  background: var(--gradient-background);
+  color: #fff;
+  border: var(--border-primary-strong);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-family: "Exo 2", monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 var(4px) 15px rgba(211, 47, 47, 0.3), var(--shadow-inset);
+}
+
+.search-container button:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(183, 28, 28, 1) 0%,
+    rgba(211, 47, 47, 1) 50%,
+    rgba(183, 28, 28, 1) 100%
+  );
+  box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Floating timezone toggle button */
+.timezone-toggle-floating {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  padding: 12px 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(211, 47, 47, 0.9) 0%,
+    rgba(139, 0, 0, 1) 50%,
+    rgba(211, 47, 47, 0.9) 100%
+  );
+  color: #fff;
+  border: var(--border-primary-strong);
+  cursor: pointer;
+  font-family: "Exo 2", monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(211, 47, 47, 0.4), var(--shadow-inset);
+  backdrop-filter: blur(10px);
+  min-width: 120px;
+  text-align: center;
+}
+
+.timezone-toggle-floating:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(183, 28, 28, 1) 0%,
+    rgba(211, 47, 47, 1) 50%,
+    rgba(183, 28, 28, 1) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(211, 47, 47, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.timezone-toggle-floating:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 15px rgba(211, 47, 47, 0.4), var(--shadow-inset);
+}
+
+/* Add a subtle glow animation */
+.timezone-toggle-floating::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    rgba(211, 47, 47, 0.6),
+    rgba(139, 0, 0, 0.4),
+    rgba(211, 47, 47, 0.6)
+  );
+  z-index: -1;
+  opacity: 0.7;
+  animation: floatingButtonGlow 3s ease-in-out infinite alternate;
+}
+
+/* In your CSS file, e.g., styles/components/buttons.css */
+.time-range-selector .time-range-btn {
+  /* Your existing button styles or new ones */
+  padding: 8px 15px;
+  margin: 0 5px;
+  cursor: pointer;
+  border: 1px solid var(--color-primary);
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-secondary);
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.time-range-selector .time-range-btn:hover {
+  background-color: var(--color-primary-dark);
+  color: #fff;
+}
+
+.time-range-selector .time-range-btn.active {
+  background-color: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 0 10px var(--color-primary);
+}
+
+/* Mobile adjustments for floating button */
+@media screen and (max-width: 600px) {
+  .timezone-toggle-floating {
+    bottom: 15px;
+    left: 15px;
+    padding: 10px 1 var(--spacing-xs);
+    font-size: 0.75rem;
+    min-width: 100px;
+  }
+}
+
+/* Ensure the button doesn't interfere with footer on very small screens */
+@media screen and (max-height: 500px) {
+  .timezone-toggle-floating {
+    bottom: 10px;
+    left: 10px;
+    padding: var(--spacing-sm) 12px;
+    font-size: 0.7rem;
+    min-width: 90px;
+  }
+}

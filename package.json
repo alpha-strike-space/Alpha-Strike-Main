@@ -1,0 +1,25 @@
+{
+  "devDependencies": {
+    "@biomejs/biome": "1.5.3",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "rollup": "^4.41.1",
+    "vite": "^6.3.5"
+  },
+  "name": "alpha-strike-main",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "check": "biome check --apply .",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "biome format --write"
+    ]
+  }
+}

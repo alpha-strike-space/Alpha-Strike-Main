@@ -1,0 +1,642 @@
+{
+  "navbar.home": {
+    "en": "Recently Stamped",
+    "ru": "Недавно Отмечено",
+    "zh": "最近盖章",
+    "es": "Recientemente Sellado"
+  },
+  "navbar.killers": {
+    "en": "Leading Killers",
+    "ru": "Лидирующие Убийцы",
+    "zh": "领先杀手",
+    "es": "Principales Asesinos"
+  },
+  "navbar.systems": {
+    "en": "Leading Systems",
+    "ru": "Лидирующие Системы",
+    "zh": "领先系统",
+    "es": "Principales Sistemas"
+  },
+  "navbar.victims": {
+    "en": "Leading Victims",
+    "ru": "Лидирующие Жертвы",
+    "zh": "领先受害者",
+    "es": "Principales Víctimas"
+  },
+  "navbar.search": {
+    "en": "Search",
+    "ru": "Поиск",
+    "zh": "搜索",
+    "es": "Buscar"
+  },
+  "page.search-header": {
+    "en": "Search Stamped Mails",
+    "ru": "Поиск Отмеченных Писем",
+    "zh": "搜索盖章邮件",
+    "es": "Buscar Correos Sellados"
+  },
+  "page.stamped-header": {
+    "en": "Recently Stamped Mails",
+    "ru": "Недавно Запечатленные Письма",
+    "zh": "最近盖章邮件",
+    "es": "Correos Sellados Recientemente"
+  },
+  "header.tenaciousKillers": {
+    "en": "Tenacious Killers",
+    "ru": "Упорные Убийцы",
+    "zh": "顽强杀手",
+    "es": "Asesinos Tenaces"
+  },
+  "table.name": {
+    "en": "Name",
+    "ru": "Имя",
+    "zh": "姓名",
+    "es": "Nombre"
+  },
+  "table.numVictimsStacked": {
+    "en": "Number of Victims Stacked",
+    "ru": "Количество накопленных жертв",
+    "zh": "堆叠的受害者数量",
+    "es": "Número de Víctimas Acumuladas"
+  },
+  "header.defeatedVictims": {
+    "en": "Defeated Victims",
+    "ru": "Побеждённые Жертвы",
+    "zh": "被击败的受害者",
+    "es": "Víctimas Derrotadas"
+  },
+  "table.numAwakenings": {
+    "en": "Number of Awakenings",
+    "ru": "Количество Пробуждений",
+    "zh": "觉醒次数",
+    "es": "Número de Despertares"
+  },
+  "header.leadingSystemsByIncidents": {
+    "en": "Leading Systems by Incidents",
+    "ru": "Ведущие Системы по Инцидентам",
+    "zh": "基于事件的领先系统",
+    "es": "Sistemas Líderes por Incidentes"
+  },
+  "table.numIncidents": {
+    "en": "Number of Incidents",
+    "ru": "Количество Инцидентов",
+    "zh": "事件数量",
+    "es": "Número de Incidentes"
+  },
+  "search.byName": {
+    "en": "Search by Name",
+    "ru": "Поиск по имени",
+    "zh": "按名称搜索",
+    "es": "Buscar por Nombre"
+  },
+  "search.bySystem": {
+    "en": "Search by System",
+    "ru": "Поиск по системе",
+    "zh": "按系统搜索",
+    "es": "Buscar por Sistema"
+  },
+  "search.placeholder": {
+    "en": "Enter search query...",
+    "ru": "Введите запрос...",
+    "zh": "输入搜索内容...",
+    "es": "Introduzca la consulta..."
+  },
+  "search.button": {
+    "en": "Search",
+    "ru": "Поиск",
+    "zh": "搜索",
+    "es": "Buscar"
+  },
+  "search-results.header": {
+    "en": "Search Results",
+    "ru": "Результаты поиска",
+    "zh": "搜索结果",
+    "es": "Resultados de la Búsqueda"
+  },
+  "search.error": {
+    "en": "Error fetching search results. Please check your query.",
+    "ru": "Ошибка при получении результатов поиска. Пожалуйста, проверьте запрос.",
+    "zh": "获取搜索结果时出错。请检查您的查询。",
+    "es": "Error al obtener los resultados de búsqueda. Por favor, revise su consulta."
+  },
+  "card.lossType": {
+    "en": "Loss Type:",
+    "ru": "Тип потерь:",
+    "zh": "损失类型:",
+    "es": "Tipo de Pérdida:"
+  },
+  "card.solarSystem": {
+    "en": "Solar System:",
+    "ru": "Солнечная система:",
+    "zh": "太阳系:",
+    "es": "Sistema Solar:"
+  },
+  "card.timestamp": {
+    "en": "Timestamp:",
+    "ru": "Время:",
+    "zh": "时间戳:",
+    "es": "Marca de Tiempo:"
+  },
+  "card.totalVictims": {
+    "en": "Total Victims:",
+    "ru": "Общее число жертв:",
+    "zh": "总受害者:",
+    "es": "Total de víctimas:"
+  },
+  "card.totalAwakenings": {
+    "en": "Total Awakenings:",
+    "ru": "Всего пробуждений:",
+    "zh": "总觉醒数:",
+    "es": "Total de despertares:"
+  },
+  "card.solarSystemID": {
+    "en": "Solar System ID:",
+    "ru": "ID звездной системы:",
+    "zh": "太阳系编号:",
+    "es": "ID del sistema solar:"
+  },
+  "card.incidentCount": {
+    "en": "Incident Count:",
+    "ru": "Количество инцидентов:",
+    "zh": "事件数量:",
+    "es": "Cantidad de incidentes:"
+  },
+  "card.combatIncident": {
+    "en": "COMBAT INCIDENT",
+    "ru": "БОЕВОЙ ИНЦИДЕНТ",
+    "zh": "战斗事件",
+    "es": "INCIDENTE DE COMBATE"
+  },
+  "card.idLabel": {
+    "en": "ID:",
+    "ru": "ID:",
+    "zh": "ID:",
+    "es": "ID:"
+  },
+  "card.aggressor": {
+    "en": "AGGRESSOR:",
+    "ru": "АТАКУЮЩИЙ:",
+    "zh": "攻击方:",
+    "es": "AGRESOR:"
+  },
+  "card.casualty": {
+    "en": "CASUALTY:",
+    "ru": "ПОСТРАДАВШИЙ",
+    "zh": "受损方",
+    "es": "BAJA"
+  },
+  "card.location": {
+    "en": "LOCATION:",
+    "ru": "МЕСТОПОЛОЖЕНИЕ:",
+    "zh": "地点:",
+    "es": "UBICACIÓN:"
+  },
+  "card.hostileActivity": {
+    "en": "HOSTILE ACTIVITY CONFIRMED",
+    "ru": "ВРАЖДЕБНАЯ АКТИВНОСТЬ ПОДТВЕРЖДЕНА",
+    "zh": "已确认敌对活动",
+    "es": "ACTIVIDAD HOSTIL CONFIRMADA"
+  },
+  "card.localTimeLabel": {
+    "en": "LOCAL TIME:",
+    "ru": "МЕСТНОЕ ВРЕМЯ:",
+    "zh": "当地时间:",
+    "es": "HORA LOCAL:"
+  },
+  "card.utcTimeLabel": {
+    "en": "UTC TIME:",
+    "ru": "ВРЕМЯ UTC:",
+    "zh": "UTC 时间:",
+    "es": "HORA UTC:"
+  },
+  "card.combatPilot": {
+    "en": "Combat Pilot",
+    "ru": "Боевой пилот",
+    "zh": "战斗飞行员",
+    "es": "Piloto de Combate"
+  },
+  "card.kdRatio": {
+    "en": "K/D Ratio",
+    "ru": "Соотношение У/С",
+    "zh": "击杀死亡比",
+    "es": "Ratio K/D"
+  },
+  "card.winRate": {
+    "en": "Win Rate",
+    "ru": "Процент побед",
+    "zh": "胜率",
+    "es": "Tasa de Victoria"
+  },
+  "card.totalEngagements": {
+    "en": "Total Engagements",
+    "ru": "Всего боев",
+    "zh": "总交战次数",
+    "es": "Enfrentamientos Totales"
+  },
+  "card.threatLevel": {
+    "en": "Threat Level",
+    "ru": "Уровень угрозы",
+    "zh": "威胁等级",
+    "es": "Nivel de Amenaza"
+  },
+  "card.avgPerDay": {
+    "en": "Avg/Day",
+    "ru": "Среднее/День",
+    "zh": "平均/天",
+    "es": "Promedio/Día"
+  },
+  "card.activeDays": {
+    "en": "Active Days",
+    "ru": "Активные дни",
+    "zh": "活跃天数",
+    "es": "Días Activos"
+  },
+  "card.region": {
+    "en": "Region",
+    "ru": "Регион",
+    "zh": "区域",
+    "es": "Región"
+  },
+  "hero.title": {
+    "en": "Alpha-Strike Killboard",
+    "ru": "Alpha-Strike Доска Убийств",
+    "zh": "Alpha-Strike 击杀榜",
+    "es": "Tablero de Muertes Alpha-Strike"
+  },
+  "hero.tagline": {
+    "en": "Track the fiercest PvP action in the EVE Frontier galaxy.",
+    "ru": "Отслеживайте самые ожесточенные PvP-сражения в галактике EVE Frontier.",
+    "zh": "追踪 EVE Frontier 星系中最激烈的 PvP 行动。",
+    "es": "Sigue la acción PvP más feroz en la galaxia EVE Frontier."
+  },
+  "intro.heading": {
+    "en": "Welcome to the Alpha-Strike Killboard",
+    "ru": "Добро пожаловать на Доску Убийств Alpha-Strike",
+    "zh": "欢迎来到 Alpha-Strike 击杀榜",
+    "es": "Bienvenido al Tablero de Muertes Alpha-Strike"
+  },
+  "intro.paragraph1": {
+    "en": "This is your ultimate source for tracking the most tenacious killers and the deadliest battles in EVE Frontier. Whether you're a seasoned pilot or a newcomer, our killboard provides detailed statistics and leaderboards to keep you informed about the ongoing PvP action across the galaxy.",
+    "ru": "Это ваш главный источник информации о самых упорных убийцах и смертоносных сражениях в EVE Frontier. Независимо от того, являетесь ли вы опытным пилотом или новичком, наша доска убийств предоставляет подробную статистику и таблицы лидеров, чтобы держать вас в курсе текущих PvP-событий по всей галактике.",
+    "zh": "这是您追踪 EVE Frontier 中最顽强的杀手和最致命的战斗的终极来源。无论您是经验丰富的飞行员还是新手，我们的击杀榜都提供详细的统计数据和排行榜，让您了解整个星系正在进行的 PvP 行动。",
+    "es": "Esta es tu fuente definitiva para rastrear a los asesinos más tenaces y las batallas más mortíferas en EVE Frontier. Ya seas un piloto experimentado o un recién llegado, nuestro tablero de muertes proporciona estadísticas detalladas y tablas de clasificación para mantenerte informado sobre la acción PvP en curso en toda la galaxia."
+  },
+  "intro.paragraph2": {
+    "en": "Explore monthly rolling averages, top killers, and much more. Stay sharp, stay informed, and dominate the frontier.",
+    "ru": "Изучите скользящие средние за месяц, лучших убийц и многое другое. Оставайтесь бдительными, будьте в курсе и доминируйте на фронтире.",
+    "zh": "探索月度滚动平均、顶级杀手等等。保持敏锐，保持信息灵通，主宰前沿。",
+    "es": "Explora promedios mensuales móviles, los mejores asesinos y mucho más. Mantente alerta, mantente informado y domina la frontera."
+  },
+  "cta.viewKillers": {
+    "en": "View Top Killers",
+    "ru": "Посмотреть Лучших Убийц",
+    "zh": "查看顶级杀手",
+    "es": "Ver Principales Asesinos"
+  },
+  "timezone.showUtc": {
+    "en": "Show UTC",
+    "ru": "Показать UTC",
+    "zh": "显示 UTC",
+    "es": "Mostrar UTC"
+  },
+  "timezone.showLocal": {
+    "en": "Show Local",
+    "ru": "Показать местное",
+    "zh": "显示本地时间",
+    "es": "Mostrar hora local"
+  },
+  "loading.data": {
+    "en": "Loading data...",
+    "ru": "Загрузка данных...",
+    "zh": "正在加载数据...",
+    "es": "Cargando datos..."
+  },
+  "error.loadFailed": {
+    "en": "Failed to load data.",
+    "ru": "Не удалось загрузить данные.",
+    "zh": "数据加载失败。",
+    "es": "Error al cargar los datos."
+  },
+  "error.noData": {
+    "en": "No data available for this metric.",
+    "ru": "Нет данных для этой метрики.",
+    "zh": "此指标无可用数据。",
+    "es": "No hay datos disponibles para esta métrica."
+  },
+  "button.rangeDay": {
+    "en": "Day",
+    "ru": "День",
+    "zh": "日",
+    "es": "Día"
+  },
+  "button.rangeWeek": {
+    "en": "Week",
+    "ru": "Неделя",
+    "zh": "周",
+    "es": "Semana"
+  },
+  "button.rangeMonth": {
+    "en": "Month",
+    "ru": "Месяц",
+    "zh": "月",
+    "es": "Mes"
+  },
+  "header.rollingDay": {
+    "en": "Rolling Daily Average",
+    "ru": "Скользящее среднее за день",
+    "zh": "每日滚动平均",
+    "es": "Promedio Móvil Diario"
+  },
+  "header.rollingWeek": {
+    "en": "Rolling Weekly Average",
+    "ru": "Скользящее среднее за неделю",
+    "zh": "每周滚动平均",
+    "es": "Promedio Móvil Semanal"
+  },
+  "header.rollingMonth": {
+    "en": "Rolling Monthly Average",
+    "ru": "Скользящее среднее за месяц",
+    "zh": "每月滚动平均",
+    "es": "Promedio Móvil Mensual"
+  },
+  "link.viewKillmailDetails": {
+    "en": "View Details",
+    "ru": "Подробнее",
+    "zh": "查看详情",
+    "es": "Ver Detalles"
+  },
+  "link.noDetailsAvailableError": {
+    "en": "Details N/A (Error)",
+    "ru": "Детали Н/Д (Ошибка)",
+    "zh": "详情不可用 (错误)",
+    "es": "Detalles N/D (Error)"
+  },
+  "tooltip.searchFor": {
+    "en": "Search for {itemName}",
+    "ru": "Поиск {itemName}",
+    "zh": "搜索 {itemName}",
+    "es": "Buscar {itemName}"
+  },
+  "tooltip.viewKillmailDetails": {
+    "en": "View details for killmail {killmailId}",
+    "ru": "Посмотреть детали отчёта {killmailId}",
+    "zh": "查看击杀报告 {killmailId} 的详情",
+    "es": "Ver detalles del reporte de muerte {killmailId}"
+  },
+  "killmail.pageTitlePattern": {
+    "en": "Killmail: {killerName} vs {victimName}",
+    "ru": "Отчет о потерях: {killerName} против {victimName}",
+    "zh": "击杀报告: {killerName} 对战 {victimName}",
+    "es": "Informe de Muerte: {killerName} vs {victimName}"
+  },
+  "killmail.headerVs": {
+    "en": "vs",
+    "ru": "против",
+    "zh": "对战",
+    "es": "vs"
+  },
+  "killmail.headerIncidentIn": {
+    "en": "Incident in",
+    "ru": "Инцидент в",
+    "zh": "事件发生于",
+    "es": "Incidente en"
+  },
+  "killmail.killerLabel": {
+    "en": "KILLER",
+    "ru": "АТАКУЮЩИЙ",
+    "zh": "攻击方",
+    "es": "AGRESOR"
+  },
+  "killmail.victimLabel": {
+    "en": "VICTIM",
+    "ru": "ЖЕРТВА",
+    "zh": "受害者",
+    "es": "VÍCTIMA"
+  },
+  "killmail.corporationLabel": {
+    "en": "Corporation:",
+    "ru": "Корпорация:",
+    "zh": "公司:",
+    "es": "Corporación:"
+  },
+  "killmail.shipLabel": {
+    "en": "Ship:",
+    "ru": "Корабль:",
+    "zh": "舰船:",
+    "es": "Nave:"
+  },
+  "killmail.engagementDetailsTitle": {
+    "en": "Engagement Details",
+    "ru": "Детали боя",
+    "zh": "交战详情",
+    "es": "Detalles del Combate"
+  },
+  "killmail.lossTypeLabel": {
+    "en": "Loss Type:",
+    "ru": "Тип потери:",
+    "zh": "损失类型:",
+    "es": "Tipo de Pérdida:"
+  },
+  "killmail.timeLabel": {
+    "en": "Time:",
+    "ru": "Время:",
+    "zh": "时间:",
+    "es": "Hora:"
+  },
+  "killmail.locationLabel": {
+    "en": "Location:",
+    "ru": "Местоположение:",
+    "zh": "地点:",
+    "es": "Ubicación:"
+  },
+  "killmail.fittingTitle": {
+    "en": "Ship Fitting & Contents",
+    "ru": "Оснастка корабля и содержимое",
+    "zh": "舰船配置与物品",
+    "es": "Equipamiento y Contenido de la Nave"
+  },
+  "killmail.fittingNote": {
+    "en": "Note: Ship fitting, contents, and some combatant details below are illustrative placeholders. The current API does not provide this specific data.",
+    "ru": "Примечание: Оснастка корабля, содержимое и некоторые детали участников ниже являются иллюстративными заменителями. Текущий API не предоставляет эти специфические данные.",
+    "zh": "注意：下方的舰船配置、物品以及部分战斗人员详情均为示例占位符。当前 API 未提供此特定数据。",
+    "es": "Nota: El equipamiento de la nave, su contenido y algunos detalles de los combatientes a continuación son marcadores de posición ilustrativos. La API actual no proporciona estos datos específicos."
+  },
+  "killmail.fitting.highSlots": {
+    "en": "High Slots",
+    "ru": "Верхние разъемы",
+    "zh": "高槽",
+    "es": "Ranuras Superiores"
+  },
+  "killmail.fitting.midSlots": {
+    "en": "Mid Slots",
+    "ru": "Средние разъемы",
+    "zh": "中槽",
+    "es": "Ranuras Medias"
+  },
+  "killmail.fitting.lowSlots": {
+    "en": "Low Slots",
+    "ru": "Нижние разъемы",
+    "zh": "低槽",
+    "es": "Ranuras Inferiores"
+  },
+  "killmail.fitting.rigs": {
+    "en": "Rigs",
+    "ru": "Модификаторы",
+    "zh": "改装件",
+    "es": "Optimizadores"
+  },
+  "killmail.fitting.drones": {
+    "en": "Drones",
+    "ru": "Дроны",
+    "zh": "无人机",
+    "es": "Drones"
+  },
+  "killmail.fitting.ammoCharges": {
+    "en": "Ammunition / Charges",
+    "ru": "Боеприпасы / Заряды",
+    "zh": "弹药 / 装料",
+    "es": "Munición / Cargas"
+  },
+  "killmail.fitting.cargoHold": {
+    "en": "Cargo Hold",
+    "ru": "Грузовой отсек",
+    "zh": "货舱",
+    "es": "Bodega de Carga"
+  },
+  "killmail.placeholder.victimCorp": {
+    "en": "[Victim Corp Placeholder]",
+    "ru": "[Корпорация жертвы Placeholder]",
+    "zh": "[受害者公司 占位符]",
+    "es": "[Corporación Víctima Placeholder]"
+  },
+  "killmail.placeholder.victimShip": {
+    "en": "[Ship Placeholder]",
+    "ru": "[Корабль Placeholder]",
+    "zh": "[舰船 占位符]",
+    "es": "[Nave Placeholder]"
+  },
+  "killmail.placeholder.killerCorp": {
+    "en": "[Killer Corp Placeholder]",
+    "ru": "[Корпорация убийцы Placeholder]",
+    "zh": "[攻击方公司 占位符]",
+    "es": "[Corporación Agresor Placeholder]"
+  },
+  "killmail.placeholder.killerShip": {
+    "en": "[Killer Ship Placeholder]",
+    "ru": "[Корабль убийцы Placeholder]",
+    "zh": "[攻击方舰船 占位符]",
+    "es": "[Nave Agresor Placeholder]"
+  },
+  "killmail.placeholder.highSlotItem1": { "en": "Focused Medium Pulse Laser II" },
+  "killmail.placeholder.highSlotAmmo1": { "en": "(Scorch M)" },
+  "killmail.placeholder.highSlotItem2": { "en": "Small Remote Armor Repairer I" },
+  "killmail.placeholder.emptyHighSlot": { "en": "[Empty High Slot]" },
+  "killmail.placeholder.midSlotItem1": { "en": "50MN Cold-Gas Enduring Microwarpdrive" },
+  "killmail.placeholder.midSlotItem2": { "en": "Medium Cap Battery II" },
+  "killmail.placeholder.midSlotItem3": { "en": "Warp Disruptor II" },
+  "killmail.placeholder.lowSlotItem1": { "en": "Damage Control II" },
+  "killmail.placeholder.lowSlotItem2": { "en": "Medium Armor Repairer II" },
+  "killmail.placeholder.lowSlotItem3": { "en": "Heat Sink II" },
+  "killmail.placeholder.rigSlotItem1": { "en": "Medium Energy Locus Coordinator I" },
+  "killmail.placeholder.rigSlotItem2": { "en": "Medium Auxiliary Nano Pump I" },
+  "killmail.placeholder.rigSlotItem3": { "en": "Medium Ancillary Current Router I" },
+  "killmail.placeholder.droneItem1": { "en": "Acolyte II x5" },
+  "killmail.placeholder.droneItem2": { "en": "Warrior II x5" },
+  "killmail.placeholder.ammoItem1": { "en": "Scorch M x1024" },
+  "killmail.placeholder.ammoItem2": { "en": "Imperial Navy Multifrequency M x2048" },
+  "killmail.placeholder.ammoItem3": { "en": "Nanite Repair Paste x100" },
+  "killmail.placeholder.cargoItem1": { "en": "Exotic Dancers, Female x10" },
+  "killmail.placeholder.cargoItem2": { "en": "Quafe Ultra x50" },
+  "killmail.placeholder.cargoItem3": { "en": "A Lumpsucker's Severed Foot (Left) x1" },
+
+  "loading.killmail": {
+    "en": "Loading killmail data...",
+    "ru": "Загрузка данных отчета о потерях...",
+    "zh": "正在加载击杀报告数据...",
+    "es": "Cargando datos del informe de muerte..."
+  },
+  "error.killmailLoadFailed": {
+    "en": "Failed to load killmail data.",
+    "ru": "Не удалось загрузить данные отчета о потерях.",
+    "zh": "加载击杀报告数据失败。",
+    "es": "Error al cargar los datos del informe de muerte."
+  },
+  "error.noKillmailId": {
+    "en": "No killmail reference provided.",
+    "ru": "Ссылка на отчет о потерях не предоставлена.",
+    "zh": "未提供击杀报告参考。",
+    "es": "No se proporcionó referencia del informe de muerte."
+  },
+  "general.unknown": {
+    "en": "Unknown",
+    "es": "Desconocido",
+    "ru": "Неизвестно",
+    "zh": "未知"
+  },
+  "general.notApplicable": {
+    "en": "N/A",
+    "ru": "Н/Д",
+    "zh": "不适用",
+    "es": "N/D"
+  },
+  "general.classified": {
+    "en": "CLASSIFIED",
+    "ru": "ЗАСЕКРЕЧЕНО",
+    "zh": "保密",
+    "es": "CLASIFICADO"
+  },
+  "general": {
+    "unknown": {
+      "en": "Unknown",
+      "es": "Desconocido",
+      "ru": "Неизвестно",
+      "zh": "未知"
+    }
+  },
+  "card": {
+    "kdRatio": {
+      "en": "K/D Ratio",
+      "es": "Ratio K/D",
+      "ru": "K/D Соотношение",
+      "zh": "击杀/死亡比"
+    },
+    "winRate": {
+      "en": "Win Rate",
+      "es": "Tasa de Victoria",
+      "ru": "Процент Побед",
+      "zh": "胜率"
+    },
+    "totalEngagements": {
+      "en": "Total Engagements",
+      "es": "Encuentros Totales",
+      "ru": "Всего Сражений",
+      "zh": "总交战次数"
+    },
+    "incidents": {
+      "en": "Incidents",
+      "es": "Incidentes",
+      "ru": "Инциденты",
+      "zh": "事件数"
+    },
+    "avgPerDay": {
+      "en": "Per Day",
+      "es": "Por Día",
+      "ru": "В День",
+      "zh": "每日平均"
+    },
+    "activeDays": {
+      "en": "Active Days",
+      "es": "Días Activos",
+      "ru": "Активные Дни",
+      "zh": "活跃天数"
+    }
+  },
+  "search": {
+    "noAggregatedData": {
+      "en": "No aggregated data found.",
+      "es": "No se encontraron datos agregados.",
+      "ru": "Агрегированные данные не найдены.",
+      "zh": "未找到汇总数据。"
+    }
+  }
+}

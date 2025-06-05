@@ -1,0 +1,180 @@
+html {
+  height: 100%;
+}
+
+/* Base styles */
+body {
+  display: flex; /* Make body a flex container */
+  flex-direction: column; /* Stack children vertically */
+  min-height: 100%; /* Ensure body is at least viewport height */
+  margin: 0;
+  padding: 0; /* Remove default padding */
+  padding-top: 70px; /* Adjusted for fixed topnav - ensure this value matches or is greater than your topnav's height */
+  font-family: var(--font-secondary), "Exo 2", "Segoe UI", monospace, sans-serif; /* Fallback fonts added */
+  background-image: radial-gradient(circle at 20% 80%, rgba(211, 47, 47, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
+    url("/assets/images/synth_field.avif"); /* Ensure this path is correct relative to your CSS or use an absolute path if Vite handles it */
+  background-size: cover, cover, cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--color-text-secondary);
+  /* min-height: 100vh; Removed this as we are using flex for full height */
+  position: relative; /* For ::before pseudo-element positioning */
+}
+
+/* Sci-fi overlay effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 98%, rgba(211, 47, 47, 0.03) 100%),
+    linear-gradient(0deg, transparent 98%, rgba(211, 47, 47, 0.03) 100%);
+  background-size: 50px 50px, 50px 50px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* This is your main content area that should expand */
+/* If you don't have a single <main> tag wrapping all content between nav and footer,
+   you might need to add one in your HTML files or target a different primary content wrapper */
+main {
+  /* Or your primary content wrapper class/id */
+  flex-grow: 1; /* This makes the main content take up available space */
+  /* You might want to add some default width/max-width and centering for the main content block here
+       if it's not already handled by .container or other wrappers inside <main> */
+}
+
+/* Container adjustments to accommodate wider cards */
+.container {
+  max-width: 100%; /* Increased from 50% */
+  width: fit-content;
+  margin: 20px auto;
+  padding: 25px;
+  background: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(28, 28, 28, 0.9) 100%);
+  border: var(--border-primary);
+  border-radius: 0px;
+  box-shadow: 0 0 30px rgba(211, 47, 47, 0.2), var(--shadow-inset), 0 var(--spacing-sm)
+    var(--spacing-xl) rgba(0, 0, 0, 0.6);
+  position: relative;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+/* Sci-fi border glow effect */
+.container::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    rgba(211, 47, 47, 0.5),
+    rgba(139, 0, 0, 0.3),
+    rgba(211, 47, 47, 0.5)
+  );
+  border-radius: 0px;
+  z-index: -1;
+  opacity: 0.6;
+  animation: borderPulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes borderPulse {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+h1 {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-style: normal;
+  text-align: center;
+  color: #f8f8f8;
+  margin-bottom: 30px;
+  text-shadow: 0 0 20px rgba(211, 47, 47, 0.6), 0 0 40px rgba(211, 47, 47, 0.3), 0 2px
+    var(--spacing-xs) rgba(0, 0, 0, 0.8);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+}
+
+/* Sci-fi underline for h1 */
+h1::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(211, 47, 47, 0.8),
+    rgba(139, 0, 0, 1),
+    rgba(211, 47, 47, 0.8),
+    transparent
+  );
+  box-shadow: 0 0 10px rgba(211, 47, 47, 0.5);
+}
+
+/* Styling for Font Awesome icons */
+.topnav a i,
+h1 > i,
+#searchBtn i {
+  margin-right: var(--spacing-sm);
+  text-shadow: 0 0 10px rgba(211, 47, 47, 0.5);
+}
+
+.site-footer {
+  text-align: center;
+  padding: 25px 0;
+  margin-top: 50px;
+  border-top: var(--border-primary);
+  font-size: 0.9em;
+  color: #aaa;
+  background: linear-gradient(135deg, rgba(18, 18, 18, 0.8) 0%, rgba(24, 24, 24, 0.9) 100%);
+  box-shadow: 0 -5px 20px rgba(211, 47, 47, 0.1);
+}
+
+.note {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-top: 20px;
+  text-align: center;
+  padding: 10px;
+  background: rgba(18, 18, 18, 0.8);
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(211, 47, 47, 0.2);
+}
+
+@media screen and (max-width: 600px) {
+  body {
+    background-attachment: scroll;
+  }
+
+  .container {
+    max-width: 100%;
+    margin: auto auto;
+    padding: 20px;
+  }
+
+  /* Make sure table is responsive */
+  th,
+  td {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+  .container::before {
+    opacity: 0.4;
+  }
+}
