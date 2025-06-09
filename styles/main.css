@@ -12,6 +12,7 @@
 @import url("components/stats.css");
 @import url("components/hero.css");
 @import url("components/killmail-detail.css");
+@import url("components/loadingOverlay.css");
 
 /* Navbar Search Styles */
 .nav-search-container {

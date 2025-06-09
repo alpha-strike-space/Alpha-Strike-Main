@@ -6,6 +6,7 @@ import {
   createIncidentCard,
   navigateToSearch,
 } from "./incidentCard.js";
+import { showLoading, hideLoading } from "./components/loadingOverlay.js";
 
 /**
  * Get URL parameters for pre-filling search
@@ -107,6 +108,8 @@ async function performSearch(query) {
     '<p data-translate="search.loading">Loading...</p>';
   totalsCardContainer.innerHTML = "";
 
+  showLoading();
+
   try {
     // Generate case variations of the search query
     const queryVariations = generateCaseVariations(query, searchType);
@@ -150,7 +153,10 @@ async function performSearch(query) {
     const currentLang = localStorage.getItem("preferredLanguage") || "en";
     setLanguage(currentLang);
   }
+  hideLoading();
 }
+
+
 
 /**
  * Display the search results using createIncidentCard from utils.js.

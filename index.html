@@ -115,10 +115,11 @@
       import { toggleTimezone } from "./js/utils.js";
       import { createIncidentCard } from "./js/incidentCard.js";
       import { WebSocketManager } from "./js/websocket.js";
+      import { showLoading, hideLoading } from "./js/components/loadingOverlay.js";
       // Page-specific initialization
       document.addEventListener("DOMContentLoaded", async () => {
         initializePage("home");
-
+        showLoading();
         try {
           const data = await fetchRecentIncidents();
           displayDataInContainer(data, "data-container", createIncidentCard, {
@@ -138,6 +139,7 @@
           "data-container",
         );
         wsManager.connect();
+        hideLoading();
       });
     </script>
   </body>

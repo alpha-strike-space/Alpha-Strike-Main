@@ -5,6 +5,7 @@ import {
 } from "./api.js";
 import { setLanguage, translations } from "./translation-dictionary.js";
 import { navigateToSearch } from "./incidentCard.js";
+import { showLoading, hideLoading } from "./components/loadingOverlay.js";
 
 export function updateRollingAverageHeaderText(timeRange) {
   const rollingHeader = document.getElementById("rollingAverageHeader");
@@ -86,7 +87,7 @@ export async function fetchAndDisplayMetric(
   }
 
   // updateActiveButtonStates(timeRange); // Helper to update UI button states
-
+  showLoading();
   // Try to load from cache first
   try {
     const cachedItem = localStorage.getItem(cacheKey);
@@ -106,6 +107,7 @@ export async function fetchAndDisplayMetric(
           dataContainer,
           timeRange,
         );
+        hideLoading();
         return;
       }
       console.log(
@@ -115,7 +117,9 @@ export async function fetchAndDisplayMetric(
     }
   } catch (error) {
     console.error("Error reading from localStorage:", error);
+    hideLoading();
   }
+
 
   // If not in cache or cache expired, fetch from API
   try {
@@ -144,6 +148,7 @@ export async function fetchAndDisplayMetric(
         dataContainer.innerHTML = `<p data-translate="error.noData">${noDataText}</p>`;
       }
       if (table) table.style.display = "none"; // Ensure table is hidden if no data
+      hideLoading();
       return;
     }
 
@@ -176,6 +181,7 @@ export async function fetchAndDisplayMetric(
     }
     if (table) table.style.display = "none"; // Ensure table is hidden on error
   }
+  hideLoading();
 }
 
 /**

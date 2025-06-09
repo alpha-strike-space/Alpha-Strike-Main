@@ -11,6 +11,7 @@ import {
 import { addIncidentCardListeners, navigateToSearch } from "./incidentCard.js";
 import { lazyLoader } from "./utils/lazyLoading.js";
 import { formatTimestamp, showLocalTime } from "./utils.js";
+import { showLoading, hideLoading } from "./components/loadingOverlay.js";
 
 let killmailDataStore = null; // Store fetched killmail data here
 
@@ -495,6 +496,7 @@ async function loadAndRenderKillmailPageContent() {
     try {
       // Only show loading message if we don't have data stored yet
       if (!killmailDataStore) {
+        showLoading();
         killmailContentEl.innerHTML = `<p data-translate="loading.killmail">${getTranslationLocal(
           "loading.killmail",
           "Loading killmail data...",
@@ -515,6 +517,7 @@ async function loadAndRenderKillmailPageContent() {
         // also check if mail_id changed
         const incidentDataArray = await fetchIncidentById(mail_id);
         if (!incidentDataArray || incidentDataArray.length === 0) {
+          hideLoading();
           throw new Error(
             getTranslationLocal(
               "error.killmailNotFound",
@@ -547,6 +550,7 @@ async function loadAndRenderKillmailPageContent() {
   if (typeof setLanguage === "function") {
     setLanguage(currentLang);
   }
+  hideLoading();
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
