@@ -79,6 +79,7 @@ export class WebSocketManager {
       if (card) {
         // Check if card is valid
         container.insertBefore(card, container.firstChild);
+        setLanguage(localStorage.getItem('preferredLanguage') || 'en');
       } else {
         console.warn(
           "Websocket: Incident item did not result in a displayable card:",
