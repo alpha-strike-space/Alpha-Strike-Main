@@ -117,9 +117,9 @@
       import { WebSocketManager } from "./js/websocket.js";
       import { showLoading, hideLoading } from "./js/components/loadingOverlay.js";
       // Page-specific initialization
+      showLoading();
       document.addEventListener("DOMContentLoaded", async () => {
         initializePage("home");
-        showLoading();
         try {
           const data = await fetchRecentIncidents();
           displayDataInContainer(data, "data-container", createIncidentCard, {

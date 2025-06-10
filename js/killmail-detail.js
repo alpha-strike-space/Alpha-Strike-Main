@@ -494,21 +494,6 @@ async function loadAndRenderKillmailPageContent() {
 
   if (mail_id) {
     try {
-      // Only show loading message if we don't have data stored yet
-      if (!killmailDataStore) {
-        showLoading();
-        killmailContentEl.innerHTML = `<p data-translate="loading.killmail">${getTranslationLocal(
-          "loading.killmail",
-          "Loading killmail data...",
-        )}</p>`;
-        // Immediately translate the loading message
-        const currentLangForLoading =
-          localStorage.getItem("preferredLanguage") || languages[0];
-        if (typeof setLanguage === "function") {
-          setLanguage(currentLangForLoading);
-        }
-      }
-
       // Fetch data only if it's not already in killmailDataStore
       if (
         !killmailDataStore ||
@@ -554,6 +539,7 @@ async function loadAndRenderKillmailPageContent() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  showLoading();
   await loadTranslations(); // Load all translation strings first
   initializePage("killmail_detail"); // Initialize navigation, static translations
 

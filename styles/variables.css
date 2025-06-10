@@ -34,12 +34,14 @@
   /* Shadows */
   --shadow-glow-primary: 0 0 20px rgba(211, 47, 47, 0.4);
   --shadow-glow-secondary: 0 0 20px rgba(255, 167, 38, 0.4);
+  --shadow-glow-white: 0 0 20px rgba(255, 255, 255, 0.4);
   --shadow-card: 0 0 30px rgba(211, 47, 47, 0.2), 0 8px 32px rgba(0, 0, 0, 0.6);
   --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
   /* Borders */
   --border-primary: 1px solid rgba(211, 47, 47, 0.3);
   --border-primary-strong: 1px solid rgba(211, 47, 47, 0.6);
+  --border-primary-white: 1px solid rgba(255, 255, 255, 0.3);
 
   /* Typography */
   --font-primary: "Exo 2", monospace;

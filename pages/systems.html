@@ -62,8 +62,9 @@
             </div>
         </main>
         <!-- Scripts -->
-        
         <script type="module">
+            import { showLoading, hideLoading } from "/js/components/loadingOverlay.js";
+            showLoading();
     import { initializePage } from '../js/common.js';
     // Import the new function specifically
     import { fetchAndDisplayMetric, updateRollingAverageHeaderText } from '../js/monthly-tables.js';
@@ -115,6 +116,7 @@
             updateRollingAverageHeaderText(currentTimeRange);
             // Note: The main setLanguage in translation-dictionary.js will handle other data-translate elements.
         };
+        hideLoading();
     });
 </script>
     </body>
