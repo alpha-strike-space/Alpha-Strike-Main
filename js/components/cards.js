@@ -170,11 +170,11 @@ function createSystemCardHeader(item, stats) {
   const imageContainer = document.createElement('div');
   imageContainer.className = 'system-image-container';
 
-  const image = document.createElement('img');
-  image.className = 'system-image';
-  image.alt = `${item.solar_system_name || item.name} system`;
-  image.dataset.src = 'https://images.evetech.net/types/3796/render';
-  imageContainer.appendChild(image);
+  // Replace image with Font Awesome star icon
+  const starIcon = document.createElement('i');
+  starIcon.className = 'fa-solid fa-sun system-image';
+  starIcon.setAttribute('aria-label', 'system star');
+  imageContainer.appendChild(starIcon);
 
   const info = document.createElement('div');
   info.className = 'system-info';
