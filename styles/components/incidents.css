@@ -129,7 +129,7 @@
   font-size: 0.9rem;
   font-weight: 600;
   text-align: left;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   letter-spacing: 0.3px;
   text-decoration: underline;
   min-width: 300px; /* Ensure enough space for name */
