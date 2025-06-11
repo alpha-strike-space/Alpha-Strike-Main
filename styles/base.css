@@ -1,12 +1,14 @@
-html {
-  height: 100%;
+html, body {
+  height: 100vh;
+  min-height: 100vh;
 }
 
 /* Base styles */
 body {
   display: flex; /* Make body a flex container */
   flex-direction: column; /* Stack children vertically */
-  min-height: 100%; /* Ensure body is at least viewport height */
+  height: 100vh;
+  min-height: 100vh;
   margin: 0;
   padding: 0; /* Remove default padding */
   padding-top: 70px; /* Adjusted for fixed topnav - ensure this value matches or is greater than your topnav's height */
@@ -17,7 +19,7 @@ body {
   background-size: cover, cover, cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed; /* or scroll if you want to avoid issues */
   color: var(--color-text-secondary);
   /* min-height: 100vh; Removed this as we are using flex for full height */
   position: relative; /* For ::before pseudo-element positioning */
@@ -158,15 +160,13 @@ h1 > i,
 }
 
 @media screen and (max-width: 600px) {
-  body {
-    background-attachment: scroll;
-  }
 
   .container {
     max-width: 100%;
     margin: auto auto;
     padding: 20px;
   }
+
 
   /* Make sure table is responsive */
   th,
