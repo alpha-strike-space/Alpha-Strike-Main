@@ -14,11 +14,11 @@ function getTimeElapsed(timestamp) {
   if (typeof timestamp === "string") {
     incidentTime = new Date(timestamp);
   } else if (typeof timestamp === "number") {
-    if (timestamp < 10000000000) {
+    if (timestamp < 10000000000) { // 10 digits for UNIX timestamp in seconds
       incidentTime = new Date(timestamp * 1000);
-    } else if (timestamp < 10000000000000) {
+    } else if (timestamp < 10000000000000) { // 14 digits for UNIX timestamp in milliseconds
       incidentTime = new Date(timestamp);
-    } else {
+    } else { // Windows LDAP timestamp
       // Windows FILETIME conversion
       const msSince1601 = timestamp / 10000;
       const epochDifference = 11644473600000;
