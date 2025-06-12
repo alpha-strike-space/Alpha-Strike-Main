@@ -1,5 +1,4 @@
-html, body {
-  height: 100vh;
+html {
   min-height: 100vh;
 }
 
@@ -7,14 +6,23 @@ html, body {
 body {
   display: flex; /* Make body a flex container */
   flex-direction: column; /* Stack children vertically */
-  height: 100vh;
   min-height: 100vh;
   margin: 0;
   padding: 0; /* Remove default padding */
   padding-top: 70px; /* Adjusted for fixed topnav - ensure this value matches or is greater than your topnav's height */
-  font-family: var(--font-secondary), "Exo 2", "Segoe UI", monospace, sans-serif; /* Fallback fonts added */
-  background-image: radial-gradient(circle at 20% 80%, rgba(211, 47, 47, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
+  font-family:
+    var(--font-secondary), "Exo 2", "Segoe UI", monospace, sans-serif; /* Fallback fonts added */
+  background-image:
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(211, 47, 47, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(139, 0, 0, 0.15) 0%,
+      transparent 50%
+    ),
     url("/assets/images/synth_field.avif"); /* Ensure this path is correct relative to your CSS or use an absolute path if Vite handles it */
   background-size: cover, cover, cover;
   background-position: center;
@@ -33,9 +41,12 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent 98%, rgba(211, 47, 47, 0.03) 100%),
+  background:
+    linear-gradient(90deg, transparent 98%, rgba(211, 47, 47, 0.03) 100%),
     linear-gradient(0deg, transparent 98%, rgba(211, 47, 47, 0.03) 100%);
-  background-size: 50px 50px, 50px 50px;
+  background-size:
+    50px 50px,
+    50px 50px;
   pointer-events: none;
   z-index: -1;
 }
@@ -56,11 +67,17 @@ main {
   width: fit-content;
   margin: 20px auto;
   padding: 25px;
-  background: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(28, 28, 28, 0.9) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(18, 18, 18, 0.95) 0%,
+    rgba(28, 28, 28, 0.9) 100%
+  );
   border: var(--border-primary);
   border-radius: 0px;
-  box-shadow: 0 0 30px rgba(211, 47, 47, 0.2), var(--shadow-inset), 0 var(--spacing-sm)
-    var(--spacing-xl) rgba(0, 0, 0, 0.6);
+  box-shadow:
+    0 0 30px rgba(211, 47, 47, 0.2),
+    var(--shadow-inset),
+    0 var(--spacing-sm) var(--spacing-xl) rgba(0, 0, 0, 0.6);
   position: relative;
   backdrop-filter: blur(10px);
   overflow: hidden;
@@ -102,8 +119,10 @@ h1 {
   text-align: center;
   color: #f8f8f8;
   margin-bottom: 30px;
-  text-shadow: 0 0 20px rgba(211, 47, 47, 0.6), 0 0 40px rgba(211, 47, 47, 0.3), 0 2px
-    var(--spacing-xs) rgba(0, 0, 0, 0.8);
+  text-shadow:
+    0 0 20px rgba(211, 47, 47, 0.6),
+    0 0 40px rgba(211, 47, 47, 0.3),
+    0 2px var(--spacing-xs) rgba(0, 0, 0, 0.8);
   letter-spacing: 2px;
   text-transform: uppercase;
   position: relative;
@@ -144,7 +163,11 @@ h1 > i,
   border-top: var(--border-primary);
   font-size: 0.9em;
   color: #aaa;
-  background: linear-gradient(135deg, rgba(18, 18, 18, 0.8) 0%, rgba(24, 24, 24, 0.9) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(18, 18, 18, 0.8) 0%,
+    rgba(24, 24, 24, 0.9) 100%
+  );
   box-shadow: 0 -5px 20px rgba(211, 47, 47, 0.1);
 }
 
@@ -160,13 +183,11 @@ h1 > i,
 }
 
 @media screen and (max-width: 600px) {
-
   .container {
     max-width: 100%;
     margin: auto auto;
     padding: 20px;
   }
-
 
   /* Make sure table is responsive */
   th,
