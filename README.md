@@ -1,12 +1,6 @@
-## Alpha-Strike-Main
-
-This project is the main user interface for the Alpha-Strike Killboard, a leaderboard for the game Eve Frontier. It allows users to view recent activities, top-ranking players and systems, and search for specific killmails. The frontend is built using HTML, CSS, and vanilla JavaScript, and it is now bundled using Vite. The live website can be found at [https://www.alpha-strike.space/](https://www.alpha-strike.space/) and utilizes the API at [https://api.alpha-strike.space/](https://api.alpha-strike.space/) for data.
-
----
-
 ## About Alpha-Strike Killboard
 
-Alpha-Strike Killboard is designed to provide players of Eve Frontier with a comprehensive overview of PvP (Player versus Player) activities. It tracks and displays information such as:
+Alpha-Strike Killboard [https://www.alpha-strike.space/](https://www.alpha-strike.space/) is designed to provide players of Eve Frontier with a comprehensive overview of PvP (Player versus Player) activities. It tracks and displays information such as:
 
 - Recent killmails ("Recently Stamped")
 - Leading killers
