@@ -1,3 +1,4 @@
+import { setLanguage } from "./translation-dictionary.js";
 import { searchIncidents, searchTotals } from "./api.js";
 import { initializePage } from "./common.js";
 import { displayAggregateCard } from "./components/cards.js";
@@ -169,10 +170,8 @@ async function performSearch(query) {
   }
 
   // Re-apply translations to new dynamic content
-  if (typeof setLanguage === "function") {
-    const currentLang = localStorage.getItem("preferredLanguage") || "en";
-    setLanguage(currentLang);
-  }
+  const currentLang = localStorage.getItem("preferredLanguage") || "en";
+  setLanguage(currentLang);
   hideLoading();
 }
 
@@ -215,13 +214,11 @@ export function initializeSearchPage() {
     performSearch(decodeURIComponent(query));
   }
 
-  if (typeof setLanguage === "function") {
-    const currentLang = localStorage.getItem("preferredLanguage") || "en";
-    setLanguage(currentLang);
-  }
+  const currentLang = localStorage.getItem("preferredLanguage") || "en";
+  setLanguage(currentLang);
 }
 
 // Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
-  initializePage("search");
+  initializeSearchPage();
 });
