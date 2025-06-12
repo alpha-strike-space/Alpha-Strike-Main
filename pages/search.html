@@ -65,6 +65,10 @@
       } from "/js/incidentCard.js";
       import { displayAggregateCard } from "/js/components/cards.js";
       import { initializeSearchPage } from "/js/search.js";
+      document.addEventListener("DOMContentLoaded", () => {
+        initializePage("search");
+        initializeSearchPage();
+      });
       hideLoading();
     </script>
   </body>

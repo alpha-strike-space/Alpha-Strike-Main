@@ -1,6 +1,5 @@
 import { setLanguage } from "./translation-dictionary.js";
 import { searchIncidents, searchTotals } from "./api.js";
-import { initializePage } from "./common.js";
 import { displayAggregateCard } from "./components/cards.js";
 import {
   addIncidentCardListeners,
@@ -23,7 +22,7 @@ function getUrlParameters() {
 /**
  * Initialize navbar search functionality
  */
-function initializeNavSearch() {
+export function initializeNavSearch() {
   const searchButton = document.getElementById("navSearchBtn");
   const searchInput = document.getElementById("navSearchQuery");
   const searchType = document.getElementById("navSearchType");
@@ -205,20 +204,9 @@ function displaySearchResults(data) {
  * Initialize search page functionality
  */
 export function initializeSearchPage() {
-  // Initialize navbar search on all pages
-  initializeNavSearch();
-
   // Only perform search and show results on the search page
   const { query } = getUrlParameters();
   if (query) {
     performSearch(decodeURIComponent(query));
   }
-
-  const currentLang = localStorage.getItem("preferredLanguage") || "en";
-  setLanguage(currentLang);
 }
-
-// Initialize when DOM is loaded
-document.addEventListener("DOMContentLoaded", () => {
-  initializeSearchPage();
-});

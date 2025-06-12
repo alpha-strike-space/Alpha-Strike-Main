@@ -1,4 +1,5 @@
-import { createIncidentCard } from "./incidentCard.js";
+import { createIncidentCard, addIncidentCardListeners } from "./incidentCard.js";
+import { setLanguage } from "./translation-dictionary.js";
 
 /**
  * WebSocket connection manager for live updates
@@ -80,6 +81,7 @@ export class WebSocketManager {
         // Check if card is valid
         container.insertBefore(card, container.firstChild);
         setLanguage(localStorage.getItem('preferredLanguage') || 'en');
+        addIncidentCardListeners();
       } else {
         console.warn(
           "Websocket: Incident item did not result in a displayable card:",
