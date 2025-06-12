@@ -1,5 +1,7 @@
 import { currentLanguageIndex, languages, translations } from '../translation-dictionary.js';
 import { lazyLoader } from '../utils/lazyLoading.js';
+import { getLocalPortraitPath } from '../common.js';
+import { fetchSmartCharacterByAddress } from '../api.js';
 
 // Helper function to get translations
 const getTranslation = (key, fallbackText = '') => {
@@ -29,7 +31,7 @@ function calculatePlayerStats(item) {
 /**
  * Create the player card header section
  */
-function createPlayerCardHeader(item, stats) {
+function createPlayerCardHeader(item, stats, portraitUrl) {
   const header = document.createElement('div');
   header.className = 'card-header';
 
@@ -42,7 +44,7 @@ function createPlayerCardHeader(item, stats) {
   const image = document.createElement('img');
   image.className = 'profile-image';
   image.alt = `${item.name}'s profile`;
-  image.src = item.image || '../assets/images/default-avatar.avif';
+  image.src = getLocalPortraitPath(portraitUrl, '../');
   imageContainer.appendChild(image);
 
   const info = document.createElement('div');
@@ -240,13 +242,22 @@ function createSystemCardStats(item) {
 /**
  * Create a player card with the given data
  */
-function createPlayerCard(item) {
+async function createPlayerCard(item) {
   const card = document.createElement('div');
   card.className = 'data-card enhanced-player-card';
   card.dataset.id = item.id;
 
+  let portraitUrl = null;
+  // If we have an address, fetch the character details to get the portrait URL
+  if (item.character_address) {
+    const character = await fetchSmartCharacterByAddress(item.character_address);
+    if (character) {
+      portraitUrl = character.portraitUrl;
+    }
+  }
+
   const stats = calculatePlayerStats(item);
-  const header = createPlayerCardHeader(item, stats);
+  const header = createPlayerCardHeader(item, stats, portraitUrl);
   // const statsSection = createPlayerCardStats(stats);
 
   card.appendChild(header);
@@ -283,7 +294,7 @@ function createSystemCard(item) {
 /**
  * Display the aggregate card based on search type
  */
-function displayAggregateCard(data, type) {
+async function displayAggregateCard(data, type) {
   const totalsCardContainer = document.getElementById('totals-card');
   totalsCardContainer.innerHTML = '';
 
@@ -293,7 +304,10 @@ function displayAggregateCard(data, type) {
   }
 
   const item = data[0];
-  const card = type === 'system' ? createSystemCard(item) : createPlayerCard(item);
+  const card =
+    type === 'system'
+      ? createSystemCard(item)
+      : await createPlayerCard(item);
   totalsCardContainer.appendChild(card);
 }
 

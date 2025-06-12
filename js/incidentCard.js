@@ -1,6 +1,8 @@
 import { formatTimestamp, showLocalTime } from "./utils.js";
 import { lazyLoader } from "./utils/lazyLoading.js";
 import { translations } from "./translation-dictionary.js";
+import { fetchSmartCharacterById } from "./api.js";
+import { getLocalPortraitPath } from "./common.js";
 
 /**
  * Function to calculate time elapsed since incident
@@ -96,20 +98,6 @@ export function createIncidentCard(item) {
   card.className = "incident-list-item";
   card.dataset.timestamp = item.time_stamp;
 
-  // Create killer image with lazy loading
-  const killerImg = document.createElement("img");
-  killerImg.className = "profile-image";
-  killerImg.alt = `Killer ${item.killer_name || "Unknown"}`;
-  killerImg.dataset.src = "../assets/images/default-avatar.avif";
-  lazyLoader.addLazyLoading(killerImg, killerImg.dataset.src);
-
-  // Create victim image with lazy loading
-  const victimImg = document.createElement("img");
-  victimImg.className = "profile-image";
-  victimImg.alt = `Victim ${item.victim_name || "Unknown"}`;
-  victimImg.dataset.src = "../assets/images/default-avatar.avif";
-  lazyLoader.addLazyLoading(victimImg, victimImg.dataset.src);
-
   const isIndexPage =
     window.location.pathname.endsWith("index.html") ||
     window.location.pathname === "/" ||
@@ -125,6 +113,15 @@ export function createIncidentCard(item) {
     ? "card.localTimeLabel"
     : "card.utcTimeLabel";
   const placeholderProfileImage = `${assetBasePath}assets/images/default-avatar.avif`;
+
+  const killerPortraitUrl = getLocalPortraitPath(
+    item.killer_portrait_url,
+    assetBasePath,
+  );
+  const victimPortraitUrl = getLocalPortraitPath(
+    item.victim_portrait_url,
+    assetBasePath,
+  );
 
   const preferredLang = localStorage.getItem("preferredLanguage") || "en";
 
@@ -177,11 +174,11 @@ export function createIncidentCard(item) {
   card.innerHTML = `
         <div class="incident-photos">
             <div class="photo-container killer-photo">
-                <img src="${killerImg.dataset.src}" alt="Aggressor" class="combatant-photo"/>
+                <img src="${killerPortraitUrl}" alt="Aggressor" class="combatant-photo killer-image"/>
             </div>
             <div class="vs-indicator"><i class="fas fa-bolt"></i></div>
             <div class="photo-container victim-photo">
-                <img src="${victimImg.dataset.src}" alt="Victim" class="combatant-photo"/>
+                <img src="${victimPortraitUrl}" alt="Victim" class="combatant-photo victim-image"/>
             </div>
         </div>
         <div class="incident-combatants">

@@ -138,7 +138,27 @@ async function performSearch(query) {
 
     // Display results if we found any
     if (combinedIncidents.length > 0) {
-      displayAggregateCard(combinedTotals, searchType);
+      // Enrich the totals data with the character address from the incidents list
+      if (
+        searchType === "name" &&
+        combinedTotals.length > 0 &&
+        combinedIncidents.length > 0
+      ) {
+        const characterName = combinedTotals[0].name;
+        const matchingIncident = combinedIncidents.find(
+          (inc) =>
+            inc.killer_name === characterName ||
+            inc.victim_name === characterName,
+        );
+        if (matchingIncident) {
+          combinedTotals[0].character_address =
+            matchingIncident.killer_name === characterName
+              ? matchingIncident.killer_address
+              : matchingIncident.victim_address;
+        }
+      }
+
+      await displayAggregateCard(combinedTotals, searchType);
       displaySearchResults(combinedIncidents);
     } else {
       resultsContainer.innerHTML = `<p data-translate="search.noResults">No results found.</p>`;
@@ -155,8 +175,6 @@ async function performSearch(query) {
   }
   hideLoading();
 }
-
-
 
 /**
  * Display the search results using createIncidentCard from utils.js.
@@ -206,5 +224,4 @@ export function initializeSearchPage() {
 // Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   initializePage("search");
-  initializeSearchPage();
 });

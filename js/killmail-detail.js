@@ -1,5 +1,5 @@
 import { fetchIncidentById } from "./api.js";
-import { initializePage } from "./common.js";
+import { initializePage, getLocalPortraitPath } from "./common.js";
 // Import translations and language utilities from translation-dictionary.js
 import {
   currentLanguageIndex,
@@ -63,7 +63,7 @@ function createCombatantCard(data, type) {
       name: data.name,
     },
   );
-  image.src = "../assets/images/default-avatar.avif";
+  image.src = getLocalPortraitPath(data.portrait_url, "../");
 
   const info = document.createElement("div");
   info.className = "combatant-info-km";
@@ -458,8 +458,17 @@ function renderKillmailDetailsHTML(data) {
   const combatantsGrid = document.createElement("div");
   combatantsGrid.className = "combatants-grid-km";
 
-  const killerData = { name: killerNameDisplay, loss_type: lossType };
-  const victimData = { name: victimName, loss_type: lossType };
+  // Pass the specific portrait URLs down to the card creation function
+  const killerData = {
+    name: killerNameDisplay,
+    loss_type: lossType,
+    portrait_url: data.killer_portrait_url,
+  };
+  const victimData = {
+    name: victimName,
+    loss_type: lossType,
+    portrait_url: data.victim_portrait_url,
+  };
 
   combatantsGrid.appendChild(createCombatantCard(killerData, "killer"));
   combatantsGrid.appendChild(createCombatantCard(victimData, "victim"));

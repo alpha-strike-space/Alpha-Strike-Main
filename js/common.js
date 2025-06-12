@@ -8,6 +8,48 @@ import { addIncidentCardListeners } from "./incidentCard.js";
 import { toggleTimezone } from "./utils.js";
 import { initializeSearchPage } from "./search.js";
 
+// --- Portrait Image Mapping ---
+const portraitUrlMapping = {
+  "https://artifacts.evefrontier.com/portraits/PortraitAwakened256.png":
+    "assets/images/portraits/PortraitAwakened256.avif",
+  "https://artifacts.evefrontier.com/portraits/PortraitAscended256.png":
+    "assets/images/portraits/PortraitAscended256.avif",
+  "https://artifacts.evefrontier.com/portraits/PortraitRainmakers256.png":
+    "assets/images/portraits/PortraitRainmakers256.avif",
+  "https://artifacts.evefrontier.com/portraits/PortraitInitiated256.png":
+    "assets/images/portraits/PortraitInitiated256.avif",
+  "https://artifacts.evefrontier.com/Character/123456789_256.jpg":
+    "assets/images/portraits/123456789_256.avif",
+  "https://artifacts.evefrontier.com/portraits/PortraitSeers256.png":
+    "assets/images/portraits/PortraitSeers256.avif",
+  "https://artifacts.evefrontier.com/portraits/PortraitHarbingers256.png":
+    "assets/images/portraits/PortraitHarbingers256.avif",
+};
+
+/**
+ * Maps an external portrait URL to a local path.
+ * @param {string|null} externalUrl The full URL of the portrait from the API.
+ * @param {string} assetBasePath The base path for assets (e.g., './' or '../').
+ * @returns {string} The local path to the portrait image.
+ */
+export function getLocalPortraitPath(externalUrl, assetBasePath) {
+  const placeholder = `${assetBasePath}assets/images/default-avatar.avif`;
+  if (!externalUrl) {
+    return placeholder;
+  }
+
+  const localPath = portraitUrlMapping[externalUrl];
+
+  if (localPath) {
+    return assetBasePath + localPath;
+  } else {
+    console.warn(
+      `Missing local mapping for portrait URL: "${externalUrl}". Using default avatar. Please download the image and update the portraitUrlMapping in js/common.js.`,
+    );
+    return placeholder;
+  }
+}
+
 /**
  * Common functionality shared across pages
  */

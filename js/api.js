@@ -4,6 +4,7 @@
 import "./types/api-types/Incidents.js";
 import "./types/api-types/Totals.js";
 import "./types/api-types/Location.js";
+import "./types/api-types/SmartCharacter.js";
 
 /**
  * Base API utilities
@@ -42,6 +43,54 @@ async function checkServerHealth() {
 }
 
 /**
+ * Character Endpoints
+ */
+const worldApiBaseUrl = "https://world-api-stillness.live.tech.evefrontier.com";
+
+/**
+ * Fetches a single smart character by its address from the World API.
+ * This function first finds the character's ID by their address,
+ * then fetches the full character details.
+ * @param {string} characterAddress The address of the smart character.
+ * @returns {Promise<SmartCharacter|null>} A promise that resolves to the smart character data, or null if not found.
+ */
+async function fetchSmartCharacterByAddress(characterAddress) {
+  if (!characterAddress) {
+    return Promise.resolve(null);
+  }
+
+  const url = `${worldApiBaseUrl}/v2/smartcharacters/${characterAddress}`;
+  try {
+    const response = await fetchApiData(url);
+    if (response) {
+      // The endpoint returns the character object directly.
+      return response;
+    }
+    return null;
+  } catch (error) {
+    console.error(
+      `Error fetching smart character by address ${characterAddress}:`,
+      error,
+    );
+    return null;
+  }
+}
+
+/**
+ * Fetches a single smart character by its ID from the World API.
+ * The response from the API is expected to include a `portraitUrl`.
+ * @param {string} characterId The ID of the smart character.
+ * @returns {Promise<SmartCharacter|null>} A promise that resolves to the smart character data, or null if no ID is provided.
+ */
+async function fetchSmartCharacterById(characterId) {
+  if (!characterId) {
+    return Promise.resolve(null);
+  }
+  const url = `${worldApiBaseUrl}/v2/smartcharacters/${characterId}`;
+  return await fetchApiData(url);
+}
+
+/**
  * Incident Endpoints
  */
 
@@ -50,9 +99,38 @@ async function checkServerHealth() {
  * @returns {Promise<Incident[]>} - Array of incident objects
  */
 async function fetchRecentIncidents() {
-  return await fetchApiData(
+  const incidents = await fetchApiData(
     "https://api.alpha-strike.space/incident?filter=month",
   );
+
+  if (!incidents || !Array.isArray(incidents)) {
+    return [];
+  }
+
+  // Enrich incidents with character data
+  const enrichedIncidents = await Promise.all(
+    incidents.map(async (incident) => {
+      const killerPromise = fetchSmartCharacterByAddress(
+        incident.killer_address,
+      );
+      const victimPromise = fetchSmartCharacterByAddress(
+        incident.victim_address,
+      );
+      const [killer, victim] = await Promise.all([
+        killerPromise,
+        victimPromise,
+      ]);
+      return {
+        ...incident,
+        killer_id: killer ? killer.id : null,
+        victim_id: victim ? victim.id : null,
+        killer_portrait_url: killer ? killer.portraitUrl : null,
+        victim_portrait_url: victim ? victim.portraitUrl : null,
+      };
+    }),
+  );
+
+  return enrichedIncidents;
 }
 
 /**
@@ -61,9 +139,31 @@ async function fetchRecentIncidents() {
  * @returns {Promise<Incident>} - An incident object
  */
 async function fetchIncidentById(mail_id) {
-  return await fetchApiData(
+  const incidentArray = await fetchApiData(
     `https://api.alpha-strike.space/incident?mail_id=${mail_id}`,
   );
+
+  if (!incidentArray || incidentArray.length === 0) {
+    return null;
+  }
+
+  const incident = incidentArray[0];
+
+  // Enrich incident with character data
+  const killerPromise = fetchSmartCharacterByAddress(incident.killer_address);
+  const victimPromise = fetchSmartCharacterByAddress(incident.victim_address);
+  const [killer, victim] = await Promise.all([killerPromise, victimPromise]);
+
+  const enrichedIncident = {
+    ...incident,
+    killer_id: killer ? killer.id : null,
+    victim_id: victim ? victim.id : null,
+    killer_portrait_url: killer ? killer.portraitUrl : null,
+    victim_portrait_url: victim ? victim.portraitUrl : null,
+  };
+
+  // Return the enriched data in an array to match the frontend's expectation
+  return [enrichedIncident];
 }
 
 /**
@@ -77,7 +177,37 @@ async function searchIncidents(query, type) {
     type === "system"
       ? `https://api.alpha-strike.space/incident?system=${encodeURIComponent(query)}`
       : `https://api.alpha-strike.space/incident?name=${encodeURIComponent(query)}`;
-  return await fetchApiData(endpoint);
+
+  const incidents = await fetchApiData(endpoint);
+
+  if (!incidents || !Array.isArray(incidents)) {
+    return [];
+  }
+
+  // Enrich incidents with character data
+  const enrichedIncidents = await Promise.all(
+    incidents.map(async (incident) => {
+      const killerPromise = fetchSmartCharacterByAddress(
+        incident.killer_address,
+      );
+      const victimPromise = fetchSmartCharacterByAddress(
+        incident.victim_address,
+      );
+      const [killer, victim] = await Promise.all([
+        killerPromise,
+        victimPromise,
+      ]);
+      return {
+        ...incident,
+        killer_id: killer ? killer.id : null,
+        victim_id: victim ? victim.id : null,
+        killer_portrait_url: killer ? killer.portraitUrl : null,
+        victim_portrait_url: victim ? victim.portraitUrl : null,
+      };
+    }),
+  );
+
+  return enrichedIncidents;
 }
 
 /**
@@ -152,6 +282,9 @@ export {
   fetchApiData,
   // Health check
   checkServerHealth,
+  // Character Endpoints
+  fetchSmartCharacterByAddress,
+  fetchSmartCharacterById,
   // Incident endpoints
   fetchRecentIncidents,
   fetchIncidentById,
