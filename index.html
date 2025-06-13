@@ -97,41 +97,6 @@
     </footer>
 
     <!-- Scripts -->
-    <script type="module">
-      import { initializePage, displayDataInContainer } from "./js/common.js";
-      import { fetchRecentIncidents } from "./js/api.js";
-      import { toggleTimezone } from "./js/utils.js";
-      import { createIncidentCard } from "./js/incidentCard.js";
-      import { WebSocketManager } from "./js/websocket.js";
-      import {
-        showLoading,
-        hideLoading,
-      } from "./js/components/loadingOverlay.js";
-      // Page-specific initialization
-      showLoading();
-      document.addEventListener("DOMContentLoaded", async () => {
-        initializePage("home");
-        try {
-          const data = await fetchRecentIncidents();
-          displayDataInContainer(data, "data-container", createIncidentCard, {
-            sortBy: "time_stamp",
-            sortDirection: "desc",
-            limit: 100,
-            noDataMessage: "No recent incidents found.",
-          });
-        } catch (error) {
-          document.getElementById("data-container").textContent =
-            "Failed to load data.";
-        }
-
-        // Initialize WebSocket for live updates
-        const wsManager = new WebSocketManager(
-          "wss://api.alpha-strike.space/ws/mails",
-          "data-container",
-        );
-        wsManager.connect();
-        hideLoading();
-      });
-    </script>
+    <script src="/js/main.js" type="module"></script>
   </body>
 </html>

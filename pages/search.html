@@ -54,22 +54,6 @@
       </button>
     </main>
 
-    <script type="module">
-      import { showLoading, hideLoading } from "/js/components/loadingOverlay.js";
-      showLoading();
-      import { initializePage } from "/js/common.js";
-      import { searchIncidents, searchTotals } from "/js/api.js";
-      import {
-        createIncidentCard,
-        addIncidentCardListeners,
-      } from "/js/incidentCard.js";
-      import { displayAggregateCard } from "/js/components/cards.js";
-      import { initializeSearchPage } from "/js/search.js";
-      document.addEventListener("DOMContentLoaded", () => {
-        initializePage("search");
-        initializeSearchPage();
-      });
-      hideLoading();
-    </script>
+    <script type="module" src="../js/search-page.js"></script>
   </body>
 </html>

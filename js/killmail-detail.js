@@ -180,14 +180,17 @@ function createFittingCategory(title, icon, items) {
   summary.innerHTML = `<i class="fas fa-${icon}"></i> ${title}`;
 
   const list = document.createElement("ul");
+  const listFragment = document.createDocumentFragment(); // Use a fragment for list items
+
   items.forEach((item) => {
     const li = document.createElement("li");
     const span = document.createElement("span");
     span.className = "placeholder";
     span.textContent = item;
     li.appendChild(span);
-    list.appendChild(li);
+    listFragment.appendChild(li);
   });
+  list.appendChild(listFragment); // Append all list items at once
 
   details.appendChild(summary);
   details.appendChild(list);
@@ -385,10 +388,6 @@ function renderKillmailDetailsHTML(data) {
     "unknown",
   );
   const lossType = getGeneralTranslationLocal(data.loss_type, "classified");
-  const solarSystemId = getGeneralTranslationLocal(
-    data.solar_system_id,
-    "notApplicable",
-  );
 
   documentTitleEl.textContent = getTranslationLocal(
     "killmail.pageTitlePattern",
@@ -396,7 +395,8 @@ function renderKillmailDetailsHTML(data) {
     { killerName: killerNameDisplay, victimName: victimName },
   );
 
-  // Create header section
+  // Use a document fragment to build the header content to minimize DOM manipulation
+  const headerFragment = document.createDocumentFragment();
   const header = document.createElement("h1");
   const killerSpan = document.createElement("span");
   killerSpan.className = "killer clickable-name";
@@ -450,9 +450,15 @@ function renderKillmailDetailsHTML(data) {
   location.appendChild(locationText);
   location.appendChild(systemSpan);
 
-  pageTitleContainerEl.innerHTML = "";
-  pageTitleContainerEl.appendChild(header);
-  pageTitleContainerEl.appendChild(location);
+  headerFragment.appendChild(header);
+  headerFragment.appendChild(location);
+
+  // Clear and append header
+  pageTitleContainerEl.textContent = "";
+  pageTitleContainerEl.appendChild(headerFragment);
+
+  // Use a document fragment for the main content to minimize DOM manipulation
+  const contentFragment = document.createDocumentFragment();
 
   // Create combatants grid
   const combatantsGrid = document.createElement("div");
@@ -472,25 +478,34 @@ function renderKillmailDetailsHTML(data) {
 
   combatantsGrid.appendChild(createCombatantCard(killerData, "killer"));
   combatantsGrid.appendChild(createCombatantCard(victimData, "victim"));
+  contentFragment.appendChild(combatantsGrid);
 
   // Create engagement details
   const engagementDetails = createEngagementDetails(data);
+  contentFragment.appendChild(engagementDetails);
 
   // Create fitting section
   const fittingSection = createFittingSection();
+  contentFragment.appendChild(fittingSection);
 
-  // Clear and append all sections
-  killmailContentEl.innerHTML = "";
-  killmailContentEl.appendChild(combatantsGrid);
-  killmailContentEl.appendChild(engagementDetails);
-  killmailContentEl.appendChild(fittingSection);
+  // Clear and append all sections at once
+  killmailContentEl.textContent = "";
+  killmailContentEl.appendChild(contentFragment);
 
   if (typeof addIncidentCardListeners === "function") {
     addIncidentCardListeners();
   }
 }
 
-async function loadAndRenderKillmailPageContent() {
+export function onLanguageChange() {
+  if (killmailDataStore) {
+    renderKillmailDetailsHTML(killmailDataStore);
+  } else {
+    loadAndRenderKillmailPageContent();
+  }
+}
+
+export async function loadAndRenderKillmailPageContent() {
   const urlParams = new URLSearchParams(window.location.search);
   const mail_id = urlParams.get("mail_id");
   const killmailContentEl = document.getElementById("killmail-content");
@@ -545,52 +560,4 @@ async function loadAndRenderKillmailPageContent() {
     setLanguage(currentLang);
   }
   hideLoading();
-}
-
-document.addEventListener("DOMContentLoaded", async () => {
-  showLoading();
-  await loadTranslations(); // Load all translation strings first
-  initializePage("killmail_detail"); // Initialize navigation, static translations
-
-  await loadAndRenderKillmailPageContent(); // Initial fetch and render of the killmail
-
-  // Define a global function that the translation dictionary can call to refresh this page's content
-  if (typeof window.AlphaStrike === "undefined") {
-    window.AlphaStrike = {};
-  }
-  window.AlphaStrike.onLanguageChangeRenderContent = () => {
-    console.log(
-      "Killmail page: Language change detected, re-rendering content.",
-    );
-    // We have the data in killmailDataStore, so just re-render the HTML part
-    if (killmailDataStore) {
-      renderKillmailDetailsHTML(killmailDataStore);
-    } else {
-      // If for some reason data isn't stored, try fetching and rendering again
-      // This might happen if the initial load failed but language was changed.
-      loadAndRenderKillmailPageContent();
-    }
-    // The main setLanguage in translation-dictionary will handle static data-translate elements again.
-    // We only needed to re-render the killmail-specific content.
-  };
-});
-
-function createKillmailCard(killmail) {
-  const card = document.createElement("div");
-  card.className = "killmail-card";
-
-  // Create image elements with lazy loading
-  const killerImg = document.createElement("img");
-  killerImg.className = "profile-image";
-  killerImg.alt = `Killer ${killmail.killer_name}`;
-  killerImg.dataset.src = "../assets/images/awakened.avif";
-  lazyLoader.addLazyLoading(killerImg, killerImg.dataset.src);
-
-  const victimImg = document.createElement("img");
-  victimImg.className = "profile-image";
-  victimImg.alt = `Victim ${killmail.victim_name}`;
-  victimImg.dataset.src = "../assets/images/awakened.avif";
-  lazyLoader.addLazyLoading(victimImg, victimImg.dataset.src);
-
-  // ... rest of your card creation code ...
 }
