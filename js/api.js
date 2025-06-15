@@ -96,11 +96,13 @@ async function fetchSmartCharacterById(characterId) {
 
 /**
  * Fetch recent incidents data
+ * @param {number} limit - The number of incidents to fetch.
+ * @param {number} offset - The starting point for fetching incidents.
  * @returns {Promise<Incident[]>} - Array of incident objects
  */
-async function fetchRecentIncidents() {
+async function fetchRecentIncidents(limit = 20, offset = 0) {
   const incidents = await fetchApiData(
-    "https://api.alpha-strike.space/incident?filter=month",
+    `https://api.alpha-strike.space/incident?filter=month&limit=${limit}&offset=${offset}`,
   );
 
   if (!incidents || !Array.isArray(incidents)) {
@@ -170,13 +172,19 @@ async function fetchIncidentById(mail_id) {
  * Search incidents by name or system
  * @param {string} query - Search query
  * @param {string} type - 'name' or 'system'
+ * @param {number} [limit] - The number of incidents to fetch.
+ * @param {number} [offset] - The starting point for fetching incidents.
  * @returns {Promise<Incident[]>} - Array of search results
  */
-async function searchIncidents(query, type) {
-  const endpoint =
+async function searchIncidents(query, type, limit, offset) {
+  let endpoint =
     type === "system"
       ? `https://api.alpha-strike.space/incident?system=${encodeURIComponent(query)}`
       : `https://api.alpha-strike.space/incident?name=${encodeURIComponent(query)}`;
+
+  if (limit !== undefined && offset !== undefined) {
+    endpoint += `&limit=${limit}&offset=${offset}`;
+  }
 
   const incidents = await fetchApiData(endpoint);
 

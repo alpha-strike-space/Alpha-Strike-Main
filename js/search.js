@@ -7,6 +7,14 @@ import {
   navigateToSearch,
 } from "./incidentCard.js";
 import { showLoading, hideLoading } from "./components/loadingOverlay.js";
+import { renderPaginationControls } from "./components/pagination.js";
+
+// --- State Management ---
+const incidentsPerPage = 20;
+let currentPage = 1;
+let hasNextPage = false;
+let currentQuery = "";
+let currentType = "";
 
 /**
  * Get URL parameters for pre-filling search
@@ -52,126 +60,15 @@ export function initializeNavSearch() {
  * @returns {string[]} Array of case variations
  */
 function generateCaseVariations(query, type) {
-  // If query is empty or only whitespace, return empty array
   if (!query || !query.trim()) return [];
-
-  // Remove any extra whitespace
   query = query.trim();
+  if (type === "system") return [query.toUpperCase()];
 
-  // For system queries, only use uppercase
-  if (type === "system") {
-    return [query.toUpperCase()];
-  }
+  const lower = query.toLowerCase();
+  const upper = query.toUpperCase();
+  const firstUpper = query.charAt(0).toUpperCase() + query.slice(1).toLowerCase();
 
-  // For character names, use three different capitalizations
-  // If the query is already lowercase, we'll create variations by capitalizing different parts
-  if (query === query.toLowerCase()) {
-    return [
-      query, // Original (lowercase)
-      query.toUpperCase(), // All uppercase
-      query.charAt(0).toUpperCase() + query.slice(1), // First letter capitalized
-    ];
-  }
-
-  // If the query is already uppercase, we'll create variations by lowercasing different parts
-  if (query === query.toUpperCase()) {
-    return [
-      query, // Original (uppercase)
-      query.toLowerCase(), // All lowercase
-      query.charAt(0).toLowerCase() + query.slice(1), // First letter lowercase
-    ];
-  }
-
-  // For mixed case, use the standard variations
-  return [
-    query, // Original
-    query.toLowerCase(), // All lowercase
-    query.toUpperCase(), // All uppercase
-  ];
-}
-
-/**
- * Performs two API calls concurrently:
- *   1. Incident search (detailed stamped mail results)
- *   2. Aggregated totals (all time totals) from a different URL.
- */
-async function performSearch(query) {
-  const { type } = getUrlParameters();
-  const searchType = type || "name";
-
-  const resultsContainer = document.getElementById("results-container");
-  const totalsCardContainer = document.getElementById("totals-card");
-
-  if (!resultsContainer || !totalsCardContainer) return;
-
-  resultsContainer.innerHTML =
-    '<p data-translate="search.loading">Loading...</p>';
-  totalsCardContainer.innerHTML = "";
-
-  showLoading();
-
-  try {
-    // Generate case variations of the search query
-    const queryVariations = generateCaseVariations(query, searchType);
-
-    // Try each variation sequentially until we get results
-    let combinedIncidents = [];
-    let combinedTotals = [];
-
-    for (const variation of queryVariations) {
-      try {
-        const [incidents, totals] = await Promise.all([
-          searchIncidents(variation, searchType),
-          searchTotals(variation, searchType),
-        ]);
-
-        // If we got results, use them and break the loop
-        if (incidents && incidents.length > 0) {
-          combinedIncidents = incidents;
-          combinedTotals = totals || [];
-          break;
-        }
-      } catch (error) {
-        // Continue to next variation
-      }
-    }
-
-    // Display results if we found any
-    if (combinedIncidents.length > 0) {
-      // Enrich the totals data with the character address from the incidents list
-      if (
-        searchType === "name" &&
-        combinedTotals.length > 0 &&
-        combinedIncidents.length > 0
-      ) {
-        const characterName = combinedTotals[0].name;
-        const matchingIncident = combinedIncidents.find(
-          (inc) =>
-            inc.killer_name === characterName ||
-            inc.victim_name === characterName,
-        );
-        if (matchingIncident) {
-          combinedTotals[0].character_address =
-            matchingIncident.killer_name === characterName
-              ? matchingIncident.killer_address
-              : matchingIncident.victim_address;
-        }
-      }
-
-      await displayAggregateCard(combinedTotals, searchType);
-      displaySearchResults(combinedIncidents);
-    } else {
-      resultsContainer.innerHTML = `<p data-translate="search.noResults">No results found.</p>`;
-    }
-  } catch (error) {
-    console.error("Error fetching search data:", error);
-    resultsContainer.innerHTML = `<p data-translate="search.error">Error loading search results.</p>`;
-  }
-
-  // Re-apply translations to new dynamic content
-  const currentLang = localStorage.getItem("preferredLanguage") || "en";
-  setLanguage(currentLang);
-  hideLoading();
+  return [...new Set([query, lower, upper, firstUpper])];
 }
 
 /**
@@ -180,33 +77,182 @@ async function performSearch(query) {
 function displaySearchResults(data) {
   const container = document.getElementById("results-container");
   if (!container) return;
-
   container.innerHTML = "";
 
   if (!data || data.length === 0) {
-    container.innerHTML = `<p data-translate="search.noResults">No results found.</p>`;
+    container.innerHTML = `<p data-translate="search.noResults">No search results found.</p>`;
     return;
   }
 
   data.forEach((item) => {
     const card = createIncidentCard(item);
-    if (card) {
-      container.appendChild(card);
-    }
+    if (card) container.appendChild(card);
   });
 
-  if (typeof addIncidentCardListeners === "function") {
-    addIncidentCardListeners();
+  addIncidentCardListeners?.();
+}
+
+/**
+ * Renders the pagination controls, showing them only if needed.
+ */
+function renderPagination() {
+  const paginationContainer = document.getElementById("pagination-container");
+  if (!paginationContainer) return;
+
+  if (currentPage > 1 || hasNextPage) {
+    paginationContainer.style.display = "flex";
+    renderPaginationControls({
+      container: paginationContainer,
+      currentPage,
+      hasNextPage,
+      onPageClick: loadPage,
+    });
+  } else {
+    paginationContainer.style.display = "none";
   }
+}
+
+/**
+ * Fetches and displays a specific page of incident results.
+ * This is a wrapper function that handles loading indicators.
+ * @param {number} page - The page number to load.
+ */
+async function loadPage(page) {
+  showLoading();
+  try {
+    await _loadAndDisplayPage(page);
+
+    // After the content is loaded, scroll to the top of the container.
+    const resultsContainer = document.getElementById("results-container");
+    if (resultsContainer) {
+      resultsContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  } catch (error) {
+    console.error("Error fetching search page:", error);
+    document.getElementById("results-container").innerHTML = `<p data-translate="search.error">Error loading search results.</p>`;
+  } finally {
+    hideLoading();
+    const currentLang = localStorage.getItem("preferredLanguage") || "en";
+    setLanguage(currentLang);
+  }
+}
+
+/**
+ * The core recursive logic for loading a page. If a page is empty or fails to load, it tries the one before it.
+ * @private
+ * @param {number} page - The page number to attempt to load.
+ */
+async function _loadAndDisplayPage(page) {
+  if (page < 1) {
+    // Base case for recursion: we've gone below page 1.
+    currentPage = 1;
+    hasNextPage = false;
+    displaySearchResults([]);
+    renderPagination();
+    return;
+  }
+
+  try {
+    const offset = (page - 1) * incidentsPerPage;
+    const incidents = await searchIncidents(currentQuery, currentType, incidentsPerPage + 1, offset);
+
+    if (incidents.length === 0 && page > 1) {
+      // This page is empty, and it's not the first page. Recurse to the previous one.
+      await _loadAndDisplayPage(page - 1);
+      return;
+    }
+
+    // This page has content, or it's page 1 (which might be empty). Display it.
+    currentPage = page;
+    hasNextPage = incidents.length > incidentsPerPage;
+    const incidentsToDisplay = incidents.slice(0, incidentsPerPage);
+
+    displaySearchResults(incidentsToDisplay);
+    renderPagination();
+  } catch (error) {
+    // If fetching fails (e.g., API returns 404 for a large offset), we also treat it
+    // as an out-of-bounds page and try the previous one, unless we're on page 1.
+    console.warn(`Failed to fetch search page ${page}, trying page ${page - 1}. Error:`, error);
+    if (page > 1) {
+      await _loadAndDisplayPage(page - 1);
+    } else {
+      console.error("Error fetching initial search results:", error);
+      document.getElementById("results-container").innerHTML = `<p data-translate="search.error">Error loading search results.</p>`;
+      currentPage = 1;
+      hasNextPage = false;
+      renderPagination();
+    }
+  }
+}
+
+/**
+ * Performs the initial search, handling case variations and fetching the first page.
+ */
+async function performInitialSearch(query, type) {
+  const resultsContainer = document.getElementById("results-container");
+  const totalsCardContainer = document.getElementById("totals-card");
+  const paginationContainer = document.getElementById("pagination-container");
+
+  if (!resultsContainer || !totalsCardContainer || !paginationContainer) return;
+
+  // Reset UI for new search
+  currentPage = 1;
+  resultsContainer.innerHTML = `<p data-translate="search.loading">Loading...</p>`;
+  totalsCardContainer.innerHTML = "";
+  paginationContainer.style.display = "none";
+  showLoading();
+
+  const queryVariations = generateCaseVariations(query, type);
+  let successfulVariation = null;
+  let initialIncidents = [];
+  let totalsData = [];
+
+  for (const variation of queryVariations) {
+    try {
+      const [totals, incidents] = await Promise.all([
+        searchTotals(variation, type),
+        searchIncidents(variation, type, incidentsPerPage + 1, 0),
+      ]);
+
+      if (incidents?.length > 0) {
+        successfulVariation = variation;
+        initialIncidents = incidents;
+        totalsData = totals || [];
+        break;
+      }
+    } catch (error) {
+      /* Continue to next variation */
+    }
+  }
+
+  hideLoading();
+
+  if (successfulVariation) {
+    currentQuery = successfulVariation;
+    currentType = type;
+
+    // Display aggregate card
+    await displayAggregateCard(totalsData, type);
+
+    // Display first page of incidents
+    hasNextPage = initialIncidents.length > incidentsPerPage;
+    const incidentsToDisplay = initialIncidents.slice(0, incidentsPerPage);
+    displaySearchResults(incidentsToDisplay);
+    renderPagination();
+  } else {
+    resultsContainer.innerHTML = `<p data-translate="search.noResults">No results found for your query.</p>`;
+  }
+
+  const currentLang = localStorage.getItem("preferredLanguage") || "en";
+  setLanguage(currentLang);
 }
 
 /**
  * Initialize search page functionality
  */
 export function initializeSearchPage() {
-  // Only perform search and show results on the search page
-  const { query } = getUrlParameters();
+  const { query, type } = getUrlParameters();
   if (query) {
-    performSearch(decodeURIComponent(query));
+    performInitialSearch(decodeURIComponent(query), type || "name");
   }
 }

@@ -202,7 +202,7 @@ function createSystemCardHeader(item, stats) {
   incidentsStat.className = 'header-stat';
   incidentsStat.innerHTML = `
         <div class="header-stat-value ${stats.threatClass}">${stats.totalIncidents}</div>
-        <div class="header-stat-label" data-translate="card.incidents">Incidents</div>
+        <div class="header-stat-label" data-translate="card.incidentCount">Incidents</div>
     `;
 
   const avgPerDayStat = document.createElement('div');
