@@ -232,8 +232,7 @@
     padding: var(--spacing-xs) 0;
   }
 
-  .topnav-links a,
-  .topnav-links .lang-btn-nav {
+  .topnav-links a {
     padding: var(--spacing-sm) var(--spacing-xs); /* Reduced padding */
     font-size: 0.75rem; /* Smaller font */
     letter-spacing: 0.3px; /* Reduced letter spacing */
@@ -294,8 +293,7 @@
     padding: var(--spacing-xs) 0;
   }
 
-  .topnav-links a,
-  .topnav-links .lang-btn-nav {
+  .topnav-links a {
     width: calc(100% - var(--spacing-lg) * 2); /* Account for padding */
     margin: 0 auto; /* Center the items */
     text-align: left;
@@ -339,5 +337,13 @@
     background-color: rgba(211, 47, 47, 0.15);
     border-left: 3px solid var(--color-primary);
     padding-left: calc(var(--spacing-md) - 3px);
+  }
+
+  .topnav-links .lang-btn-nav {
+    
+    margin-bottom: 10px;
+    border: var(--border-primary);
+    /* Make it as wide as it needs to be, but also centered */
+    width: auto;
   }
 }
