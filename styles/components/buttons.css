@@ -152,7 +152,6 @@
   .timezone-toggle-floating {
     bottom: 15px;
     left: 15px;
-    padding: 10px 1 var(--spacing-xs);
     font-size: 0.75rem;
     min-width: 100px;
   }
