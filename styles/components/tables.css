@@ -40,6 +40,7 @@ td {
   text-shadow: var(--shadow-text-muted);
   border-bottom: var(--border-primary); /* Apply only bottom border to cells for row separation */
   font-weight: bold;
+  white-space: nowrap;
 }
 
 /* Font awesome formatting in table rows */
@@ -120,7 +121,7 @@ tbody tr:last-child td {
 
   th,
   td {
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: var(--spacing-sm);
     font-size: 0.9rem;
   }
 

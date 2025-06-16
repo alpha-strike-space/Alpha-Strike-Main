@@ -54,10 +54,10 @@
     "es": "Nombre"
   },
   "table.numVictimsStacked": {
-    "en": "Number of Victims Stacked",
-    "ru": "Количество накопленных жертв",
-    "zh": "堆叠的受害者数量",
-    "es": "Número de Víctimas Acumuladas"
+    "en": "Number of kills",
+    "ru": "Количество убийств",
+    "zh": "击杀数",
+    "es": "Número de bajas"
   },
   "header.defeatedVictims": {
     "en": "Defeated Victims",
