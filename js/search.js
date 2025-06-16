@@ -15,6 +15,7 @@ let currentPage = 1;
 let hasNextPage = false;
 let currentQuery = "";
 let currentType = "";
+let totalIncidents = 0;
 
 /**
  * Get URL parameters for pre-filling search
@@ -106,6 +107,7 @@ function renderPagination() {
       currentPage,
       hasNextPage,
       onPageClick: loadPage,
+      totalPages: totalIncidents > 0 ? Math.ceil(totalIncidents / incidentsPerPage) : null,
     });
   } else {
     paginationContainer.style.display = "none";
@@ -197,6 +199,7 @@ async function performInitialSearch(query, type) {
 
   // Reset UI for new search
   currentPage = 1;
+  totalIncidents = 0;
   resultsContainer.innerHTML = `<p data-translate="search.loading">Loading...</p>`;
   totalsCardContainer.innerHTML = "";
   paginationContainer.style.display = "none";
@@ -230,6 +233,16 @@ async function performInitialSearch(query, type) {
   if (successfulVariation) {
     currentQuery = successfulVariation;
     currentType = type;
+
+    if (totalsData && totalsData.length > 0) {
+      const aggregateData = totalsData[0];
+      if (type === "system") {
+        totalIncidents = aggregateData.incident_count || 0;
+      } else {
+        totalIncidents =
+          (aggregateData.total_kills || 0) + (aggregateData.total_losses || 0);
+      }
+    }
 
     // Display aggregate card
     await displayAggregateCard(totalsData, type);

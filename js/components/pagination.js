@@ -5,8 +5,15 @@
  * @param {number} options.currentPage - The current active page.
  * @param {boolean} options.hasNextPage - A boolean to indicate if there is a next page.
  * @param {function(number): void} options.onPageClick - The callback function to execute when a page button is clicked.
+ * @param {number} [options.totalPages] - Optional total number of pages.
  */
-export function renderPaginationControls({ container, currentPage, hasNextPage, onPageClick }) {
+export function renderPaginationControls({
+  container,
+  currentPage,
+  hasNextPage,
+  onPageClick,
+  totalPages = null,
+}) {
   if (!container) return;
 
   container.innerHTML = "";
@@ -22,13 +29,22 @@ export function renderPaginationControls({ container, currentPage, hasNextPage, 
     return button;
   };
 
+  // Determine if there is a next page. Prioritize totalPages if available.
+  const effectiveHasNextPage = totalPages !== null ? currentPage < totalPages : hasNextPage;
+
   // Previous Button
   container.appendChild(createButton("«", currentPage - 1, currentPage === 1));
 
   // Page numbers
   const pagesToShow = 2; // Pages before and after current
   let startPage = Math.max(1, currentPage - pagesToShow);
-  let endPage = currentPage + pagesToShow;
+  let endPage;
+
+  if (totalPages) {
+    endPage = Math.min(totalPages, currentPage + pagesToShow);
+  } else {
+    endPage = currentPage + pagesToShow;
+  }
 
   // "First" button and ellipsis
   if (startPage > 1) {
@@ -42,17 +58,25 @@ export function renderPaginationControls({ container, currentPage, hasNextPage, 
 
   // Numbered page buttons
   for (let i = startPage; i <= endPage; i++) {
-    if (i > currentPage && !hasNextPage) continue;
+    if (!totalPages && i > currentPage && !hasNextPage) continue;
     container.appendChild(createButton(i.toString(), i, false, i === currentPage));
   }
 
-  // Ellipsis and "Next" button
-  if (hasNextPage) {
+  // Ellipsis and "Last" button if totalPages is known
+  if (totalPages && endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      const ellipsis = document.createElement("span");
+      ellipsis.textContent = "...";
+      container.appendChild(ellipsis);
+    }
+    container.appendChild(createButton(totalPages.toString(), totalPages));
+  } else if (!totalPages && hasNextPage) {
+    // Fallback for when totalPages is not available
     const ellipsis = document.createElement("span");
     ellipsis.textContent = "...";
     container.appendChild(ellipsis);
   }
 
   // Next Button
-  container.appendChild(createButton("»", currentPage + 1, !hasNextPage));
+  container.appendChild(createButton("»", currentPage + 1, !effectiveHasNextPage));
 } 
