@@ -4,13 +4,13 @@ export const languages = ['en', 'es', 'ru', 'zh'];
 export let currentLanguageIndex = 0; // Index of the currently selected language in the languages array
 
 /**
- * Sets the language for the page and updates UI elements.
+ * Applies translations to all elements with `data-translate` within a given scope.
+ * @param {HTMLElement} scope - The element to search within for translatable elements.
+ * @param {string} lang - The target language code (e.g., 'en', 'es').
  */
-export function setLanguage(lang) {
-  document.documentElement.lang = lang;
-  localStorage.setItem('preferredLanguage', lang);
+export function applyTranslationsToElement(scope, lang) {
+  const elements = scope.querySelectorAll('[data-translate]');
 
-  const elements = document.querySelectorAll('[data-translate]');
   [...elements].map((element) => {
     const key = element.getAttribute('data-translate');
     const translationEntry = translations[key];
@@ -43,7 +43,11 @@ export function setLanguage(lang) {
       } else {
         // For most elements, try to preserve child <i> tags if they are the first child
         const firstChild = element.firstChild;
-        if (firstChild && firstChild.nodeType === Node.ELEMENT_NODE && firstChild.tagName === 'I') {
+        if (
+          firstChild &&
+          firstChild.nodeType === Node.ELEMENT_NODE &&
+          firstChild.tagName === 'I'
+        ) {
           element.innerHTML = `${firstChild.outerHTML} ${translation}`;
         } else {
           element.textContent = translation;
@@ -51,6 +55,16 @@ export function setLanguage(lang) {
       }
     }
   });
+}
+
+/**
+ * Sets the language for the page and updates UI elements.
+ */
+export function setLanguage(lang) {
+  document.documentElement.lang = lang;
+  localStorage.setItem('preferredLanguage', lang);
+
+  applyTranslationsToElement(document, lang);
 
   const langBtn = document.getElementById('animatedLangBtn');
   if (langBtn) {
