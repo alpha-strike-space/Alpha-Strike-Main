@@ -91,8 +91,43 @@ async function fetchSmartCharacterById(characterId) {
 }
 
 /**
+ * Enriches a single incident with character data (portraits, IDs).
+ * @param {Incident} incident - The bare incident object.
+ * @returns {Promise<Incident>} - The enriched incident object.
+ */
+export async function enrichIncident(incident) {
+  const killerPromise = fetchSmartCharacterByAddress(incident.killer_address);
+  const victimPromise = fetchSmartCharacterByAddress(incident.victim_address);
+  const [killer, victim] = await Promise.all([killerPromise, victimPromise]);
+  return {
+    ...incident,
+    killer_id: killer ? killer.id : null,
+    victim_id: victim ? victim.id : null,
+    killer_portrait_url: killer ? killer.portraitUrl : null,
+    victim_portrait_url: victim ? victim.portraitUrl : null,
+  };
+}
+
+/**
  * Incident Endpoints
  */
+
+/**
+ * Fetches recent incidents from the API without enrichment.
+ * @param {number} limit - The number of incidents to fetch.
+ * @param {number} offset - The starting point for fetching incidents.
+ * @returns {Promise<Incident[]>} - Array of bare incident objects.
+ */
+export async function fetchBareIncidents(limit = 20, offset = 0) {
+  const incidents = await fetchApiData(
+    `https://api.alpha-strike.space/incident?filter=month&limit=${limit}&offset=${offset}`,
+  );
+
+  if (!incidents || !Array.isArray(incidents)) {
+    return [];
+  }
+  return incidents;
+}
 
 /**
  * Fetch recent incidents data
@@ -112,23 +147,7 @@ async function fetchRecentIncidents(limit = 20, offset = 0) {
   // Enrich incidents with character data
   const enrichedIncidents = await Promise.all(
     incidents.map(async (incident) => {
-      const killerPromise = fetchSmartCharacterByAddress(
-        incident.killer_address,
-      );
-      const victimPromise = fetchSmartCharacterByAddress(
-        incident.victim_address,
-      );
-      const [killer, victim] = await Promise.all([
-        killerPromise,
-        victimPromise,
-      ]);
-      return {
-        ...incident,
-        killer_id: killer ? killer.id : null,
-        victim_id: victim ? victim.id : null,
-        killer_portrait_url: killer ? killer.portraitUrl : null,
-        victim_portrait_url: victim ? victim.portraitUrl : null,
-      };
+      return await enrichIncident(incident);
     }),
   );
 
@@ -152,20 +171,40 @@ async function fetchIncidentById(mail_id) {
   const incident = incidentArray[0];
 
   // Enrich incident with character data
-  const killerPromise = fetchSmartCharacterByAddress(incident.killer_address);
-  const victimPromise = fetchSmartCharacterByAddress(incident.victim_address);
-  const [killer, victim] = await Promise.all([killerPromise, victimPromise]);
-
-  const enrichedIncident = {
-    ...incident,
-    killer_id: killer ? killer.id : null,
-    victim_id: victim ? victim.id : null,
-    killer_portrait_url: killer ? killer.portraitUrl : null,
-    victim_portrait_url: victim ? victim.portraitUrl : null,
-  };
+  const enrichedIncident = await enrichIncident(incident);
 
   // Return the enriched data in an array to match the frontend's expectation
   return [enrichedIncident];
+}
+
+/**
+ * Fetches bare incident data from the search endpoint without enrichment.
+ * @param {string} query - Search query
+ * @param {string} type - 'name' or 'system'
+ * @param {number} [limit] - The number of incidents to fetch.
+ * @param {number} [offset] - The starting point for fetching incidents.
+ * @returns {Promise<Incident[]>} - Array of bare incident objects.
+ */
+export async function searchBareIncidents(query, type, limit, offset) {
+  let endpoint =
+    type === "system"
+      ? `https://api.alpha-strike.space/incident?system=${encodeURIComponent(
+          query,
+        )}`
+      : `https://api.alpha-strike.space/incident?name=${encodeURIComponent(
+          query,
+        )}`;
+
+  if (limit !== undefined && offset !== undefined) {
+    endpoint += `&limit=${limit}&offset=${offset}`;
+  }
+
+  const incidents = await fetchApiData(endpoint);
+
+  if (!incidents || !Array.isArray(incidents)) {
+    return [];
+  }
+  return incidents;
 }
 
 /**
@@ -177,16 +216,7 @@ async function fetchIncidentById(mail_id) {
  * @returns {Promise<Incident[]>} - Array of search results
  */
 async function searchIncidents(query, type, limit, offset) {
-  let endpoint =
-    type === "system"
-      ? `https://api.alpha-strike.space/incident?system=${encodeURIComponent(query)}`
-      : `https://api.alpha-strike.space/incident?name=${encodeURIComponent(query)}`;
-
-  if (limit !== undefined && offset !== undefined) {
-    endpoint += `&limit=${limit}&offset=${offset}`;
-  }
-
-  const incidents = await fetchApiData(endpoint);
+  const incidents = await searchBareIncidents(query, type, limit, offset);
 
   if (!incidents || !Array.isArray(incidents)) {
     return [];
@@ -195,23 +225,7 @@ async function searchIncidents(query, type, limit, offset) {
   // Enrich incidents with character data
   const enrichedIncidents = await Promise.all(
     incidents.map(async (incident) => {
-      const killerPromise = fetchSmartCharacterByAddress(
-        incident.killer_address,
-      );
-      const victimPromise = fetchSmartCharacterByAddress(
-        incident.victim_address,
-      );
-      const [killer, victim] = await Promise.all([
-        killerPromise,
-        victimPromise,
-      ]);
-      return {
-        ...incident,
-        killer_id: killer ? killer.id : null,
-        victim_id: victim ? victim.id : null,
-        killer_portrait_url: killer ? killer.portraitUrl : null,
-        victim_portrait_url: victim ? victim.portraitUrl : null,
-      };
+      return await enrichIncident(incident);
     }),
   );
 

@@ -258,34 +258,36 @@ export function navigateToSearch(query, type) {
 /**
  * Add click event listeners to incident cards for navigation
  * This should be called after cards are added to the DOM
+ * @param {HTMLElement} [element=document] - The element to search within for clickable items. Defaults to the whole document.
  */
-export function addIncidentCardListeners() {
+export function addIncidentCardListeners(element) {
+  const scope = element || document;
   // Add listeners for clickable names
-  for (const element of document.querySelectorAll(".clickable-name")) {
+  for (const el of scope.querySelectorAll(".clickable-name")) {
     // Check if a listener has already been attached to this element
-    if (!element.dataset.listenerAttached) {
-      element.addEventListener("click", (e) => {
+    if (!el.dataset.listenerAttached) {
+      el.addEventListener("click", (e) => {
         e.preventDefault();
-        const name = element.dataset.name;
+        const name = el.dataset.name;
         if (name && name !== "UNKNOWN") {
           navigateToSearch(name, "name");
         }
       });
-      element.dataset.listenerAttached = "true"; // Mark as attached
+      el.dataset.listenerAttached = "true"; // Mark as attached
     }
   }
 
   // Add listeners for clickable systems
-  for (const element of document.querySelectorAll(".clickable-system")) {
-    if (!element.dataset.listenerAttached) {
-      element.addEventListener("click", (e) => {
+  for (const el of scope.querySelectorAll(".clickable-system")) {
+    if (!el.dataset.listenerAttached) {
+      el.addEventListener("click", (e) => {
         e.preventDefault();
-        const system = element.dataset.system;
+        const system = el.dataset.system;
         if (system && system !== "UNKNOWN") {
           navigateToSearch(system, "system");
         }
       });
-      element.dataset.listenerAttached = "true"; // Mark as attached
+      el.dataset.listenerAttached = "true"; // Mark as attached
     }
   }
 }

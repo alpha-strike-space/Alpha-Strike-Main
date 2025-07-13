@@ -1,0 +1,107 @@
+/* styles/components/inline-loader.css */
+
+.inline-loader-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-lg, 24px);
+  min-height: 150px; /* Give it some space */
+}
+
+.inline-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md, 16px);
+}
+
+.inline-loader-svg-container {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+
+.inline-loader-svg {
+  width: 20px;
+  height: auto;
+  color: var(--color-primary-light);
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+/* Re-using the animations from the main loading overlay for consistency */
+.inline-loader-svg:nth-child(5),
+.inline-loader-svg:nth-child(6) {
+  animation-name: svg-opacity-anim-center;
+  animation-delay: 0s;
+}
+.inline-loader-svg:nth-child(4),
+.inline-loader-svg:nth-child(7) {
+  animation-name: svg-opacity-anim-center;
+  animation-delay: 0.1s;
+}
+.inline-loader-svg:nth-child(3),
+.inline-loader-svg:nth-child(8) {
+  animation-name: svg-opacity-anim-middle;
+  animation-delay: 0.2s;
+}
+.inline-loader-svg:nth-child(2),
+.inline-loader-svg:nth-child(9) {
+  animation-name: svg-opacity-anim-middle;
+  animation-delay: 0.3s;
+}
+.inline-loader-svg:nth-child(1),
+.inline-loader-svg:nth-child(10) {
+  animation-name: svg-opacity-anim-outer;
+  animation-delay: 0.4s;
+}
+
+@keyframes svg-opacity-anim-center {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+@keyframes svg-opacity-anim-middle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+@keyframes svg-opacity-anim-outer {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.inline-loader-text {
+  color: var(--color-text-light, #ff5252);
+  font-family: "Orbitron", monospace;
+  font-size: clamp(1em, 2.5vw, 1.2em);
+  letter-spacing: 2px;
+  text-shadow: var(--shadow-glow-white, 0 0 20px #d32f2f), 0 0 2px #fff;
+  animation: text-breathing 5s ease-in-out infinite;
+}
+
+@keyframes text-breathing {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+} 
