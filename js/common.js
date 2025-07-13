@@ -35,6 +35,10 @@ const portraitUrlMapping = {
 export function getLocalPortraitPath(externalUrl, assetBasePath) {
   const placeholder = `${assetBasePath}assets/images/default-avatar.avif`;
   if (!externalUrl) {
+    console.warn(
+      `Missing portrait URL. Using default avatar. Please download the image and update the portraitUrlMapping in js/common.js.`,
+      externalUrl,
+    );
     return placeholder;
   }
 

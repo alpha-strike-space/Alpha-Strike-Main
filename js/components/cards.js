@@ -44,7 +44,14 @@ function createPlayerCardHeader(item, stats, portraitUrl) {
   const image = document.createElement('img');
   image.className = 'profile-image';
   image.alt = `${item.name}'s profile`;
-  image.src = getLocalPortraitPath(portraitUrl, '../');
+
+  const isIndexPage =
+    window.location.pathname.endsWith("index.html") ||
+    window.location.pathname === "/" ||
+    window.location.pathname.endsWith("/Alpha-Strike-Main/");
+  const assetBasePath = isIndexPage ? "./" : "../";
+
+  image.src = getLocalPortraitPath(portraitUrl, assetBasePath);
   imageContainer.appendChild(image);
 
   const info = document.createElement('div');
@@ -247,12 +254,24 @@ async function createPlayerCard(item) {
   card.className = 'data-card enhanced-player-card';
   card.dataset.id = item.id;
 
-  let portraitUrl = null;
-  // If we have an address, fetch the character details to get the portrait URL
-  if (item.character_address) {
-    const character = await fetchSmartCharacterByAddress(item.character_address);
-    if (character) {
-      portraitUrl = character.portraitUrl;
+  // Prioritize the portraitUrl passed in the item (e.g., from aggregate card)
+  let portraitUrl = item.portraitUrl || null;
+
+  // If we don't have a portraitUrl, try to fetch it via character address.
+  // This handles other contexts where the card might be used.
+  if (!portraitUrl && item.character_address) {
+    try {
+      const character = await fetchSmartCharacterByAddress(
+        item.character_address,
+      );
+      if (character) {
+        portraitUrl = character.portraitUrl;
+      }
+    } catch (error) {
+      console.warn(
+        `Could not fetch character by address for card: ${item.character_address}`,
+        error,
+      );
     }
   }
 

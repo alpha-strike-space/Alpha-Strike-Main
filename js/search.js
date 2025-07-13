@@ -1,12 +1,25 @@
-import { setLanguage } from "./translation-dictionary.js";
-import { searchIncidents, searchTotals } from "./api.js";
+import {
+  setLanguage,
+  applyTranslationsToElement,
+  languages,
+  currentLanguageIndex,
+} from "./translation-dictionary.js";
+import {
+  searchBareIncidents,
+  enrichIncident,
+  searchTotals,
+  fetchSmartCharacterByAddress,
+} from "./api.js";
 import { displayAggregateCard } from "./components/cards.js";
 import {
   addIncidentCardListeners,
   createIncidentCard,
   navigateToSearch,
 } from "./incidentCard.js";
-import { showLoading, hideLoading } from "./components/loadingOverlay.js";
+import {
+  showInlineLoader,
+  hideInlineLoader,
+} from "./components/inline-loader.js";
 import { renderPaginationControls } from "./components/pagination.js";
 
 // --- State Management ---
@@ -67,7 +80,8 @@ function generateCaseVariations(query, type) {
 
   const lower = query.toLowerCase();
   const upper = query.toUpperCase();
-  const firstUpper = query.charAt(0).toUpperCase() + query.slice(1).toLowerCase();
+  const firstUpper =
+    query.charAt(0).toUpperCase() + query.slice(1).toLowerCase();
 
   return [...new Set([query, lower, upper, firstUpper])];
 }
@@ -120,20 +134,20 @@ function renderPagination() {
  * @param {number} page - The page number to load.
  */
 async function loadPage(page) {
-  showLoading();
+  const resultsContainer = document.getElementById("results-container");
+  showInlineLoader(resultsContainer, "Loading Incidents...");
   try {
     await _loadAndDisplayPage(page);
 
     // After the content is loaded, scroll to the top of the container.
-    const resultsContainer = document.getElementById("results-container");
     if (resultsContainer) {
       resultsContainer.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   } catch (error) {
     console.error("Error fetching search page:", error);
-    document.getElementById("results-container").innerHTML = `<p data-translate="search.error">Error loading search results.</p>`;
+    resultsContainer.innerHTML = `<p data-translate="search.error">Error loading search results.</p>`;
   } finally {
-    hideLoading();
+    hideInlineLoader(resultsContainer);
     const currentLang = localStorage.getItem("preferredLanguage") || "en";
     setLanguage(currentLang);
   }
@@ -149,37 +163,73 @@ async function _loadAndDisplayPage(page) {
     // Base case for recursion: we've gone below page 1.
     currentPage = 1;
     hasNextPage = false;
-    displaySearchResults([]);
+    const resultsContainer = document.getElementById("results-container");
+    resultsContainer.innerHTML =
+      '<p data-translate="search.noResults">No search results found.</p>';
+    applyTranslationsToElement(
+      resultsContainer,
+      languages[currentLanguageIndex],
+    );
     renderPagination();
     return;
   }
 
+  const resultsContainer = document.getElementById("results-container");
+
   try {
     const offset = (page - 1) * incidentsPerPage;
-    const incidents = await searchIncidents(currentQuery, currentType, incidentsPerPage + 1, offset);
+    const bareIncidents = await searchBareIncidents(
+      currentQuery,
+      currentType,
+      incidentsPerPage + 1,
+      offset,
+    );
 
-    if (incidents.length === 0 && page > 1) {
+    if (bareIncidents.length === 0 && page > 1) {
       // This page is empty, and it's not the first page. Recurse to the previous one.
       await _loadAndDisplayPage(page - 1);
       return;
     }
 
+    // This is a new page load, clear the container.
+    resultsContainer.innerHTML = "";
+
     // This page has content, or it's page 1 (which might be empty). Display it.
     currentPage = page;
-    hasNextPage = incidents.length > incidentsPerPage;
-    const incidentsToDisplay = incidents.slice(0, incidentsPerPage);
+    hasNextPage = bareIncidents.length > incidentsPerPage;
+    const incidentsToProcess = bareIncidents.slice(0, incidentsPerPage);
 
-    displaySearchResults(incidentsToDisplay);
+    if (incidentsToProcess.length === 0) {
+      resultsContainer.innerHTML =
+        '<p data-translate="search.noResults">No search results found.</p>';
+      // Ensure the "no results" message is translated
+      applyTranslationsToElement(resultsContainer, languages[currentLanguageIndex]);
+    } else {
+      const processingPromises = incidentsToProcess.map(async (incident) => {
+        const enriched = await enrichIncident(incident);
+        const card = createIncidentCard(enriched);
+        if (card) {
+          resultsContainer.appendChild(card);
+          addIncidentCardListeners(card);
+          applyTranslationsToElement(card, languages[currentLanguageIndex]);
+        }
+      });
+      await Promise.all(processingPromises);
+    }
+
     renderPagination();
   } catch (error) {
     // If fetching fails (e.g., API returns 404 for a large offset), we also treat it
     // as an out-of-bounds page and try the previous one, unless we're on page 1.
-    console.warn(`Failed to fetch search page ${page}, trying page ${page - 1}. Error:`, error);
+    console.warn(
+      `Failed to fetch search page ${page}, trying page ${page - 1}. Error:`,
+      error,
+    );
     if (page > 1) {
       await _loadAndDisplayPage(page - 1);
     } else {
       console.error("Error fetching initial search results:", error);
-      document.getElementById("results-container").innerHTML = `<p data-translate="search.error">Error loading search results.</p>`;
+      resultsContainer.innerHTML = `<p data-translate="search.error">Error loading search results.</p>`;
       currentPage = 1;
       hasNextPage = false;
       renderPagination();
@@ -200,26 +250,25 @@ async function performInitialSearch(query, type) {
   // Reset UI for new search
   currentPage = 1;
   totalIncidents = 0;
-  resultsContainer.innerHTML = `<p data-translate="search.loading">Loading...</p>`;
+  showInlineLoader(resultsContainer, "Searching...");
   totalsCardContainer.innerHTML = "";
   paginationContainer.style.display = "none";
-  showLoading();
 
   const queryVariations = generateCaseVariations(query, type);
   let successfulVariation = null;
-  let initialIncidents = [];
+  let initialBareIncidents = [];
   let totalsData = [];
 
   for (const variation of queryVariations) {
     try {
       const [totals, incidents] = await Promise.all([
         searchTotals(variation, type),
-        searchIncidents(variation, type, incidentsPerPage + 1, 0),
+        searchBareIncidents(variation, type, incidentsPerPage + 1, 0),
       ]);
 
       if (incidents?.length > 0) {
         successfulVariation = variation;
-        initialIncidents = incidents;
+        initialBareIncidents = incidents;
         totalsData = totals || [];
         break;
       }
@@ -228,7 +277,7 @@ async function performInitialSearch(query, type) {
     }
   }
 
-  hideLoading();
+  hideInlineLoader(resultsContainer);
 
   if (successfulVariation) {
     currentQuery = successfulVariation;
@@ -241,16 +290,67 @@ async function performInitialSearch(query, type) {
       } else {
         totalIncidents =
           (aggregateData.total_kills || 0) + (aggregateData.total_losses || 0);
+
+        // Try to fetch a portrait from the first incident for the aggregate card
+        if (type === "name" && initialBareIncidents?.length > 0) {
+          const firstIncident = initialBareIncidents[0];
+          let characterAddress = null;
+
+          // Determine the address of the searched character from the incident
+          if (
+            firstIncident.killer_name?.toLowerCase() ===
+            successfulVariation.toLowerCase()
+          ) {
+            characterAddress = firstIncident.killer_address;
+          } else if (
+            firstIncident.victim_name?.toLowerCase() ===
+            successfulVariation.toLowerCase()
+          ) {
+            characterAddress = firstIncident.victim_address;
+          }
+
+          if (characterAddress) {
+            try {
+              const character =
+                await fetchSmartCharacterByAddress(characterAddress);
+              if (character?.portraitUrl) {
+                aggregateData.portraitUrl = character.portraitUrl;
+              }
+            } catch (error) {
+              console.warn(
+                `Could not fetch portrait for ${characterAddress}`,
+                error,
+              );
+            }
+          }
+        }
       }
     }
 
-    // Display aggregate card
+    // Display aggregate card and clear results for streaming
     await displayAggregateCard(totalsData, type);
+    resultsContainer.innerHTML = ""; // Clear for streaming
 
-    // Display first page of incidents
-    hasNextPage = initialIncidents.length > incidentsPerPage;
-    const incidentsToDisplay = initialIncidents.slice(0, incidentsPerPage);
-    displaySearchResults(incidentsToDisplay);
+    // Stream the first page of incidents
+    hasNextPage = initialBareIncidents.length > incidentsPerPage;
+    const incidentsToProcess = initialBareIncidents.slice(
+      0,
+      incidentsPerPage,
+    );
+
+    if (incidentsToProcess.length > 0) {
+      const processingPromises = incidentsToProcess.map(async (incident) => {
+        const enriched = await enrichIncident(incident);
+        const card = createIncidentCard(enriched);
+        if (card) {
+          resultsContainer.appendChild(card);
+          addIncidentCardListeners(card);
+          applyTranslationsToElement(card, languages[currentLanguageIndex]);
+        }
+      });
+      await Promise.all(processingPromises);
+    }
+
     renderPagination();
   } else {
     resultsContainer.innerHTML = `<p data-translate="search.noResults">No results found for your query.</p>`;
