@@ -85,14 +85,12 @@ async function _loadAndDisplayIncidents(page) {
       return;
     }
 
-    // Clear the container (which may have the loader) before adding new cards
-    dataContainer.innerHTML = "";
-
     currentPage = page;
     hasNextPage = bareIncidents.length > incidentsPerPage;
     const incidentsToProcess = bareIncidents.slice(0, incidentsPerPage);
 
     if (incidentsToProcess.length === 0) {
+      dataContainer.innerHTML = "";
       displayDataInContainer([], "data-container", createIncidentCard, {
         noDataMessage: "No recent incidents found.",
       });
@@ -100,10 +98,22 @@ async function _loadAndDisplayIncidents(page) {
       return;
     }
 
-    // Process each incident individually and append it to the container as it's ready.
-    const processingPromises = incidentsToProcess.map(async (incident) => {
-      try {
-        const enrichedIncident = await enrichIncident(incident);
+    // Enrich all incidents in parallel before adding them to the DOM to preserve order.
+    const enrichedIncidents = await Promise.all(
+      incidentsToProcess.map((incident) =>
+        enrichIncident(incident).catch((error) => {
+          console.error("Error processing incident:", incident.id, error);
+          return null; // Return null for failed enrichments so one error doesn't break the whole page.
+        }),
+      ),
+    );
+
+    // Clear the container (which has the loader) before adding new cards
+    dataContainer.innerHTML = "";
+
+    // Now, add the enriched incidents to the DOM in the correct order.
+    for (const enrichedIncident of enrichedIncidents) {
+      if (enrichedIncident) {
         const card = createIncidentCard(enrichedIncident);
         if (card) {
           dataContainer.appendChild(card);
@@ -111,14 +121,10 @@ async function _loadAndDisplayIncidents(page) {
           // Apply translations to the new card
           applyTranslationsToElement(card, languages[currentLanguageIndex]);
         }
-      } catch (error) {
-        console.error("Error processing incident:", incident.id, error);
-        // Optionally, display a placeholder for the failed card
       }
-    });
+    }
 
-    // Wait for all incidents to be processed before rendering pagination
-    await Promise.all(processingPromises);
+    // All cards are in the DOM, now we can render pagination.
     renderPagination();
   } catch (error) {
     console.warn(
