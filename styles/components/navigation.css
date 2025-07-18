@@ -34,6 +34,7 @@
   font-weight: 500;
   letter-spacing: 0.5px;
   padding: var(--spacing-sm) 0; /* Match link padding vertically if needed */
+  margin-left: 1rem;
   margin-right: auto; /* Pushes other items (like hamburger on mobile, or links on desktop) to the right */
 }
 
