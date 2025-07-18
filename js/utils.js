@@ -10,7 +10,7 @@ export let showLocalTime = true;
  * @param {boolean} showLocal - Whether to show local time (default: true)
  * @returns {string} - Formatted timestamp string
  */
-export function formatTimestamp(timestamp, showLocal = true) {
+export function formatTimestamp(timestamp, showLocal = true, lang = "en") {
   let date;
 
   // Try different timestamp formats to determine the correct one
@@ -60,8 +60,9 @@ export function formatTimestamp(timestamp, showLocal = true) {
     // Get timezone abbreviation
     // const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone; // Not used directly
     const timeZoneShort = date
-      .toLocaleTimeString("en-US", { timeZoneName: "short" })
-      .split(" ")[2];
+      .toLocaleTimeString(lang, { timeZoneName: "short" })
+      .split(" ")
+      .pop();
 
     // Return in military/sci-fi format with local timezone
     return `${year}.${month}.${day} - ${hours}:${minutes}:${seconds} ${timeZoneShort}`;

@@ -16,11 +16,14 @@ function getTimeElapsed(timestamp) {
   if (typeof timestamp === "string") {
     incidentTime = new Date(timestamp);
   } else if (typeof timestamp === "number") {
-    if (timestamp < 10000000000) { // 10 digits for UNIX timestamp in seconds
+    if (timestamp < 10000000000) {
+      // 10 digits for UNIX timestamp in seconds
       incidentTime = new Date(timestamp * 1000);
-    } else if (timestamp < 10000000000000) { // 14 digits for UNIX timestamp in milliseconds
+    } else if (timestamp < 10000000000000) {
+      // 14 digits for UNIX timestamp in milliseconds
       incidentTime = new Date(timestamp);
-    } else { // Windows LDAP timestamp
+    } else {
+      // Windows LDAP timestamp
       // Windows FILETIME conversion
       const msSince1601 = timestamp / 10000;
       const epochDifference = 11644473600000;
@@ -53,17 +56,60 @@ function getTimeElapsed(timestamp) {
   );
   const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
+  const preferredLang = localStorage.getItem("preferredLanguage") || "en";
+  const getTranslatedString = (key, replacements = {}) => {
+    let str =
+      translations[key]?.[preferredLang] || translations[key]?.en || key;
+    for (const placeholder in replacements) {
+      str = str.replace(
+        new RegExp(`\\{${placeholder}\\}`, "g"),
+        replacements[placeholder],
+      );
+    }
+    return str;
+  };
+
   if (diffDays > 0) {
-    return `${diffDays}d ${diffHours}h ago`;
+    return getTranslatedString("time.daysHoursAgo", {
+      days: diffDays,
+      hours: diffHours,
+    });
   }
   if (diffHours > 0) {
-    return `${diffHours}h ${diffMinutes}m ago`;
+    return getTranslatedString("time.hoursMinutesAgo", {
+      hours: diffHours,
+      minutes: diffMinutes,
+    });
   }
   if (diffMinutes > 0) {
-    return `${diffMinutes}m ago`;
+    return getTranslatedString("time.minutesAgo", { minutes: diffMinutes });
   }
-  return "Just now";
+  return getTranslatedString("time.justNow");
 }
+
+/**
+ * Updates all time-elapsed elements on the page to the current language.
+ * This function is exported to be called when the language changes.
+ */
+export function updateIncidentCardTime() {
+  const timeElapsedElements = document.querySelectorAll(".time-elapsed");
+  timeElapsedElements.forEach((element) => {
+    const card = element.closest(".incident-list-item");
+    if (card?.dataset.timestamp) {
+      const timestamp =
+        typeof card.dataset.timestamp === "string" &&
+        !Number.isNaN(Number(card.dataset.timestamp))
+          ? Number(card.dataset.timestamp)
+          : card.dataset.timestamp;
+      element.textContent = getTimeElapsed(timestamp);
+    }
+  });
+}
+
+// Listen for the custom 'languagechange' event and update the time elements
+document.addEventListener("languagechange", () => {
+  updateIncidentCardTime();
+});
 
 /**
  * Creates a data card element for incident display
@@ -106,7 +152,11 @@ export function createIncidentCard(item) {
   const pagesBasePath = isIndexPage ? "pages/" : "";
 
   const formattedTimestamp = item.time_stamp
-    ? formatTimestamp(item.time_stamp, showLocalTime)
+    ? formatTimestamp(
+        item.time_stamp,
+        showLocalTime,
+        localStorage.getItem("preferredLanguage") || "en",
+      )
     : "N/A";
   const timeElapsed = item.time_stamp ? getTimeElapsed(item.time_stamp) : "";
   const timeLabelKey = showLocalTime

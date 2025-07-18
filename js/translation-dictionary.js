@@ -78,6 +78,10 @@ export function setLanguage(lang) {
     currentLanguageIndex = langIndex;
   }
 
+  // Dispatch a custom event to notify other components of the change.
+  const event = new CustomEvent("languagechange", { detail: { lang } });
+  document.dispatchEvent(event);
+
   // --- MODIFICATION START ---
   // Call the page-specific re-render function if it's defined
   // This allows pages like killmail-detail.js to refresh their dynamic content

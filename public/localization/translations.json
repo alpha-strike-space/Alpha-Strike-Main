@@ -644,5 +644,29 @@
     "ru": "Загрузка...",
     "zh": "正在加载...",
     "es": "Cargando..."
+  },
+  "time.daysHoursAgo": {
+    "en": "{days}d {hours}h ago",
+    "ru": "{days}д {hours}ч назад",
+    "zh": "{days}天 {hours}小时前",
+    "es": "hace {days}d {hours}h"
+  },
+  "time.hoursMinutesAgo": {
+    "en": "{hours}h {minutes}m ago",
+    "ru": "{hours}ч {minutes}м назад",
+    "zh": "{hours}小时 {minutes}分钟前",
+    "es": "hace {hours}h {minutes}m"
+  },
+  "time.minutesAgo": {
+    "en": "{minutes}m ago",
+    "ru": "{minutes}м назад",
+    "zh": "{minutes}分钟前",
+    "es": "hace {minutes}m"
+  },
+  "time.justNow": {
+    "en": "Just now",
+    "ru": "Только что",
+    "zh": "刚才",
+    "es": "Ahora mismo"
   }
 }
