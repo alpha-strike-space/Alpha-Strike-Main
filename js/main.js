@@ -30,7 +30,7 @@ async function loadIncidents(page) {
   try {
     // Show loader before starting the operation.
     // _loadAndDisplayIncidents will be responsible for clearing it or replacing it with content.
-    showInlineLoader(dataContainer, "Loading Incidents...");
+    showInlineLoader(dataContainer, "loading.incidents");
     await _loadAndDisplayIncidents(page);
 
     // After the content is loaded, scroll to the top of the container.

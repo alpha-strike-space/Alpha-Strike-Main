@@ -311,6 +311,12 @@
     "zh": "正在加载数据...",
     "es": "Cargando datos..."
   },
+  "loading.incidents": {
+    "en": "Loading Incidents...",
+    "ru": "Загрузка инцидентов...",
+    "zh": "正在加载事件...",
+    "es": "Cargando incidentes..."
+  },
   "error.loadFailed": {
     "en": "Failed to load data.",
     "ru": "Не удалось загрузить данные.",

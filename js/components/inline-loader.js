@@ -1,9 +1,15 @@
+import {
+  applyTranslationsToElement,
+  languages,
+  currentLanguageIndex,
+} from "../translation-dictionary.js";
+
 /**
  * Creates and shows a non-blocking, inline loading indicator within a specified container.
  * @param {HTMLElement} container - The container element to append the loader to.
- * @param {string} [message='Loading...'] - An optional message to display.
+ * @param {string} [translationKey='loading.data'] - The translation key for the message to display.
  */
-export function showInlineLoader(container, message = "Loading...") {
+export function showInlineLoader(container, translationKey = "loading.data") {
   if (!container) return;
 
   // Create a wrapper for the inline loader
@@ -24,9 +30,12 @@ export function showInlineLoader(container, message = "Loading...") {
         <div class="inline-loader-svg-container">
             ${svgContainer}
         </div>
-      <span class="inline-loader-text">${message}</span>
+      <span class="inline-loader-text" data-translate="${translationKey}"></span>
     </div>
   `;
+
+  // Apply the initial translation
+  applyTranslationsToElement(loaderWrapper, languages[currentLanguageIndex]);
 
   // Clear previous content and append the new loader
   container.innerHTML = "";
