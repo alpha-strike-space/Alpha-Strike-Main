@@ -7,7 +7,9 @@ Alpha-Strike Killboard [https://www.alpha-strike.space/](https://www.alpha-strik
 - Leading victims
 - Most active systems
 - Search functionality for names or systems
-- Detailed killmail views
+- ~~Detailed killmail views~~
+
+*Note: Detailed killmail information (such as ships, modules, and loot) is temporarily unavailable as we wait for the EVE Frontier API to mature. Currently, killmails show the primary aggressor, victim, time, and solar system.*
 
 The interface supports multiple languages, including English, Spanish, Russian, and Chinese.
 
@@ -142,13 +144,16 @@ Before you begin, ensure you have the following installed:
 
 ---
 
-## How to Contribute
+## We're Looking for Contributors!
 
-You may create a pull request to make any changes that you feel are necessary to improve the leaderboard. Please test your changes locally on your machine before submitting. Pull requests will be reviewed and either rejected or merged, after which they will be updated on the website.
+We enthusiastically welcome contributions from the community to help make Alpha-Strike Killboard even better! Whether you're fixing a bug, adding a new feature, or improving documentation, your input is valuable.
+
+A special area where we need your help is with **localization**. If you're fluent in languages other than English, we would be grateful for your help in reviewing and expanding our translations. You can find the localization file at `public/localization/translations.json`.
+
+To contribute, please fork the repository and submit a pull request with your proposed changes. We ask that you test your changes locally before submitting. We'll review all pull requests and work with you to get them merged.
 
 ---
 
 ## Credits
 
-- The black hole image used in the website's cascading style sheets was sourced from an article by Jean-Pierre Luminet, referenced at [https://www.engadget.com/2017-04-19-black-hole-image-jean-pierre-luminet.html](https://www.engadget.com/2017-04-19-black-hole-image-jean-pierre-luminet.html).
 - The favicon images were generated using the favicon generator hosted by [https://icons8.com/icons](https://icons8.com/icons).
