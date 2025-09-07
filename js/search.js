@@ -31,6 +31,40 @@ let currentType = "";
 let totalIncidents = 0;
 
 /**
+ * Parse timestamp from various formats and return milliseconds
+ */
+function parseTimestamp(ts) {
+  if (typeof ts === "number") {
+    if (ts < 10000000000) return ts * 1000;
+    return ts;
+  }
+  if (typeof ts === "string") {
+    if (/^\d+$/.test(ts)) {
+      const num = Number(ts);
+      if (num < 10000000000) return num * 1000;
+      return num;
+    }
+    const parsed = Date.parse(ts);
+    return isNaN(parsed) ? null : parsed;
+  }
+  return null;
+}
+
+/**
+ * Sort incidents by time_stamp descending (newest first)
+ */
+function sortIncidentsByTimestamp(incidents) {
+  return incidents.sort((a, b) => {
+    const ta = parseTimestamp(a.time_stamp);
+    const tb = parseTimestamp(b.time_stamp);
+    if (tb !== null && ta !== null) return tb - ta;
+    if (tb !== null) return 1;
+    if (ta !== null) return -1;
+    return 0;
+  });
+}
+
+/**
  * Get URL parameters for pre-filling search
  */
 function getUrlParameters() {
@@ -177,27 +211,30 @@ async function _loadAndDisplayPage(page) {
   const resultsContainer = document.getElementById("results-container");
 
   try {
-    const offset = (page - 1) * incidentsPerPage;
-    const bareIncidents = await searchBareIncidents(
+    // Fetch all incidents for the query (set a high limit)
+    let allIncidents = await searchBareIncidents(
       currentQuery,
       currentType,
-      incidentsPerPage + 1,
-      offset,
+      1000, // or a number larger than any possible result set
+      0,
     );
 
+    // Sort all incidents by time_stamp descending (newest first)
+    allIncidents = sortIncidentsByTimestamp(allIncidents);
+
+    // Paginate after sorting
+    const offset = (page - 1) * incidentsPerPage;
+    const bareIncidents = allIncidents.slice(offset, offset + incidentsPerPage);
+
     if (bareIncidents.length === 0 && page > 1) {
-      // This page is empty, and it's not the first page. Recurse to the previous one.
       await _loadAndDisplayPage(page - 1);
       return;
     }
 
-    // This is a new page load, clear the container.
     resultsContainer.innerHTML = "";
-
-    // This page has content, or it's page 1 (which might be empty). Display it.
     currentPage = page;
-    hasNextPage = bareIncidents.length > incidentsPerPage;
-    const incidentsToProcess = bareIncidents.slice(0, incidentsPerPage);
+    hasNextPage = allIncidents.length > offset + incidentsPerPage;
+    const incidentsToProcess = bareIncidents;
 
     if (incidentsToProcess.length === 0) {
       resultsContainer.innerHTML =
@@ -205,7 +242,8 @@ async function _loadAndDisplayPage(page) {
       // Ensure the "no results" message is translated
       applyTranslationsToElement(resultsContainer, languages[currentLanguageIndex]);
     } else {
-      const processingPromises = incidentsToProcess.map(async (incident) => {
+      // Process incidents sequentially to maintain order
+      for (const incident of incidentsToProcess) {
         const enriched = await enrichIncident(incident);
         const card = createIncidentCard(enriched);
         if (card) {
@@ -213,8 +251,7 @@ async function _loadAndDisplayPage(page) {
           addIncidentCardListeners(card);
           applyTranslationsToElement(card, languages[currentLanguageIndex]);
         }
-      });
-      await Promise.all(processingPromises);
+      }
     }
 
     renderPagination();
@@ -331,6 +368,9 @@ async function performInitialSearch(query, type) {
     await displayAggregateCard(totalsData, type);
     resultsContainer.innerHTML = ""; // Clear for streaming
 
+    // Sort initial incidents by time_stamp descending (newest first)
+    initialBareIncidents = sortIncidentsByTimestamp(initialBareIncidents);
+
     // Stream the first page of incidents
     hasNextPage = initialBareIncidents.length > incidentsPerPage;
     const incidentsToProcess = initialBareIncidents.slice(
@@ -339,7 +379,8 @@ async function performInitialSearch(query, type) {
     );
 
     if (incidentsToProcess.length > 0) {
-      const processingPromises = incidentsToProcess.map(async (incident) => {
+      // Process incidents sequentially to maintain order
+      for (const incident of incidentsToProcess) {
         const enriched = await enrichIncident(incident);
         const card = createIncidentCard(enriched);
         if (card) {
@@ -347,8 +388,7 @@ async function performInitialSearch(query, type) {
           addIncidentCardListeners(card);
           applyTranslationsToElement(card, languages[currentLanguageIndex]);
         }
-      });
-      await Promise.all(processingPromises);
+      }
     }
 
     renderPagination();
