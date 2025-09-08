@@ -502,13 +502,16 @@ async function createTribeCard(item) {
   card.className = 'data-card enhanced-player-card';
   card.dataset.id = item.id;
 
-  try {
-    const tribe_data = await fetchTribeByName(item.tribe_name);
-    if (tribe_data && tribe_data.tribe_url) {
-      item.tribe_url = tribe_data.tribe_url;
+  // Only fetch tribe metadata if needed, and use paginated (limit=1) request
+  if (!item.tribe_url || item.tribe_url === "NONE") {
+    try {
+      const tribe_data = await fetchTribeByName(item.tribe_name, 1, 0);
+      if (tribe_data && tribe_data.tribe_url) {
+        item.tribe_url = tribe_data.tribe_url;
+      }
+    } catch (error) {
+      console.warn('Failed to fetch tribe data for card:', item.tribe_name, error);
     }
-  } catch (error) {
-    console.warn('Failed to fetch tribe data for card:', item.tribe_name, error);
   }
 
   const stats = calculatePlayerStats(item);

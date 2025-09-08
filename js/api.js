@@ -310,10 +310,16 @@ async function searchTotals(query, type) {
   return await fetchApiData(endpoint);
 }
 
-async function fetchTribeByName(name) {
-  return await fetchApiData(
-    `https://api.alpha-strike.space/tribes?name=${encodeURIComponent(name)}`,
-  );
+async function fetchTribeByName(name, limit = 1, offset = 0) {
+  const url = `https://api.alpha-strike.space/tribes?name=${encodeURIComponent(
+    name,
+  )}&limit=${limit}&offset=${offset}`;
+  const data = await fetchApiData(url);
+  // Some endpoints may return arrays; normalize to a single object if so
+  if (Array.isArray(data)) {
+    return data[0] || null;
+  }
+  return data;
 }
 
 // Export all functions
