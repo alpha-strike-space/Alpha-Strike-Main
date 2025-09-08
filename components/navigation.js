@@ -34,6 +34,7 @@ export function initializeNavigation(activePage) {
             <a ${activePage === "killers" ? 'class="active"' : ""} href="${basePath}pages/killers.html"><i class="fa-solid fa-skull-crossbones"></i> <span data-translate="navbar.killers">Leading Killers</span></a>
             <a ${activePage === "victims" ? 'class="active"' : ""} href="${basePath}pages/victims.html"><i class="fa-solid fa-user-shield"></i> <span data-translate="navbar.victims">Leading Victims</span></a>
             <a ${activePage === "systems" ? 'class="active"' : ""} href="${basePath}pages/systems.html"><i class="fa-solid fa-map-location-dot"></i> <span data-translate="navbar.systems">Leading Systems</span></a>
+            <a ${activePage === "tribes" ? 'class="active"' : ""} href="${basePath}pages/tribes.html"><i class="fa-solid fa-users"></i> <span data-translate="navbar.tribes">Leading Tribes</span></a>
             <div class="nav-search-container">
                 <button id="navSearchToggle" class="nav-search-toggle" aria-label="Toggle search">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -43,6 +44,7 @@ export function initializeNavigation(activePage) {
                         <select id="navSearchType">
                             <option value="name" data-translate="search.byName">Character</option>
                             <option value="system" data-translate="search.bySystem">System</option>
+                            <option value="tribe" data-translate="search.byTribe">Tribe</option>
                         </select>
                         <input type="text" id="navSearchQuery" placeholder="Search..." data-translate="search.placeholder" />
                         <button id="navSearchBtn" aria-label="Search">

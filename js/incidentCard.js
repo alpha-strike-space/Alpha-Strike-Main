@@ -199,6 +199,8 @@ export function createIncidentCard(item) {
   const killerNameForSearch = item.killer_name || "UNKNOWN";
   const victimNameForSearch = item.victim_name || "UNKNOWN";
   const systemNameForSearch = item.solar_system_name || "UNKNOWN";
+  const killerTribeNameForSearch = item.killer_tribe_name || "UNKNOWN";
+  const victimTribeNameForSearch = item.victim_tribe_name || "UNKNOWN"; 
 
   let detailLinkHTML = "";
   // Use item.id for the killmail link directly
@@ -247,6 +249,24 @@ export function createIncidentCard(item) {
                   { itemName: victimNameForSearch },
                   `Search for ${victimNameForSearch}`,
                 )}">${victimNameForSearch}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
+            </div>
+        </div>
+        <div class="tribe-info">
+            <div class="combatant-info killer-info">
+                <span class="tribe-label" data-translate="card.tribe"></span>
+                <span class="tribe-name tribe killer clickable-tribe" data-tribe="${killerTribeNameForSearch}" title="${getTranslatedTooltip(
+                  "tooltip.searchFor",
+                  { itemName: killerTribeNameForSearch },
+                  `Search for ${killerTribeNameForSearch}`,
+            )}">${killerTribeNameForSearch}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
+            </div>
+            <div class="combatant-info victim-info">
+                <span class="tribe-label" data-translate="card.tribe"></span>
+                <span class="tribe-name tribe victim clickable-tribe" data-tribe="${victimTribeNameForSearch}" title="${getTranslatedTooltip(
+                  "tooltip.searchFor",
+                  { itemName: victimTribeNameForSearch },
+                  `Search for ${victimTribeNameForSearch}`,
+            )}">${victimTribeNameForSearch}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
             </div>
         </div>
         <div class="incident-details-compact">
@@ -338,6 +358,21 @@ export function addIncidentCardListeners(element) {
         }
       });
       el.dataset.listenerAttached = "true"; // Mark as attached
+    }
+  }
+
+  // Add listeners for clickable tribes
+  for (const el of scope.querySelectorAll(".clickable-tribe")) {
+    if (!el.dataset.listenerAttached) {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        const tribe = el.dataset.tribe;
+        if (tribe && tribe !== "UNKNOWN") {
+          navigateToSearch(tribe, "tribe");
+        }
+      });
+      el.dataset.listenerAttached = "true"; // Mark as attached
+      el.style.cursor = "pointer"; // Add pointer cursor
     }
   }
 }

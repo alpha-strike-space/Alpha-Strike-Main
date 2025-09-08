@@ -1,7 +1,7 @@
 import { currentLanguageIndex, languages, translations } from '../translation-dictionary.js';
 import { lazyLoader } from '../utils/lazyLoading.js';
 import { getLocalPortraitPath } from '../common.js';
-import { fetchSmartCharacterByAddress } from '../api.js';
+import { fetchSmartCharacterByAddress, fetchTribeByName } from '../api.js';
 
 // Helper function to get translations
 const getTranslation = (key, fallbackText = '') => {
@@ -102,13 +102,17 @@ function createPlayerCardHeader(item, stats, portraitUrl) {
   const info = document.createElement('div');
   info.className = 'profile-info';
 
-  const name = document.createElement('h2');
+  const name = document.createElement('h1');
   name.className = 'player-name';
   name.textContent = item.name;
 
   const status = document.createElement('p');
-  status.className = 'player-status';
-  status.textContent = item.status || getTranslation('general.unknown');
+  status.className = 'player-status clickable-tribe';
+  status.dataset.tribe = item.tribe_name;
+  status.title = getTranslation('tooltip.searchFor', 'Search for {itemName}', {
+    itemName: item.tribe_name,
+  });
+  status.textContent = item.tribe_name || getTranslation('general.unknown');
 
   info.appendChild(name);
   info.appendChild(status);
@@ -327,6 +331,119 @@ function createSystemCardHeader(item, stats) {
 }
 
 /**
+ * Create the tribe card header section. Similar to system card header section, but with player stats.
+ */
+
+function createTribeCardHeader(item, stats) {
+  const header = document.createElement('div');
+  header.className = 'card-header';
+
+  const profileSection = document.createElement('div');
+  profileSection.className = 'profile-section';
+
+  const imageContainer = document.createElement('div');
+  imageContainer.className = 'profile-image-container';
+
+  // Font Awesome logo icon
+  const logo = document.createElement('i');
+  logo.className = 'fa-solid fa-users-line system-image';
+  logo.setAttribute('aria-label', 'tribe logo');
+  imageContainer.appendChild(logo);
+
+  const info = document.createElement('div');
+  info.className = 'profile-info';
+
+  const name = document.createElement('h1');
+  name.className = 'player-name';
+  name.textContent = item.tribe_name;
+
+  info.appendChild(name);
+  
+  // Tribes can create their own website, so we need to add a link to it. If they don't have one, the API value will be "NONE".
+  if (item.tribe_url && item.tribe_url !== "NONE") {
+    const tribeURL = document.createElement('div');
+    tribeURL.className = 'tribe-url';
+    const link = document.createElement('a');
+    link.href = item.tribe_url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.textContent = 'Tribe URL';
+    link.addEventListener('click', async (e) => {
+      try {
+        e.preventDefault();
+        const module = await import('./modal.js');
+        if (module && typeof module.showExternalLinkModal === 'function') {
+          module.showExternalLinkModal(item.tribe_url);
+        } else {
+          window.open(item.tribe_url, '_blank', 'noopener,noreferrer');
+        }
+      } catch (_) {
+        window.open(item.tribe_url, '_blank', 'noopener,noreferrer');
+      }
+    });
+    tribeURL.appendChild(link);
+    info.appendChild(tribeURL);
+  }
+
+  profileSection.appendChild(imageContainer);
+  profileSection.appendChild(info);
+
+  const headerStats = document.createElement('div');
+  headerStats.className = 'header-stats';
+
+  const kdStat = document.createElement('div');
+  kdStat.className = 'header-stat';
+  kdStat.innerHTML = `
+        <div class="header-stat-value ${stats.killDeathRatio > 1 ? 'killer' : 'victim'}">${
+          stats.killDeathRatio
+        }</div>
+        <div class="header-stat-label" data-translate="card.kdRatio">K/D Ratio</div>
+    `;
+
+  const winRateStat = document.createElement('div');
+  winRateStat.className = 'header-stat';
+  winRateStat.innerHTML = `
+        <div class="header-stat-value">${stats.winRate}%</div>
+        <div class="header-stat-label" data-translate="card.winRate">Win Rate</div>
+    `;
+
+  // Color the win-rate text by gradient position
+  const winRateDecimal = Math.min(1, Math.max(0, (parseFloat(stats.winRate) || 0) / 100));
+  const winRateColor = getGradientColorAt(winRateDecimal);
+  const winRateValueEl = winRateStat.querySelector('.header-stat-value');
+  if (winRateValueEl) {
+    winRateValueEl.style.color = winRateColor;
+  }
+
+  // Insert descriptor text for the win-rate in header
+  const headerDescriptor = document.createElement('div');
+  headerDescriptor.className = 'header-stat-descriptor';
+  headerDescriptor.textContent = getWinRateDescriptor(winRateDecimal).toUpperCase();
+  const winRateLabelEl = winRateStat.querySelector('.header-stat-label');
+  if (winRateLabelEl) {
+    winRateStat.insertBefore(headerDescriptor, winRateLabelEl);
+  } else {
+    winRateStat.appendChild(headerDescriptor);
+  }
+
+  const engagementsStat = document.createElement('div');
+  engagementsStat.className = 'header-stat';
+  engagementsStat.innerHTML = `
+        <div class="header-stat-value">${stats.totalEngagements}</div>
+        <div class="header-stat-label" data-translate="card.totalEngagements">Total Engagements</div>
+    `;
+
+  headerStats.appendChild(kdStat);
+  headerStats.appendChild(winRateStat);
+  headerStats.appendChild(engagementsStat);
+
+  header.appendChild(profileSection);
+  header.appendChild(headerStats);
+
+  return header;
+}
+
+/**
  * Create the system card stats section
  */
 function createSystemCardStats(item) {
@@ -376,6 +493,32 @@ async function createPlayerCard(item) {
 }
 
 /**
+ * Create a tribe card with the given data. Similar to system card, but with player stats.
+ */
+
+async function createTribeCard(item) {
+  const card = document.createElement('div');
+  card.className = 'data-card enhanced-player-card';
+  card.dataset.id = item.id;
+
+  try {
+    const tribe_data = await fetchTribeByName(item.tribe_name);
+    if (tribe_data && tribe_data.tribe_url) {
+      item.tribe_url = tribe_data.tribe_url;
+    }
+  } catch (error) {
+    console.warn('Failed to fetch tribe data for card:', item.tribe_name, error);
+  }
+
+  const stats = calculatePlayerStats(item);
+  const header = createTribeCardHeader(item, stats);
+
+  card.appendChild(header);
+
+  return card;
+}
+
+/**
  * Create a system card with the given data
  */
 function createSystemCard(item) {
@@ -413,10 +556,15 @@ async function displayAggregateCard(data, type) {
   }
 
   const item = data[0];
-  const card =
-    type === 'system'
-      ? createSystemCard(item)
-      : await createPlayerCard(item);
+  let card = null;
+  if (type === 'system') {
+    card = createSystemCard(item);
+  } else if (type === 'name') {
+    card = await createPlayerCard(item);
+  } else if (type === 'tribe') {
+    card = await createTribeCard(item);
+  }
+
   totalsCardContainer.appendChild(card);
 }
 

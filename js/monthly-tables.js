@@ -45,7 +45,7 @@ export function updateRollingAverageHeaderText(timeRange) {
 
 /**
  * Fetches the totals data from the API for a specific time range and renders the appropriate metric, with caching.
- * @param {string} metric - One of "top_systems", "top_killers", or "top_victims"
+ * @param {string} metric - One of "top_systems", "top_killers", "top_victims", or "top_tribes"
  * @param {string} tableId - The ID of the table element to display the data in.
  * @param {string} timeRange - The time range for the filter ('day', 'week', 'month'). Default is 'month'.
  */
@@ -251,6 +251,10 @@ export function displayMetricDataInTable(
         const victimName = item.name || "UNKNOWN";
         nameCellContent = `<span class="clickable-name" data-name="${victimName}" title="Click to search for ${victimName}">${victimName}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>`;
         valueCellContent = item.losses;
+      } else if (metric === "top_tribes") {
+        const tribeName = item.tribe_name || "UNKNOWN";
+        nameCellContent = `<span class="clickable-tribe" data-tribe="${tribeName}" title="Click to search for ${tribeName}">${tribeName}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>`;
+        valueCellContent = item.total_kills + item.total_losses;
       }
 
       tr.innerHTML = `
@@ -320,6 +324,26 @@ export function addTableClickListeners(tableId) {
         typeof navigateToSearch === "function"
       ) {
         navigateToSearch(system, "system");
+      } else if (typeof navigateToSearch !== "function") {
+        console.error(
+          "navigateToSearch function is not defined. Make sure utils.js is loaded.",
+        );
+      }
+    });
+  });
+
+  // Add listeners for clickable tribes
+  [...table.querySelectorAll(".clickable-tribe")].map((element) => {
+    element.style.cursor = "pointer"; // Add pointer cursor
+    element.addEventListener("click", (e) => {
+      e.preventDefault();
+      const tribe = element.dataset.tribe;
+      if (
+        tribe &&
+        tribe !== "UNKNOWN" &&
+        typeof navigateToSearch === "function"
+      ) {
+        navigateToSearch(tribe, "tribe");
       } else if (typeof navigateToSearch !== "function") {
         console.error(
           "navigateToSearch function is not defined. Make sure utils.js is loaded.",

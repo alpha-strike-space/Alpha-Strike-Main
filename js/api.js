@@ -186,25 +186,31 @@ async function fetchIncidentById(mail_id) {
  * @returns {Promise<Incident[]>} - Array of bare incident objects.
  */
 export async function searchBareIncidents(query, type, limit, offset) {
-  let endpoint =
-    type === "system"
-      ? `https://api.alpha-strike.space/incident?system=${encodeURIComponent(
-          query,
-        )}`
-      : `https://api.alpha-strike.space/incident?name=${encodeURIComponent(
-          query,
-        )}`;
+  let endpoint = "";
+  if (type === "system") {
+    endpoint = `https://api.alpha-strike.space/incident?system=${encodeURIComponent(query)}`;
+  } else if (type === "name") {
+    endpoint = `https://api.alpha-strike.space/incident?name=${encodeURIComponent(query)}`;
+  } else if (type === "tribe") {
+    endpoint = `https://api.alpha-strike.space/incident?tribe=${encodeURIComponent(query)}`;
+  } else {
+    return [];
+  }
 
   if (limit !== undefined && offset !== undefined) {
     endpoint += `&limit=${limit}&offset=${offset}`;
   }
 
-  const incidents = await fetchApiData(endpoint);
-
-  if (!incidents || !Array.isArray(incidents)) {
+  try {
+    const incidents = await fetchApiData(endpoint);
+    if (!incidents || !Array.isArray(incidents)) {
+      return [];
+    }
+    return incidents;
+  } catch (error) {
+    // Treat errors (e.g., 400 Bad Request for unknown tribe) as no results
     return [];
   }
-  return incidents;
 }
 
 /**
@@ -291,11 +297,23 @@ async function fetchDailyTotals(filter = "day") {
  * @returns {Promise<TotalsResponse[]>} - Array of total results
  */
 async function searchTotals(query, type) {
-  const endpoint =
-    type === "system"
-      ? `https://api.alpha-strike.space/totals?system=${encodeURIComponent(query)}`
-      : `https://api.alpha-strike.space/totals?name=${encodeURIComponent(query)}`;
+  let endpoint = "";
+  if (type === "system") {
+    endpoint = `https://api.alpha-strike.space/totals?system=${encodeURIComponent(query)}`;
+  } else if (type === "name") {
+    endpoint = `https://api.alpha-strike.space/totals?name=${encodeURIComponent(query)}`;
+  } else if (type === "tribe") {
+    endpoint = `https://api.alpha-strike.space/totals?tribe=${encodeURIComponent(query)}`;
+  } else {
+    return [];
+  }
   return await fetchApiData(endpoint);
+}
+
+async function fetchTribeByName(name) {
+  return await fetchApiData(
+    `https://api.alpha-strike.space/tribes?name=${encodeURIComponent(name)}`,
+  );
 }
 
 // Export all functions
@@ -318,4 +336,5 @@ export {
   fetchWeeklyTotals,
   fetchDailyTotals,
   searchTotals,
+  fetchTribeByName,
 };

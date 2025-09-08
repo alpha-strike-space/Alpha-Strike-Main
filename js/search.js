@@ -303,7 +303,10 @@ async function performInitialSearch(query, type) {
         searchBareIncidents(variation, type, incidentsPerPage + 1, 0),
       ]);
 
-      if (incidents?.length > 0) {
+      const hasIncidents = Array.isArray(incidents) && incidents.length > 0;
+      const hasTotals = Array.isArray(totals) && totals.length > 0;
+
+      if (hasIncidents || (type === "tribe" && hasTotals)) {
         successfulVariation = variation;
         initialBareIncidents = incidents;
         totalsData = totals || [];
@@ -392,7 +395,11 @@ async function performInitialSearch(query, type) {
         } catch (e) {
           // If fetching all incidents fails, fall back to any provided value
         }
-      } else {
+      }
+      else if (type === "tribe") {
+        totalIncidents = aggregateData.total_kills + aggregateData.total_losses || 0;
+      }
+      else {
         totalIncidents =
           (aggregateData.total_kills || 0) + (aggregateData.total_losses || 0);
 
@@ -457,6 +464,12 @@ async function performInitialSearch(query, type) {
           applyTranslationsToElement(card, languages[currentLanguageIndex]);
         }
       }
+    } else {
+      // Show a tribe-specific friendly message when there are no incidents
+      const messageKey = currentType === "tribe" ? "search.noTribeIncidents" : "search.noResults";
+      resultsContainer.innerHTML = `<p data-translate="${messageKey}">No search results found.</p>`;
+      resultsContainer.style.textAlign = "center";
+      applyTranslationsToElement(resultsContainer, languages[currentLanguageIndex]);
     }
 
     renderPagination();

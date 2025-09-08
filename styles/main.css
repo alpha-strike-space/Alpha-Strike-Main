@@ -15,6 +15,7 @@
 @import url("components/loadingOverlay.css");
 @import url("components/inline-loader.css");
 @import url("components/pagination.css");
+@import url("components/modal.css");
 
 /* Navbar Search Styles */
 .nav-search-container {

@@ -29,6 +29,12 @@
     "zh": "搜索",
     "es": "Buscar"
   },
+  "navbar.tribes": {
+    "en": "Leading Tribes",
+    "ru": "Лидирующие Трибы",
+    "zh": "领先部落",
+    "es": "Principales Tribus"
+  },
   "page.search-header": {
     "en": "Search Stamped Mails",
     "ru": "Поиск Отмеченных Писем",
@@ -46,6 +52,12 @@
     "ru": "Упорные Убийцы",
     "zh": "顽强杀手",
     "es": "Asesinos Tenaces"
+  },
+  "header.leadingTribes": {
+    "en": "Leading Tribes",
+    "ru": "Лидирующие Трибы",
+    "zh": "领先部落",
+    "es": "Principales Tribus"
   },
   "table.name": {
     "en": "Name",
@@ -95,11 +107,23 @@
     "zh": "按系统搜索",
     "es": "Buscar por Sistema"
   },
+  "search.byTribe": {
+    "en": "Search by Tribe",
+    "ru": "Поиск по Трибе",
+    "zh": "按部落搜索",
+    "es": "Buscar por Tribu"
+  },
   "search.placeholder": {
     "en": "Enter search query...",
     "ru": "Введите запрос...",
     "zh": "输入搜索内容...",
     "es": "Introduzca la consulta..."
+  },
+  "search.noResults": {
+    "en": "No results found.",
+    "ru": "Ничего не найдено.",
+    "zh": "没有找到结果。",
+    "es": "No se encontraron resultados."
   },
   "search.button": {
     "en": "Search",
@@ -118,6 +142,12 @@
     "ru": "Ошибка при получении результатов поиска. Пожалуйста, проверьте запрос.",
     "zh": "获取搜索结果时出错。请检查您的查询。",
     "es": "Error al obtener los resultados de búsqueda. Por favor, revise su consulta."
+  },
+  "card.tribe": {
+    "en": "Tribe:",
+    "ru": "Трибе:",
+    "zh": "部落:",
+    "es": "Tribu:"
   },
   "card.lossType": {
     "en": "Loss Type:",
@@ -419,11 +449,11 @@
     "zh": "受害者",
     "es": "VÍCTIMA"
   },
-  "killmail.corporationLabel": {
-    "en": "Corporation:",
-    "ru": "Корпорация:",
-    "zh": "公司:",
-    "es": "Corporación:"
+  "killmail.tribeLabel": {
+    "en": "Tribe:",
+    "ru": "Трибе:",
+    "zh": "部落:",
+    "es": "Tribu:"
   },
   "killmail.shipLabel": {
     "en": "Ship:",
@@ -644,6 +674,12 @@
       "ru": "Агрегированные данные не найдены.",
       "zh": "未找到汇总数据。"
     }
+  },
+  "search.noTribeIncidents": {
+    "en": "No incidents found for this tribe yet.",
+    "es": "Aún no se encontraron incidentes para esta tribu.",
+    "ru": "Для этой трибы пока не найдено инцидентов.",
+    "zh": "该部落尚未发现相关事件。"
   },
   "loading.overlay": {
     "en": "Loading...",

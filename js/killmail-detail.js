@@ -87,14 +87,20 @@ function createCombatantCard(data, type) {
   );
   name.textContent = data.name;
 
-  const corpInfo = document.createElement("p");
-  corpInfo.innerHTML = `${getTranslationLocal(
-    "killmail.corporationLabel",
-    "Corporation:",
-  )} <span class="placeholder">${getTranslationLocal(
-    `killmail.placeholder.${type}Corp`,
-    `[${type} Corp Placeholder]`,
-  )}</span>`;
+  const tribeInfo = document.createElement("p");
+  tribeInfo.className = `${type} clickable-tribe`;
+  tribeInfo.dataset.tribe = data.tribe_name;
+  tribeInfo.title = getTranslationLocal(
+    "tooltip.searchFor",
+    "Search for {itemName}",
+    {
+      itemName: data.tribe_name,
+    },
+  );
+  tribeInfo.innerHTML = `${getTranslationLocal(
+    "killmail.tribeLabel",
+    "Tribe:",
+  )} ${data.tribe_name}`;
 
   const shipInfo = document.createElement("p");
   const shipPlaceholder =
@@ -111,7 +117,7 @@ function createCombatantCard(data, type) {
 
   info.appendChild(roleLabel);
   info.appendChild(name);
-  info.appendChild(corpInfo);
+  info.appendChild(tribeInfo);
   info.appendChild(shipInfo);
 
   header.appendChild(image);
@@ -468,11 +474,13 @@ function renderKillmailDetailsHTML(data) {
   const killerData = {
     name: killerNameDisplay,
     loss_type: lossType,
+    tribe_name: data.killer_tribe_name,
     portrait_url: data.killer_portrait_url,
   };
   const victimData = {
     name: victimName,
     loss_type: lossType,
+    tribe_name: data.victim_tribe_name,
     portrait_url: data.victim_portrait_url,
   };
 
@@ -534,6 +542,7 @@ export async function loadAndRenderKillmailPageContent() {
             ),
           );
         }
+        console.log(incidentDataArray);
         killmailDataStore = incidentDataArray[0]; // Store/update fetched data
       }
 
