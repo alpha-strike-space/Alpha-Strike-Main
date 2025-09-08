@@ -28,9 +28,6 @@ export function updateRollingAverageHeaderText(timeRange) {
     // If translations object itself is undefined or key completely missing, headerText remains the default English.
 
     rollingHeader.textContent = headerText;
-    console.log(
-      `Rolling average header updated via updateRollingAverageHeaderText for timeRange: ${timeRange}`,
-    );
   } else {
     if (!rollingHeader)
       console.warn(

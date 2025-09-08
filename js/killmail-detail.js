@@ -542,7 +542,6 @@ export async function loadAndRenderKillmailPageContent() {
             ),
           );
         }
-        console.log(incidentDataArray);
         killmailDataStore = incidentDataArray[0]; // Store/update fetched data
       }
 

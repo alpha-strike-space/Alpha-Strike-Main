@@ -82,19 +82,14 @@ export function setLanguage(lang) {
   const event = new CustomEvent("languagechange", { detail: { lang } });
   document.dispatchEvent(event);
 
-  // --- MODIFICATION START ---
   // Call the page-specific re-render function if it's defined
   // This allows pages like killmail-detail.js to refresh their dynamic content
   if (
     window.AlphaStrike &&
     typeof window.AlphaStrike.onLanguageChangeRenderContent === 'function'
   ) {
-    console.log(
-      'Calling window.AlphaStrike.onLanguageChangeRenderContent() due to language change.'
-    );
     window.AlphaStrike.onLanguageChangeRenderContent();
   }
-  // --- MODIFICATION END ---
 }
 
 /**
