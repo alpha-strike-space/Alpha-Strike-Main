@@ -12,6 +12,7 @@ export default defineConfig({
         search: resolve(__dirname, 'pages/search.html'),
         systems: resolve(__dirname, 'pages/systems.html'),
         victims: resolve(__dirname, 'pages/victims.html'),
+        tribes: resolve(__dirname, 'pages/tribes.html'),
       },
     },
   },

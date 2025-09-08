@@ -317,8 +317,6 @@ async function performInitialSearch(query, type) {
     }
   }
 
-  hideInlineLoader(resultsContainer);
-
   if (successfulVariation) {
     currentQuery = successfulVariation;
     currentType = type;
@@ -442,6 +440,8 @@ async function performInitialSearch(query, type) {
     // Display aggregate card and clear results for streaming
     await displayAggregateCard(totalsData, type);
     resultsContainer.innerHTML = ""; // Clear for streaming
+
+    hideInlineLoader(resultsContainer);
 
     // Sort initial incidents by time_stamp descending (newest first)
     initialBareIncidents = sortIncidentsByTimestamp(initialBareIncidents);

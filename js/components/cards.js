@@ -2,6 +2,7 @@ import { currentLanguageIndex, languages, translations } from '../translation-di
 import { lazyLoader } from '../utils/lazyLoading.js';
 import { getLocalPortraitPath } from '../common.js';
 import { fetchSmartCharacterByAddress, fetchTribeByName } from '../api.js';
+import { showLoading, hideLoading } from './loadingOverlay.js';
 
 // Helper function to get translations
 const getTranslation = (key, fallbackText = '') => {
@@ -549,23 +550,30 @@ function createSystemCard(item) {
 async function displayAggregateCard(data, type) {
   const totalsCardContainer = document.getElementById('totals-card');
   totalsCardContainer.innerHTML = '';
+  showLoading();
+  try {
+    if (!data || data.length === 0) {
+      totalsCardContainer.innerHTML = `<p data-translate="search.noAggregatedData">No aggregated data found.</p>`;
+      return;
+    }
 
-  if (!data || data.length === 0) {
-    totalsCardContainer.innerHTML = `<p data-translate="search.noAggregatedData">No aggregated data found.</p>`;
-    return;
+    const item = data[0];
+    let card = null;
+    if (type === 'system') {
+      card = createSystemCard(item);
+    } else if (type === 'name') {
+      card = await createPlayerCard(item);
+    } else if (type === 'tribe') {
+      card = await createTribeCard(item);
+    }
+
+    totalsCardContainer.appendChild(card);
+  } catch (error) {
+    console.error('Failed to render aggregate card:', error);
+    totalsCardContainer.innerHTML = `<p data-translate="search.error">Error loading aggregated data.</p>`;
+  } finally {
+    hideLoading();
   }
-
-  const item = data[0];
-  let card = null;
-  if (type === 'system') {
-    card = createSystemCard(item);
-  } else if (type === 'name') {
-    card = await createPlayerCard(item);
-  } else if (type === 'tribe') {
-    card = await createTribeCard(item);
-  }
-
-  totalsCardContainer.appendChild(card);
 }
 
 export { displayAggregateCard, createPlayerCard, createSystemCard };
