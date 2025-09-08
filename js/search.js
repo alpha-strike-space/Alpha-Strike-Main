@@ -287,6 +287,74 @@ async function performInitialSearch(query, type) {
       const aggregateData = totalsData[0];
       if (type === "system") {
         totalIncidents = aggregateData.incident_count || 0;
+
+        // Manually compute active days by counting unique incident dates across all time
+        try {
+          const uniqueDays = new Set();
+          const parseUtcDate = (ts) => {
+            let date;
+            if (typeof ts === "string") {
+              let s = ts.trim();
+              if (/\bUTC\b/i.test(s)) {
+                s = s.replace(/\s+UTC/i, "");
+                s = s.replace(" ", "T");
+                s = s.endsWith("Z") ? s : s + "Z";
+                date = new Date(s);
+              } else if (/[zZ]|[+\-]\d{2}:?\d{2}$/.test(s)) {
+                date = new Date(s);
+              } else if (/^\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2}:\d{2})?$/.test(s)) {
+                s = s.replace(" ", "T");
+                date = new Date(s + "Z");
+              } else {
+                date = new Date(s);
+              }
+            } else if (typeof ts === "number") {
+              if (ts < 10000000000) {
+                date = new Date(ts * 1000);
+              } else if (ts < 10000000000000) {
+                date = new Date(ts);
+              } else {
+                const msSince1601 = ts / 10000;
+                const epochDifference = 11644473600000;
+                const msSince1970 = msSince1601 - epochDifference;
+                date = new Date(msSince1970);
+              }
+            }
+            return date;
+          };
+
+          const pageSize = 500;
+          let offsetAll = 0;
+          const maxIterations = 200; // safety cap
+          let iterations = 0;
+          while (iterations < maxIterations) {
+            const batch = await searchBareIncidents(
+              successfulVariation,
+              type,
+              pageSize,
+              offsetAll,
+            );
+            if (!Array.isArray(batch) || batch.length === 0) break;
+            for (const incident of batch) {
+              const ts = incident?.time_stamp;
+              if (ts === undefined || ts === null) continue;
+              const date = parseUtcDate(ts);
+              if (!date || Number.isNaN(date.getTime())) continue;
+              const y = date.getUTCFullYear();
+              const m = String(date.getUTCMonth() + 1).padStart(2, "0");
+              const d = String(date.getUTCDate()).padStart(2, "0");
+              uniqueDays.add(`${y}-${m}-${d}`);
+            }
+            offsetAll += batch.length;
+            if (batch.length < pageSize) break;
+            iterations += 1;
+          }
+          if (uniqueDays.size > 0) {
+            aggregateData.days_active = uniqueDays.size;
+          }
+        } catch (e) {
+          // If fetching all incidents fails, fall back to any provided value
+        }
       } else {
         totalIncidents =
           (aggregateData.total_kills || 0) + (aggregateData.total_losses || 0);

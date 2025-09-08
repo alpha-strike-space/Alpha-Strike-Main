@@ -9,6 +9,51 @@ const getTranslation = (key, fallbackText = '') => {
   return translations[key]?.[lang] || translations[key]?.en || fallbackText;
 };
 
+// Map a 0-1 position to a color sampled from the specified gradient
+// linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,246,69,1) 66%, rgba(61,255,142,1) 89%, rgba(0,208,255,1) 99%)
+function getGradientColorAt(position) {
+  const pos = Math.min(1, Math.max(0, Number(position) || 0));
+  const stops = [
+    { p: 0.0, r: 210, g: 36, b: 36 },
+    { p: 0.67, r: 207, g: 199, b: 54 },
+    { p: 0.90, r: 45, g: 200, b: 110 },
+    { p: 1.0, r: 45, g: 165, b: 195 },
+  ];
+
+  if (pos <= stops[0].p) {
+    const { r, g, b } = stops[0];
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  for (let i = 1; i < stops.length; i++) {
+    const prev = stops[i - 1];
+    const next = stops[i];
+    if (pos <= next.p) {
+      const t = (pos - prev.p) / (next.p - prev.p);
+      const r = Math.round(prev.r + t * (next.r - prev.r));
+      const g = Math.round(prev.g + t * (next.g - prev.g));
+      const b = Math.round(prev.b + t * (next.b - prev.b));
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+  }
+
+  const { r, g, b } = stops[stops.length - 1];
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+// Map a 0-1 win rate to an aggressive descriptor without adding color stops
+function getWinRateDescriptor(position) {
+  const p = Math.min(1, Math.max(0, Number(position) || 0));
+  if (p <= 0.10) return 'stoic';
+  if (p <= 0.25) return 'probing';
+  if (p <= 0.33) return 'prowling';
+  if (p <= 0.42) return 'stalking';
+  if (p <= 0.50) return 'menacing';
+  if (p <= 0.67) return 'predatory';
+  if (p <= 0.90) return 'ruthless';
+  return 'lethal';
+}
+
 /**
  * Calculate player statistics for the card
  */
@@ -90,6 +135,25 @@ function createPlayerCardHeader(item, stats, portraitUrl) {
         <div class="header-stat-label" data-translate="card.winRate">Win Rate</div>
     `;
 
+  // Color the win-rate text by gradient position
+  const winRateDecimal = Math.min(1, Math.max(0, (parseFloat(stats.winRate) || 0) / 100));
+  const winRateColor = getGradientColorAt(winRateDecimal);
+  const winRateValueEl = winRateStat.querySelector('.header-stat-value');
+  if (winRateValueEl) {
+    winRateValueEl.style.color = winRateColor;
+  }
+
+  // Insert descriptor text for the win-rate in header
+  const headerDescriptor = document.createElement('div');
+  headerDescriptor.className = 'header-stat-descriptor';
+  headerDescriptor.textContent = getWinRateDescriptor(winRateDecimal).toUpperCase();
+  const winRateLabelEl = winRateStat.querySelector('.header-stat-label');
+  if (winRateLabelEl) {
+    winRateStat.insertBefore(headerDescriptor, winRateLabelEl);
+  } else {
+    winRateStat.appendChild(headerDescriptor);
+  }
+
   const engagementsStat = document.createElement('div');
   engagementsStat.className = 'header-stat';
   engagementsStat.innerHTML = `
@@ -123,6 +187,32 @@ function createPlayerCardStats(stats) {
             <span class="stat-label" data-translate="card.winRate">Win Rate</span>
         </div>
     `;
+
+  // Apply gradient-based color to the stat-content background and value text
+  const winRateDecimal = Math.min(1, Math.max(0, (parseFloat(stats.winRate) || 0) / 100));
+  const winRateColor = getGradientColorAt(winRateDecimal);
+  const statContentEl = winRateItem.querySelector('.stat-content');
+  const statValueEl = winRateItem.querySelector('.stat-value');
+  if (statContentEl) {
+    statContentEl.style.backgroundColor = winRateColor;
+    statContentEl.style.borderRadius = '4px';
+    statContentEl.style.padding = '4px 8px';
+  }
+  if (statValueEl) {
+    statValueEl.style.color = '#000';
+    statValueEl.style.textShadow = 'none';
+  }
+
+  // Add descriptor below the value in the stats grid
+  if (statContentEl) {
+    const descriptorEl = document.createElement('span');
+    descriptorEl.className = 'stat-descriptor';
+    descriptorEl.textContent = getWinRateDescriptor(winRateDecimal).toUpperCase();
+    descriptorEl.style.fontSize = '0.75rem';
+    descriptorEl.style.opacity = '0.9';
+    descriptorEl.style.color = '#000';
+    statContentEl.insertBefore(descriptorEl, statContentEl.querySelector('.stat-label'));
+  }
 
   const engagementsItem = document.createElement('div');
   engagementsItem.className = 'stat-item secondary';
