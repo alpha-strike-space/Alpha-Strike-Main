@@ -1,6 +1,6 @@
 /* Container variant for monthly tables */
 /* Container variant for monthly tables */
-.container.monthly-tables {
+.container .monthly-tables {
   margin: var(--spacing-lg) auto;
   background: linear-gradient(135deg, rgba(20, 20, 20, 0.97) 0%, rgba(28, 28, 28, 0.92) 100%);
   border: 1px solid rgba(var(--color-primary), 0.6);

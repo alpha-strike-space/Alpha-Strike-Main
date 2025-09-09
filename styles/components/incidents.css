@@ -3,7 +3,7 @@
   text-align: center;
   margin-top: 20px;
   color: var(--color-text-light);
-  width: fit-content;
+  width: 50%;
   max-width: 100%;
   box-sizing: border-box;
   margin: auto;
@@ -336,7 +336,8 @@ a.view-killmail-details-link.icon-only-link i {
 /* Container adjustments for list view */
 .container {
   max-width: 95%;
-  width: fit-content;
+  width: 80%;
+  min-width: fit-content;
 }
 
 /* Compact mode for medium-large screens */

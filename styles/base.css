@@ -64,7 +64,7 @@ main {
 /* Container adjustments to accommodate wider cards */
 .container {
   max-width: 100%; /* Increased from 50% */
-  width: fit-content;
+  width: 80%;
   margin: 20px auto;
   padding: 25px;
   background: linear-gradient(
