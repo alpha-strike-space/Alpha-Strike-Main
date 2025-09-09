@@ -1,11 +1,16 @@
-import { currentLanguageIndex, languages, translations } from '../translation-dictionary.js';
-import { lazyLoader } from '../utils/lazyLoading.js';
-import { getLocalPortraitPath } from '../common.js';
-import { fetchSmartCharacterByAddress, fetchTribeByName } from '../api.js';
-import { showLoading, hideLoading } from './loadingOverlay.js';
+import {
+  currentLanguageIndex,
+  languages,
+  translations,
+} from "../translation-dictionary.js";
+import { lazyLoader } from "../utils/lazyLoading.js";
+import { getLocalPortraitPath } from "../common.js";
+import { fetchSmartCharacterByAddress, fetchTribeByName } from "../api.js";
+import { showLoading, hideLoading } from "./loadingOverlay.js";
+import { addIncidentCardListeners } from "../incidentCard.js";
 
 // Helper function to get translations
-const getTranslation = (key, fallbackText = '') => {
+const getTranslation = (key, fallbackText = "") => {
   const lang = languages[currentLanguageIndex];
   return translations[key]?.[lang] || translations[key]?.en || fallbackText;
 };
@@ -17,7 +22,7 @@ function getGradientColorAt(position) {
   const stops = [
     { p: 0.0, r: 210, g: 36, b: 36 },
     { p: 0.67, r: 207, g: 199, b: 54 },
-    { p: 0.90, r: 45, g: 200, b: 110 },
+    { p: 0.9, r: 45, g: 200, b: 110 },
     { p: 1.0, r: 45, g: 165, b: 195 },
   ];
 
@@ -45,14 +50,14 @@ function getGradientColorAt(position) {
 // Map a 0-1 win rate to an aggressive descriptor without adding color stops
 function getWinRateDescriptor(position) {
   const p = Math.min(1, Math.max(0, Number(position) || 0));
-  if (p <= 0.10) return 'stoic';
-  if (p <= 0.25) return 'probing';
-  if (p <= 0.33) return 'prowling';
-  if (p <= 0.42) return 'stalking';
-  if (p <= 0.50) return 'menacing';
-  if (p <= 0.67) return 'predatory';
-  if (p <= 0.90) return 'ruthless';
-  return 'lethal';
+  if (p <= 0.1) return "stoic";
+  if (p <= 0.25) return "probing";
+  if (p <= 0.33) return "prowling";
+  if (p <= 0.42) return "stalking";
+  if (p <= 0.5) return "menacing";
+  if (p <= 0.67) return "predatory";
+  if (p <= 0.9) return "ruthless";
+  return "lethal";
 }
 
 /**
@@ -65,7 +70,9 @@ function calculatePlayerStats(item) {
       : item.total_kills || 0;
   const totalEngagements = (item.total_kills || 0) + (item.total_losses || 0);
   const winRate =
-    totalEngagements > 0 ? (((item.total_kills || 0) / totalEngagements) * 100).toFixed(1) : 0;
+    totalEngagements > 0
+      ? (((item.total_kills || 0) / totalEngagements) * 100).toFixed(1)
+      : 0;
 
   return {
     killDeathRatio,
@@ -78,17 +85,17 @@ function calculatePlayerStats(item) {
  * Create the player card header section
  */
 function createPlayerCardHeader(item, stats, portraitUrl) {
-  const header = document.createElement('div');
-  header.className = 'card-header';
+  const header = document.createElement("div");
+  header.className = "card-header";
 
-  const profileSection = document.createElement('div');
-  profileSection.className = 'profile-section';
+  const profileSection = document.createElement("div");
+  profileSection.className = "profile-section";
 
-  const imageContainer = document.createElement('div');
-  imageContainer.className = 'profile-image-container';
+  const imageContainer = document.createElement("div");
+  imageContainer.className = "profile-image-container";
 
-  const image = document.createElement('img');
-  image.className = 'profile-image';
+  const image = document.createElement("img");
+  image.className = "profile-image";
   image.alt = `${item.name}'s profile`;
 
   const isIndexPage =
@@ -100,20 +107,21 @@ function createPlayerCardHeader(item, stats, portraitUrl) {
   image.src = getLocalPortraitPath(portraitUrl, assetBasePath);
   imageContainer.appendChild(image);
 
-  const info = document.createElement('div');
-  info.className = 'profile-info';
+  const info = document.createElement("div");
+  info.className = "profile-info";
 
-  const name = document.createElement('h1');
-  name.className = 'player-name';
+  const name = document.createElement("h1");
+  name.className = "player-name";
   name.textContent = item.name;
 
-  const status = document.createElement('p');
-  status.className = 'player-status clickable-tribe';
+  const status = document.createElement("p");
+  status.className = "player-status clickable-tribe";
   status.dataset.tribe = item.tribe_name;
-  status.title = getTranslation('tooltip.searchFor', 'Search for {itemName}', {
-    itemName: item.tribe_name,
-  });
-  status.textContent = item.tribe_name || getTranslation('general.unknown');
+  status.title =
+    getTranslation("tooltip.searchFor", "Search for: ", {
+      itemName: item.tribe_name,
+    }) + item.tribe_name;
+  status.textContent = item.tribe_name || getTranslation("general.unknown");
 
   info.appendChild(name);
   info.appendChild(status);
@@ -121,46 +129,50 @@ function createPlayerCardHeader(item, stats, portraitUrl) {
   profileSection.appendChild(imageContainer);
   profileSection.appendChild(info);
 
-  const headerStats = document.createElement('div');
-  headerStats.className = 'header-stats';
+  const headerStats = document.createElement("div");
+  headerStats.className = "header-stats";
 
-  const kdStat = document.createElement('div');
-  kdStat.className = 'header-stat';
+  const kdStat = document.createElement("div");
+  kdStat.className = "header-stat";
   kdStat.innerHTML = `
-        <div class="header-stat-value ${stats.killDeathRatio > 1 ? 'killer' : 'victim'}">${
+        <div class="header-stat-value ${stats.killDeathRatio > 1 ? "killer" : "victim"}">${
           stats.killDeathRatio
         }</div>
         <div class="header-stat-label" data-translate="card.kdRatio">K/D Ratio</div>
     `;
 
-  const winRateStat = document.createElement('div');
-  winRateStat.className = 'header-stat';
+  const winRateStat = document.createElement("div");
+  winRateStat.className = "header-stat";
   winRateStat.innerHTML = `
         <div class="header-stat-value">${stats.winRate}%</div>
         <div class="header-stat-label" data-translate="card.winRate">Win Rate</div>
     `;
 
   // Color the win-rate text by gradient position
-  const winRateDecimal = Math.min(1, Math.max(0, (parseFloat(stats.winRate) || 0) / 100));
+  const winRateDecimal = Math.min(
+    1,
+    Math.max(0, (parseFloat(stats.winRate) || 0) / 100),
+  );
   const winRateColor = getGradientColorAt(winRateDecimal);
-  const winRateValueEl = winRateStat.querySelector('.header-stat-value');
+  const winRateValueEl = winRateStat.querySelector(".header-stat-value");
   if (winRateValueEl) {
     winRateValueEl.style.color = winRateColor;
   }
 
   // Insert descriptor text for the win-rate in header
-  const headerDescriptor = document.createElement('div');
-  headerDescriptor.className = 'header-stat-descriptor';
-  headerDescriptor.textContent = getWinRateDescriptor(winRateDecimal).toUpperCase();
-  const winRateLabelEl = winRateStat.querySelector('.header-stat-label');
+  const headerDescriptor = document.createElement("div");
+  headerDescriptor.className = "header-stat-descriptor";
+  headerDescriptor.textContent =
+    getWinRateDescriptor(winRateDecimal).toUpperCase();
+  const winRateLabelEl = winRateStat.querySelector(".header-stat-label");
   if (winRateLabelEl) {
     winRateStat.insertBefore(headerDescriptor, winRateLabelEl);
   } else {
     winRateStat.appendChild(headerDescriptor);
   }
 
-  const engagementsStat = document.createElement('div');
-  engagementsStat.className = 'header-stat';
+  const engagementsStat = document.createElement("div");
+  engagementsStat.className = "header-stat";
   engagementsStat.innerHTML = `
         <div class="header-stat-value">${stats.totalEngagements}</div>
         <div class="header-stat-label" data-translate="card.totalEngagements">Total Engagements</div>
@@ -180,11 +192,11 @@ function createPlayerCardHeader(item, stats, portraitUrl) {
  * Create the player card stats section
  */
 function createPlayerCardStats(stats) {
-  const statsGrid = document.createElement('div');
-  statsGrid.className = 'stats-grid';
+  const statsGrid = document.createElement("div");
+  statsGrid.className = "stats-grid";
 
-  const winRateItem = document.createElement('div');
-  winRateItem.className = 'stat-item secondary';
+  const winRateItem = document.createElement("div");
+  winRateItem.className = "stat-item secondary";
   winRateItem.innerHTML = `
         <div class="stat-icon"><i class="fas fa-percentage"></i></div>
         <div class="stat-content">
@@ -194,33 +206,40 @@ function createPlayerCardStats(stats) {
     `;
 
   // Apply gradient-based color to the stat-content background and value text
-  const winRateDecimal = Math.min(1, Math.max(0, (parseFloat(stats.winRate) || 0) / 100));
+  const winRateDecimal = Math.min(
+    1,
+    Math.max(0, (parseFloat(stats.winRate) || 0) / 100),
+  );
   const winRateColor = getGradientColorAt(winRateDecimal);
-  const statContentEl = winRateItem.querySelector('.stat-content');
-  const statValueEl = winRateItem.querySelector('.stat-value');
+  const statContentEl = winRateItem.querySelector(".stat-content");
+  const statValueEl = winRateItem.querySelector(".stat-value");
   if (statContentEl) {
     statContentEl.style.backgroundColor = winRateColor;
-    statContentEl.style.borderRadius = '4px';
-    statContentEl.style.padding = '4px 8px';
+    statContentEl.style.borderRadius = "4px";
+    statContentEl.style.padding = "4px 8px";
   }
   if (statValueEl) {
-    statValueEl.style.color = '#000';
-    statValueEl.style.textShadow = 'none';
+    statValueEl.style.color = "#000";
+    statValueEl.style.textShadow = "none";
   }
 
   // Add descriptor below the value in the stats grid
   if (statContentEl) {
-    const descriptorEl = document.createElement('span');
-    descriptorEl.className = 'stat-descriptor';
-    descriptorEl.textContent = getWinRateDescriptor(winRateDecimal).toUpperCase();
-    descriptorEl.style.fontSize = '0.75rem';
-    descriptorEl.style.opacity = '0.9';
-    descriptorEl.style.color = '#000';
-    statContentEl.insertBefore(descriptorEl, statContentEl.querySelector('.stat-label'));
+    const descriptorEl = document.createElement("span");
+    descriptorEl.className = "stat-descriptor";
+    descriptorEl.textContent =
+      getWinRateDescriptor(winRateDecimal).toUpperCase();
+    descriptorEl.style.fontSize = "0.75rem";
+    descriptorEl.style.opacity = "0.9";
+    descriptorEl.style.color = "#000";
+    statContentEl.insertBefore(
+      descriptorEl,
+      statContentEl.querySelector(".stat-label"),
+    );
   }
 
-  const engagementsItem = document.createElement('div');
-  engagementsItem.className = 'stat-item secondary';
+  const engagementsItem = document.createElement("div");
+  engagementsItem.className = "stat-item secondary";
   engagementsItem.innerHTML = `
         <div class="stat-icon"><i class="fas fa-fire"></i></div>
         <div class="stat-content">
@@ -242,15 +261,19 @@ function calculateSystemStats(item) {
   const avgIncidentsPerDay =
     item.incident_count && item.days_active
       ? (item.incident_count / item.days_active).toFixed(1)
-      : '< 1';
+      : "< 1";
   const threatLevel =
-    item.incident_count > 100 ? 'HIGH' : item.incident_count > 50 ? 'MEDIUM' : 'LOW';
+    item.incident_count > 100
+      ? "HIGH"
+      : item.incident_count > 50
+        ? "MEDIUM"
+        : "LOW";
   const threatClass =
-    threatLevel === 'HIGH'
-      ? 'threat-high'
-      : threatLevel === 'MEDIUM'
-        ? 'threat-medium'
-        : 'threat-low';
+    threatLevel === "HIGH"
+      ? "threat-high"
+      : threatLevel === "MEDIUM"
+        ? "threat-medium"
+        : "threat-low";
 
   return {
     avgIncidentsPerDay,
@@ -265,31 +288,32 @@ function calculateSystemStats(item) {
  * Create the system card header section
  */
 function createSystemCardHeader(item, stats) {
-  const header = document.createElement('div');
-  header.className = 'card-header';
+  const header = document.createElement("div");
+  header.className = "card-header";
 
-  const systemSection = document.createElement('div');
-  systemSection.className = 'system-section';
+  const systemSection = document.createElement("div");
+  systemSection.className = "system-section";
 
-  const imageContainer = document.createElement('div');
-  imageContainer.className = 'system-image-container';
+  const imageContainer = document.createElement("div");
+  imageContainer.className = "system-image-container";
 
   // Replace image with Font Awesome star icon
-  const starIcon = document.createElement('i');
-  starIcon.className = 'fa-solid fa-sun system-image';
-  starIcon.setAttribute('aria-label', 'system star');
+  const starIcon = document.createElement("i");
+  starIcon.className = "fa-solid fa-sun system-image";
+  starIcon.setAttribute("aria-label", "system star");
   imageContainer.appendChild(starIcon);
 
-  const info = document.createElement('div');
-  info.className = 'system-info';
+  const info = document.createElement("div");
+  info.className = "system-info";
 
-  const name = document.createElement('h2');
-  name.className = 'system-name';
+  const name = document.createElement("h2");
+  name.className = "system-name";
   name.textContent = item.solar_system_name || item.name;
 
-  const region = document.createElement('p');
-  region.className = 'system-region';
-  region.textContent = item.region_name || item.region || getTranslation('general.unknown');
+  const region = document.createElement("p");
+  region.className = "system-region";
+  region.textContent =
+    item.region_name || item.region || getTranslation("general.unknown");
 
   info.appendChild(name);
   info.appendChild(region);
@@ -297,25 +321,25 @@ function createSystemCardHeader(item, stats) {
   systemSection.appendChild(imageContainer);
   systemSection.appendChild(info);
 
-  const headerStats = document.createElement('div');
-  headerStats.className = 'header-stats';
+  const headerStats = document.createElement("div");
+  headerStats.className = "header-stats";
 
-  const incidentsStat = document.createElement('div');
-  incidentsStat.className = 'header-stat';
+  const incidentsStat = document.createElement("div");
+  incidentsStat.className = "header-stat";
   incidentsStat.innerHTML = `
         <div class="header-stat-value ${stats.threatClass}">${stats.totalIncidents}</div>
         <div class="header-stat-label" data-translate="card.incidentCount">Incidents</div>
     `;
 
-  const avgPerDayStat = document.createElement('div');
-  avgPerDayStat.className = 'header-stat';
+  const avgPerDayStat = document.createElement("div");
+  avgPerDayStat.className = "header-stat";
   avgPerDayStat.innerHTML = `
         <div class="header-stat-value">${stats.avgIncidentsPerDay}</div>
         <div class="header-stat-label" data-translate="card.avgPerDay">Per Day</div>
     `;
 
-  const activeDaysStat = document.createElement('div');
-  activeDaysStat.className = 'header-stat';
+  const activeDaysStat = document.createElement("div");
+  activeDaysStat.className = "header-stat";
   activeDaysStat.innerHTML = `
         <div class="header-stat-value">${stats.activeDays}</div>
         <div class="header-stat-label" data-translate="card.activeDays">Active Days</div>
@@ -336,50 +360,54 @@ function createSystemCardHeader(item, stats) {
  */
 
 function createTribeCardHeader(item, stats) {
-  const header = document.createElement('div');
-  header.className = 'card-header';
+  const header = document.createElement("div");
+  header.className = "card-header";
 
-  const profileSection = document.createElement('div');
-  profileSection.className = 'profile-section';
+  const profileSection = document.createElement("div");
+  profileSection.className = "profile-section";
 
-  const imageContainer = document.createElement('div');
-  imageContainer.className = 'profile-image-container';
+  const imageContainer = document.createElement("div");
+  imageContainer.className = "profile-image-container";
 
   // Font Awesome logo icon
-  const logo = document.createElement('i');
-  logo.className = 'fa-solid fa-users-line system-image';
-  logo.setAttribute('aria-label', 'tribe logo');
+  const logo = document.createElement("i");
+  logo.className = "fa-solid fa-users-line system-image";
+  logo.setAttribute("aria-label", "tribe logo");
   imageContainer.appendChild(logo);
 
-  const info = document.createElement('div');
-  info.className = 'profile-info';
+  const info = document.createElement("div");
+  info.className = "profile-info";
 
-  const name = document.createElement('h1');
-  name.className = 'player-name';
+  const name = document.createElement("h1");
+  name.className = "player-name clickable-tribe";
   name.textContent = item.tribe_name;
+  // Make tribe name clickable for search navigation
+  name.dataset.tribe = item.tribe_name;
+  name.title =
+    getTranslation("tooltip.searchFor", "Search for: ") + item.tribe_name;
 
   info.appendChild(name);
-  
+
   // Tribes can create their own website, so we need to add a link to it. If they don't have one, the API value will be "NONE".
   if (item.tribe_url && item.tribe_url !== "NONE") {
-    const tribeURL = document.createElement('div');
-    tribeURL.className = 'tribe-url';
-    const link = document.createElement('a');
+    const tribeURL = document.createElement("div");
+    tribeURL.className = "tribe-url";
+    const link = document.createElement("a");
     link.href = item.tribe_url;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.textContent = 'Tribe URL';
-    link.addEventListener('click', async (e) => {
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Tribe URL";
+    link.addEventListener("click", async (e) => {
       try {
         e.preventDefault();
-        const module = await import('./modal.js');
-        if (module && typeof module.showExternalLinkModal === 'function') {
+        const module = await import("./modal.js");
+        if (module && typeof module.showExternalLinkModal === "function") {
           module.showExternalLinkModal(item.tribe_url);
         } else {
-          window.open(item.tribe_url, '_blank', 'noopener,noreferrer');
+          window.open(item.tribe_url, "_blank", "noopener,noreferrer");
         }
       } catch (_) {
-        window.open(item.tribe_url, '_blank', 'noopener,noreferrer');
+        window.open(item.tribe_url, "_blank", "noopener,noreferrer");
       }
     });
     tribeURL.appendChild(link);
@@ -389,46 +417,50 @@ function createTribeCardHeader(item, stats) {
   profileSection.appendChild(imageContainer);
   profileSection.appendChild(info);
 
-  const headerStats = document.createElement('div');
-  headerStats.className = 'header-stats';
+  const headerStats = document.createElement("div");
+  headerStats.className = "header-stats";
 
-  const kdStat = document.createElement('div');
-  kdStat.className = 'header-stat';
+  const kdStat = document.createElement("div");
+  kdStat.className = "header-stat";
   kdStat.innerHTML = `
-        <div class="header-stat-value ${stats.killDeathRatio > 1 ? 'killer' : 'victim'}">${
+        <div class="header-stat-value ${stats.killDeathRatio > 1 ? "killer" : "victim"}">${
           stats.killDeathRatio
         }</div>
         <div class="header-stat-label" data-translate="card.kdRatio">K/D Ratio</div>
     `;
 
-  const winRateStat = document.createElement('div');
-  winRateStat.className = 'header-stat';
+  const winRateStat = document.createElement("div");
+  winRateStat.className = "header-stat";
   winRateStat.innerHTML = `
         <div class="header-stat-value">${stats.winRate}%</div>
         <div class="header-stat-label" data-translate="card.winRate">Win Rate</div>
     `;
 
   // Color the win-rate text by gradient position
-  const winRateDecimal = Math.min(1, Math.max(0, (parseFloat(stats.winRate) || 0) / 100));
+  const winRateDecimal = Math.min(
+    1,
+    Math.max(0, (parseFloat(stats.winRate) || 0) / 100),
+  );
   const winRateColor = getGradientColorAt(winRateDecimal);
-  const winRateValueEl = winRateStat.querySelector('.header-stat-value');
+  const winRateValueEl = winRateStat.querySelector(".header-stat-value");
   if (winRateValueEl) {
     winRateValueEl.style.color = winRateColor;
   }
 
   // Insert descriptor text for the win-rate in header
-  const headerDescriptor = document.createElement('div');
-  headerDescriptor.className = 'header-stat-descriptor';
-  headerDescriptor.textContent = getWinRateDescriptor(winRateDecimal).toUpperCase();
-  const winRateLabelEl = winRateStat.querySelector('.header-stat-label');
+  const headerDescriptor = document.createElement("div");
+  headerDescriptor.className = "header-stat-descriptor";
+  headerDescriptor.textContent =
+    getWinRateDescriptor(winRateDecimal).toUpperCase();
+  const winRateLabelEl = winRateStat.querySelector(".header-stat-label");
   if (winRateLabelEl) {
     winRateStat.insertBefore(headerDescriptor, winRateLabelEl);
   } else {
     winRateStat.appendChild(headerDescriptor);
   }
 
-  const engagementsStat = document.createElement('div');
-  engagementsStat.className = 'header-stat';
+  const engagementsStat = document.createElement("div");
+  engagementsStat.className = "header-stat";
   engagementsStat.innerHTML = `
         <div class="header-stat-value">${stats.totalEngagements}</div>
         <div class="header-stat-label" data-translate="card.totalEngagements">Total Engagements</div>
@@ -448,8 +480,8 @@ function createTribeCardHeader(item, stats) {
  * Create the system card stats section
  */
 function createSystemCardStats(item) {
-  const statsGrid = document.createElement('div');
-  statsGrid.className = 'stats-grid';
+  const statsGrid = document.createElement("div");
+  statsGrid.className = "stats-grid";
 
   return statsGrid;
 }
@@ -458,8 +490,8 @@ function createSystemCardStats(item) {
  * Create a player card with the given data
  */
 async function createPlayerCard(item) {
-  const card = document.createElement('div');
-  card.className = 'data-card enhanced-player-card';
+  const card = document.createElement("div");
+  card.className = "data-card enhanced-player-card";
   card.dataset.id = item.id;
 
   // Prioritize the portraitUrl passed in the item (e.g., from aggregate card)
@@ -498,8 +530,8 @@ async function createPlayerCard(item) {
  */
 
 async function createTribeCard(item) {
-  const card = document.createElement('div');
-  card.className = 'data-card enhanced-player-card';
+  const card = document.createElement("div");
+  card.className = "data-card enhanced-player-card";
   card.dataset.id = item.id;
 
   // Only fetch tribe metadata if needed, and use paginated (limit=1) request
@@ -510,7 +542,11 @@ async function createTribeCard(item) {
         item.tribe_url = tribe_data.tribe_url;
       }
     } catch (error) {
-      console.warn('Failed to fetch tribe data for card:', item.tribe_name, error);
+      console.warn(
+        "Failed to fetch tribe data for card:",
+        item.tribe_name,
+        error,
+      );
     }
   }
 
@@ -526,21 +562,21 @@ async function createTribeCard(item) {
  * Create a system card with the given data
  */
 function createSystemCard(item) {
-  const card = document.createElement('div');
-  card.className = 'data-card enhanced-system-card';
+  const card = document.createElement("div");
+  card.className = "data-card enhanced-system-card";
   card.dataset.id = item.id;
 
   const stats = calculateSystemStats(item);
   const header = createSystemCardHeader(item, stats);
-  const statsSection = '';
+  const statsSection = "";
 
   card.appendChild(header);
   // card.appendChild(statsSection);
 
   // Set up lazy loading for the system image
-  const systemImage = card.querySelector('.system-image');
+  const systemImage = card.querySelector(".system-image");
   if (systemImage) {
-    const imageUrl = 'https://images.evetech.net/types/3796/render';
+    const imageUrl = "https://images.evetech.net/types/3796/render";
     lazyLoader.addLazyLoading(systemImage, imageUrl);
   }
 
@@ -551,8 +587,8 @@ function createSystemCard(item) {
  * Display the aggregate card based on search type
  */
 async function displayAggregateCard(data, type) {
-  const totalsCardContainer = document.getElementById('totals-card');
-  totalsCardContainer.innerHTML = '';
+  const totalsCardContainer = document.getElementById("totals-card");
+  totalsCardContainer.innerHTML = "";
   showLoading();
   try {
     if (!data || data.length === 0) {
@@ -562,17 +598,19 @@ async function displayAggregateCard(data, type) {
 
     const item = data[0];
     let card = null;
-    if (type === 'system') {
+    if (type === "system") {
       card = createSystemCard(item);
-    } else if (type === 'name') {
+    } else if (type === "name") {
       card = await createPlayerCard(item);
-    } else if (type === 'tribe') {
+    } else if (type === "tribe") {
       card = await createTribeCard(item);
     }
 
     totalsCardContainer.appendChild(card);
+    // Attach click listeners for any clickable elements within the aggregate card
+    addIncidentCardListeners(card);
   } catch (error) {
-    console.error('Failed to render aggregate card:', error);
+    console.error("Failed to render aggregate card:", error);
     totalsCardContainer.innerHTML = `<p data-translate="search.error">Error loading aggregated data.</p>`;
   } finally {
     hideLoading();

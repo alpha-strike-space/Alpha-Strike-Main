@@ -408,10 +408,10 @@
     "es": "Detalles N/D (Error)"
   },
   "tooltip.searchFor": {
-    "en": "Search for {itemName}",
-    "ru": "Поиск {itemName}",
-    "zh": "搜索 {itemName}",
-    "es": "Buscar {itemName}"
+    "en": "Search for: ",
+    "ru": "Поиск: ",
+    "zh": "搜索: ",
+    "es": "Buscar: "
   },
   "tooltip.viewKillmailDetails": {
     "en": "View details for killmail {killmailId}",
@@ -563,27 +563,41 @@
     "zh": "[攻击方舰船 占位符]",
     "es": "[Nave Agresor Placeholder]"
   },
-  "killmail.placeholder.highSlotItem1": { "en": "Focused Medium Pulse Laser II" },
+  "killmail.placeholder.highSlotItem1": {
+    "en": "Focused Medium Pulse Laser II"
+  },
   "killmail.placeholder.highSlotAmmo1": { "en": "(Scorch M)" },
-  "killmail.placeholder.highSlotItem2": { "en": "Small Remote Armor Repairer I" },
+  "killmail.placeholder.highSlotItem2": {
+    "en": "Small Remote Armor Repairer I"
+  },
   "killmail.placeholder.emptyHighSlot": { "en": "[Empty High Slot]" },
-  "killmail.placeholder.midSlotItem1": { "en": "50MN Cold-Gas Enduring Microwarpdrive" },
+  "killmail.placeholder.midSlotItem1": {
+    "en": "50MN Cold-Gas Enduring Microwarpdrive"
+  },
   "killmail.placeholder.midSlotItem2": { "en": "Medium Cap Battery II" },
   "killmail.placeholder.midSlotItem3": { "en": "Warp Disruptor II" },
   "killmail.placeholder.lowSlotItem1": { "en": "Damage Control II" },
   "killmail.placeholder.lowSlotItem2": { "en": "Medium Armor Repairer II" },
   "killmail.placeholder.lowSlotItem3": { "en": "Heat Sink II" },
-  "killmail.placeholder.rigSlotItem1": { "en": "Medium Energy Locus Coordinator I" },
+  "killmail.placeholder.rigSlotItem1": {
+    "en": "Medium Energy Locus Coordinator I"
+  },
   "killmail.placeholder.rigSlotItem2": { "en": "Medium Auxiliary Nano Pump I" },
-  "killmail.placeholder.rigSlotItem3": { "en": "Medium Ancillary Current Router I" },
+  "killmail.placeholder.rigSlotItem3": {
+    "en": "Medium Ancillary Current Router I"
+  },
   "killmail.placeholder.droneItem1": { "en": "Acolyte II x5" },
   "killmail.placeholder.droneItem2": { "en": "Warrior II x5" },
   "killmail.placeholder.ammoItem1": { "en": "Scorch M x1024" },
-  "killmail.placeholder.ammoItem2": { "en": "Imperial Navy Multifrequency M x2048" },
+  "killmail.placeholder.ammoItem2": {
+    "en": "Imperial Navy Multifrequency M x2048"
+  },
   "killmail.placeholder.ammoItem3": { "en": "Nanite Repair Paste x100" },
   "killmail.placeholder.cargoItem1": { "en": "Exotic Dancers, Female x10" },
   "killmail.placeholder.cargoItem2": { "en": "Quafe Ultra x50" },
-  "killmail.placeholder.cargoItem3": { "en": "A Lumpsucker's Severed Foot (Left) x1" },
+  "killmail.placeholder.cargoItem3": {
+    "en": "A Lumpsucker's Severed Foot (Left) x1"
+  },
 
   "loading.killmail": {
     "en": "Loading killmail data...",
