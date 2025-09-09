@@ -122,6 +122,12 @@ function createPlayerCardHeader(item, stats, portraitUrl) {
       itemName: item.tribe_name,
     }) + item.tribe_name;
   status.textContent = item.tribe_name || getTranslation("general.unknown");
+  // Append inline external-link icon
+  const tribeIcon = document.createElement("i");
+  tribeIcon.className = "fa-sharp fa-solid fa-arrow-up-right-from-square";
+  tribeIcon.setAttribute("aria-hidden", "true");
+  tribeIcon.style = "margin-left: 0.1rem; vertical-align: super; font-size: 0.5rem;";
+  status.appendChild(tribeIcon);
 
   info.appendChild(name);
   info.appendChild(status);
