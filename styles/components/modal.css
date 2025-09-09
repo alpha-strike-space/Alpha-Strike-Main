@@ -38,13 +38,18 @@
   font-weight: 700;
 }
 
-.modal-header .fa-solid {
+.modal-header .fa-triangle-exclamation {
   font-size: 1.2rem;
   color: var(--color-secondary);
 }
 
-.modal-header i {
-  color: var(--color-primary-light);
+.modal-close-icon {
+  margin-left: auto;
+  color: var(--color-text-light);
+}
+
+.modal-close-icon:hover {
+  color: var(--color-text-primary);
 }
 
 .modal-body {
@@ -71,4 +76,55 @@
   padding: 0 16px 16px 16px;
 }
 
+
+/* Scrollable variant for tall content */
+.modal-container.modal-container--scrollable {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+  margin: 2rem;
+}
+
+.modal-container.modal-container--scrollable .modal-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.modal-scroll {
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.modal-character-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-character-item {
+  padding: 10px 4px;
+  border-bottom: var(--border-primary);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.modal-character-item:last-child {
+  border-bottom: none;
+}
+
+.modal-character-item:hover {
+  background-color: rgba(211, 47, 47, 0.18);
+  color: var(--color-text-primary);
+}
+
+.modal-character-item i {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+}
 

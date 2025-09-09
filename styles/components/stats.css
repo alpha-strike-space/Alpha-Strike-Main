@@ -153,6 +153,15 @@
   transform: translateY(-2px);
 }
 
+.header-stat.clickable {
+  cursor: pointer;
+}
+
+.header-stat.clickable .header-stat-label {
+  display: inline-flex;
+  align-items: center;
+}
+
 .header-stat-value {
   font-family: var(--font-secondary);
   font-size: 2rem;

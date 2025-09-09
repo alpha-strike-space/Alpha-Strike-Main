@@ -365,7 +365,7 @@ function createSystemCardHeader(item, stats) {
  * Create the tribe card header section. Similar to system card header section, but with player stats.
  */
 
-function createTribeCardHeader(item, stats) {
+async function createTribeCardHeader(item, stats) {
   const header = document.createElement("div");
   header.className = "card-header";
 
@@ -472,9 +472,39 @@ function createTribeCardHeader(item, stats) {
         <div class="header-stat-label" data-translate="card.totalEngagements">Total Engagements</div>
     `;
 
+  const numCharactersStat = document.createElement("div");
+  numCharactersStat.className = "header-stat";
+  numCharactersStat.innerHTML = `
+        <div class="header-stat-value">${item.member_count}</div>
+        <div class="header-stat-label">
+          <span data-translate="card.numCharacters">Member Count</span>
+          <i class="fa-sharp fa-solid fa-arrow-up-right-from-square" aria-hidden="true" style="margin-left: 0.2rem; font-size: 0.5rem; vertical-align: super;"></i>
+        </div>
+    `;
+
+  const tribeCharacterModal = await import("./tribeCharacterModal.js");
+  numCharactersStat.addEventListener("click", () => {
+    tribeCharacterModal.showTribeCharacterModal(item.tribe_name);
+  });
+  // Communicate clickability: pointer cursor, tooltip, and keyboard support
+  numCharactersStat.classList.add("clickable");
+  numCharactersStat.title = getTranslation("card.numCharacters", "Member Count");
+  numCharactersStat.setAttribute("role", "button");
+  numCharactersStat.tabIndex = 0;
+  numCharactersStat.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      numCharactersStat.click();
+    }
+  });
+  
+
   headerStats.appendChild(kdStat);
   headerStats.appendChild(winRateStat);
   headerStats.appendChild(engagementsStat);
+  headerStats.appendChild(numCharactersStat);
+
+
 
   header.appendChild(profileSection);
   header.appendChild(headerStats);
@@ -541,11 +571,12 @@ async function createTribeCard(item) {
   card.dataset.id = item.id;
 
   // Only fetch tribe metadata if needed, and use paginated (limit=1) request
-  if (!item.tribe_url || item.tribe_url === "NONE") {
+
     try {
       const tribe_data = await fetchTribeByName(item.tribe_name, 1, 0);
       if (tribe_data && tribe_data.tribe_url) {
         item.tribe_url = tribe_data.tribe_url;
+        item.member_count = tribe_data.member_count;
       }
     } catch (error) {
       console.warn(
@@ -554,10 +585,10 @@ async function createTribeCard(item) {
         error,
       );
     }
-  }
+  
 
   const stats = calculatePlayerStats(item);
-  const header = createTribeCardHeader(item, stats);
+  const header = await createTribeCardHeader(item, stats);
 
   card.appendChild(header);
 

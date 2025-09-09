@@ -155,6 +155,12 @@
     "zh": "损失类型:",
     "es": "Tipo de Pérdida:"
   },
+  "card.numCharacters": {
+    "en": "Member Count",
+    "ru": "Количество членов",
+    "zh": "成员数量",
+    "es": "Número de miembros"
+  },
   "card.solarSystem": {
     "en": "Solar System:",
     "ru": "Солнечная система:",
