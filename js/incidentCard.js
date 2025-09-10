@@ -202,6 +202,43 @@ export function createIncidentCard(item) {
   const killerTribeNameForSearch = item.killer_tribe_name || "UNKNOWN";
   const victimTribeNameForSearch = item.victim_tribe_name || "UNKNOWN"; 
 
+  // Determine whether each side has a tribe (API returns "NONE" when absent)
+  const killerHasTribe =
+    typeof item.killer_tribe_name === "string" &&
+    item.killer_tribe_name.toUpperCase() !== "NONE";
+  const victimHasTribe =
+    typeof item.victim_tribe_name === "string" &&
+    item.victim_tribe_name.toUpperCase() !== "NONE";
+
+  // Keep both tribe blocks to preserve layout, hide when tribe is "NONE"
+  const killerVisibility = killerHasTribe
+    ? ""
+    : 'style="visibility: hidden;" aria-hidden="true"';
+  const victimVisibility = victimHasTribe
+    ? ""
+    : 'style="visibility: hidden;" aria-hidden="true"';
+
+  const tribeInfoHTML = `
+        <div class="tribe-info">
+            <div class="combatant-info killer-info" ${killerVisibility}>
+                <span class="tribe-label" data-translate="card.tribe"></span>
+                <span class="tribe-name tribe killer clickable-tribe" data-tribe="${killerTribeNameForSearch}" title="${getTranslatedTooltip(
+                  "tooltip.searchFor",
+                  { itemName: killerTribeNameForSearch },
+                  `Search for ${killerTribeNameForSearch}`,
+                )}">${killerTribeNameForSearch}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
+            </div>
+            <div class="combatant-info victim-info" ${victimVisibility}>
+                <span class="tribe-label" data-translate="card.tribe"></span>
+                <span class="tribe-name tribe victim clickable-tribe" data-tribe="${victimTribeNameForSearch}" title="${getTranslatedTooltip(
+                  "tooltip.searchFor",
+                  { itemName: victimTribeNameForSearch },
+                  `Search for ${victimTribeNameForSearch}`,
+                )}">${victimTribeNameForSearch}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
+            </div>
+        </div>
+    `;
+
   let detailLinkHTML = "";
   // Use item.id for the killmail link directly
   const killmailId = item.id;
@@ -251,24 +288,7 @@ export function createIncidentCard(item) {
                 )}">${victimNameForSearch}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
             </div>
         </div>
-        <div class="tribe-info">
-            <div class="combatant-info killer-info">
-                <span class="tribe-label" data-translate="card.tribe"></span>
-                <span class="tribe-name tribe killer clickable-tribe" data-tribe="${killerTribeNameForSearch}" title="${getTranslatedTooltip(
-                  "tooltip.searchFor",
-                  { itemName: killerTribeNameForSearch },
-                  `Search for ${killerTribeNameForSearch}`,
-            )}">${killerTribeNameForSearch}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
-            </div>
-            <div class="combatant-info victim-info">
-                <span class="tribe-label" data-translate="card.tribe"></span>
-                <span class="tribe-name tribe victim clickable-tribe" data-tribe="${victimTribeNameForSearch}" title="${getTranslatedTooltip(
-                  "tooltip.searchFor",
-                  { itemName: victimTribeNameForSearch },
-                  `Search for ${victimTribeNameForSearch}`,
-            )}">${victimTribeNameForSearch}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
-            </div>
-        </div>
+        ${tribeInfoHTML}
         <div class="incident-details-compact">
             <div class="detail-group">
                 <span class="detail-label" data-translate="card.lossType"></span>
