@@ -89,6 +89,12 @@
   text-shadow: 0 0 var(--spacing-sm) rgba(255, 167, 38, 0.4);
 }
 
+/* Win rate descriptor styling */
+.header-stat-descriptor,
+.stat-descriptor {
+  text-transform: uppercase;
+}
+
 @media screen and (max-width: 800px) {
   .data-card {
     padding: 20px;
