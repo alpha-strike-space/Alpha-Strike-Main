@@ -269,6 +269,54 @@
     "zh": "总交战次数",
     "es": "Enfrentamientos Totales"
   },
+  "card.winRateDescriptor.stoic": {
+    "en": "Stoic",
+    "ru": "Стойкий",
+    "zh": "坚忍",
+    "es": "Estoico"
+  },
+  "card.winRateDescriptor.probing": {
+    "en": "Probing",
+    "ru": "Разведывающий",
+    "zh": "试探",
+    "es": "Exploratorio"
+  },
+  "card.winRateDescriptor.prowling": {
+    "en": "Prowling",
+    "ru": "Рыщущий",
+    "zh": "潜行",
+    "es": "Merodeador"
+  },
+  "card.winRateDescriptor.stalking": {
+    "en": "Stalking",
+    "ru": "Преследующий",
+    "zh": "追踪",
+    "es": "Acechante"
+  },
+  "card.winRateDescriptor.menacing": {
+    "en": "Menacing",
+    "ru": "Угрожающий",
+    "zh": "威胁",
+    "es": "Amenazante"
+  },
+  "card.winRateDescriptor.predatory": {
+    "en": "Predatory",
+    "ru": "Хищный",
+    "zh": "掠食性",
+    "es": "Depredador"
+  },
+  "card.winRateDescriptor.ruthless": {
+    "en": "Ruthless",
+    "ru": "Беспощадный",
+    "zh": "无情",
+    "es": "Despiadado"
+  },
+  "card.winRateDescriptor.lethal": {
+    "en": "Lethal",
+    "ru": "Смертоносный",
+    "zh": "致命",
+    "es": "Letal"
+  },
   "card.threatLevel": {
     "en": "Threat Level",
     "ru": "Уровень угрозы",

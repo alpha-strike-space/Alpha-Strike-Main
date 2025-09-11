@@ -60,6 +60,15 @@ function getWinRateDescriptor(position) {
   return "lethal";
 }
 
+// DRY helper: apply localized descriptor to an element and make it reactive to language changes
+function applyWinRateDescriptor(element, position) {
+  const descriptorKey = getWinRateDescriptor(position);
+  const translateKey = `card.winRateDescriptor.${descriptorKey}`;
+  element.setAttribute("data-translate", translateKey);
+  element.style.textTransform = "uppercase";
+  element.textContent = getTranslation(translateKey, descriptorKey);
+}
+
 /**
  * Calculate player statistics for the card
  */
@@ -168,8 +177,7 @@ function createPlayerCardHeader(item, stats, portraitUrl) {
   // Insert descriptor text for the win-rate in header
   const headerDescriptor = document.createElement("div");
   headerDescriptor.className = "header-stat-descriptor";
-  headerDescriptor.textContent =
-    getWinRateDescriptor(winRateDecimal).toUpperCase();
+  applyWinRateDescriptor(headerDescriptor, winRateDecimal);
   const winRateLabelEl = winRateStat.querySelector(".header-stat-label");
   if (winRateLabelEl) {
     winRateStat.insertBefore(headerDescriptor, winRateLabelEl);
@@ -233,8 +241,7 @@ function createPlayerCardStats(stats) {
   if (statContentEl) {
     const descriptorEl = document.createElement("span");
     descriptorEl.className = "stat-descriptor";
-    descriptorEl.textContent =
-      getWinRateDescriptor(winRateDecimal).toUpperCase();
+    applyWinRateDescriptor(descriptorEl, winRateDecimal);
     descriptorEl.style.fontSize = "0.75rem";
     descriptorEl.style.opacity = "0.9";
     descriptorEl.style.color = "#000";
@@ -456,8 +463,7 @@ async function createTribeCardHeader(item, stats) {
   // Insert descriptor text for the win-rate in header
   const headerDescriptor = document.createElement("div");
   headerDescriptor.className = "header-stat-descriptor";
-  headerDescriptor.textContent =
-    getWinRateDescriptor(winRateDecimal).toUpperCase();
+  applyWinRateDescriptor(headerDescriptor, winRateDecimal);
   const winRateLabelEl = winRateStat.querySelector(".header-stat-label");
   if (winRateLabelEl) {
     winRateStat.insertBefore(headerDescriptor, winRateLabelEl);
